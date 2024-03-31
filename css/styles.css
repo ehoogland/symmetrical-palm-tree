@@ -1,0 +1,33 @@
+body { /* fallback of sans-serif if Open Sans not available */ 
+    font-family: "Open Sans", sans-serif;
+}
+
+h1, h2, h3 {/* cursive if Lobster not available */ 
+   font-family: "Lobster", cursive;
+}
+
+h2 {
+   color: #3046C5;
+}
+
+header {
+    padding: 30px; /* left to right color change/gradient */
+    background-image: linear-gradient(to right, #5637DD, #3046C5, #60106B);
+    color: white;
+}
+
+header h2 {
+    color: #CEC8FF;
+}
+
+footer {
+    background-image:linear-gradient(#CEC8FF,white);
+    /* padding: T/B L/R
+    padding: 20px 0;
+}
+
+.row-content {
+    padding: 50px 0;
+    border-bottom: 1px ridge;
+    min-height: 200px;
+}}
