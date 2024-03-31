@@ -1,3 +1,4 @@
+/* elements */
 body { /* fallback of sans-serif if Open Sans not available */ 
     font-family: "Open Sans", sans-serif;
 }
@@ -20,14 +21,15 @@ header h2 {
     color: #CEC8FF;
 }
 
-footer {
-    background-image:linear-gradient(#CEC8FF,white);
-    /* padding: T/B L/R
-    padding: 20px 0;
+footer {background-image:linear-gradient(#CEC8FF,white);
 }
-
+/* classes */
 .row-content {
     padding: 50px 0;
     border-bottom: 1px ridge;
     min-height: 200px;
-}}
+}
+
+.navbar {
+     background-color: #901CAD;
+}
