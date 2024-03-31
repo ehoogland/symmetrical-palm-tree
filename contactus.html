@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <!-- Required meta tags always come first -->
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous" />
+
+    <!-- Additional CSS must be placed after Bootstrap CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css"
+        integrity="sha512-MV7K8+y+gLIBoVD59lQIYicR65iaqukzvf/nwasF0nqhPay5w/9lJmVM2hMDcnK1OnMGCdVK+iQrJ7lzPJQd1w=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lobster|Open+Sans" />
+    <link rel="stylesheet" href="css/styles.css" />
+    <title>Nucamp: A Better Way To Camp</title>
+</head>
+
+<body>
+
+    <!-- header -->
+    <header>
+        <div class="container">
+            <div class="row">
+                <div class="col">
+                    <h1>Nucamp</h1>
+                    <h2>a better way to camp</h2>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- navbar -->
+    <nav class="navbar navbar-expand-sm navbar-dark sticky-top">
+        <div class="container">
+            <button class="navbar-toggler ml-auto" type="button" data-bs-toggle="collapse"
+                data-bs-target="#nucampNavbar">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="nucampNavbar">
+                <ul class="navbar-nav">
+                    <li class="nav-item"><a class="nav-link" href="index.html"><span class="fa fa-home fa-lg"></span> Home</a>
+                    </li>
+                    <li class="nav-item"><a class="nav-link" href="aboutus.html"><span class="fa fa-info fa-lg"></span> About</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#"><span class="fa fa-list fa-lg"></span> Sites</a></li>
+                    <li class="nav-item"><a class="nav-link active" href="#"><span class="fa fa-address-card fa-lg"></span> Contact</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- breadcrumb -->
+    <div class="container">
+        <div class="row">
+            <div class="col">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="index.html">Home</a></li>
+                    <li class="breadcrumb-item active">Contact</li>
+                </ol>
+                <h2>Contact Us</h2>
+                <hr />
+            </div>
+        </div>
+
+        <!-- contact section -->
+        <div class="row row-content align-items-center">
+            <div class="col-sm-4">
+                <h5>Our Address</h5>
+                <address>
+                    1 Nucamp Way<br>
+                    Seattle, WA 98001<br>
+                    U.S.A.
+                </address>
+            </div>
+            <div class="col">
+                <a role="button" class="btn btn-link" href="tel:+12065551234"><span class="fa-solid fa-phone"></span> 1-206-555-1234</a><br />
+                <a role="button" class="btn btn-link" href="mailto:campsites@nucamp.co"><span class="fa-solid fa-envelope"></span> campsites@nucamp.co</a>
+            </div>
+        </div>
+        
+        <!-- feedback form -->
+        <div class="row row-content">
+            <div class="col-12">
+                <h2>Send us your Feedback</h2>
+                <hr />
+            </div>
+            <div class="col">
+                <form>
+                    <div class="row mb-3">
+                        <label for="firstName" class="col-md-2">First Name</label>
+                        <div class="col-md-10">
+                            <input type="text" id="firstName" name="firstName" placeholder="First Name">
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <label for="lastName" class="col-md-2">Last Name</label>
+                        <div class="col-md-10">
+                            <input type="text" id="lastName" name="lastName" placeholder="Last Name">
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <label for="areaCode" class="col-md-2">Contact Tel.</label>
+                        <div class="col-5 col-md-2">
+                            <input type="tel" id="areaCode" name="areaCode" placeholder="Area code">
+                        </div>
+                        <div class="col">
+                            <input type="tel" name="tel" placeholder="Tel. number">
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <label for="email" class="col-md-2 col-form-label">Email</label>
+                        <div class="col-md-10">
+                            <input type="email" id="email" name="email" placeholder="Email">
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col offset-md-2">
+                            May we contact you?
+                            <input type="radio" id="contactYes" name="contactRadios" value="yes">
+                            <label for="contactYes">Yes</label>
+                            <input type="radio" id="contactNo" name="contactRadios" value="no">
+                            <label for="contactNo">No</label>
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <label for="feedback" class="col-md-2">Your Feedback</label>
+                        <div class="col-mb-10 offset-md-2">
+                            <textarea id="feedback" name="feedback" rows="8"></textarea>
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-md-10 offset-md-2">
+                            <button type="submit" class="btn btn-primary">Send Feedback</button>
+                        </div>
+                    </div>
+                </form>
+            </div><!-- end <div col-md-10> -->
+        </div>
+<footer>
+        <div class="container">
+            <div class="row">
+                <div class="col-4 col-sm-2 offset-1">
+                    <h5>Links</h5>
+                    <ul class="list-unstyled">
+                        <li><a href="index.html">Home</a></li>
+                        <li><a href="aboutus.html">About</a></li>
+                        <li><a href="#">Sites</a></li>
+                        <li><a href="#">Contact</a></li>
+                    </ul>
+                </div>
+                <div class="col-6 col-sm-5 text-center">
+                    <h5>Social</h5>
+                    <a href="http://instagram.com/"><span class="fa-brands fa-instagram fa-xl"></span></a>
+                    <a href="http://facebook.com/"><span class="fa-brands fa-facebook fa-xl"></span></a>
+                    <a href="http://twitter.com/"><span class="fa-brands fa-twitter fa-xl"></span></a>
+                    <a href="http://youtube.com/"><span class="fa-brands fa-youtube fa-xl"></span></a>
+                </div>
+                <div class="col-sm-4 text-center">
+                    <span class="fa-solid fa-phone fa-lg text-primary"></span> 1-206-555-1234<br>
+                    <span class="fa-solid fa-envelope fa-lg text-primary"></span> campsites@nucamp.co
+                </div>
+            </div>
+        </div>
+    </footer>
+    
+    <!-- Bootstrap JavaScript plugins-->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4"
+        crossorigin="anonymous"></script>
+        
+    </body>
+    
+    </html>
