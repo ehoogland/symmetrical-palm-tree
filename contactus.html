@@ -89,36 +89,47 @@
             </div>
             <div class="col">
                 <form>
-                    <div class="row mb-3">
-                        <label for="firstName" class="col-md-2">First Name</label>
-                        <div class="col-md-10">
-                            <input type="text" id="firstName" name="firstName" placeholder="First Name">
+                    <div class="row mb-3 align-items-center">  
+                        <div class="col-auto">
+                            <label for="firstName" class="col-form-label">First Name</label>
+                        </div>
+                        <div class="col-auto">    
+                            <input type="text" class="form-control" id="firstName"  placeholder="First Name">
                         </div>
                     </div>
-                    <div class="row mb-3">
-                        <label for="lastName" class="col-md-2">Last Name</label>
-                        <div class="col-md-10">
-                            <input type="text" id="lastName" name="lastName" placeholder="Last Name">
+
+                    <div class="row mb-3 align-items-center">
+                        <div class="col-auto">
+                            <label for="lastName" class="col-form-label">Last Name</label>
+                        </div>
+                        <div class="col-auto">    
+                            <input type="text" class="form-control" id="lastName"  placeholder="Last Name">
                         </div>
                     </div>
-                    <div class="row mb-3">
-                        <label for="areaCode" class="col-md-2">Contact Tel.</label>
-                        <div class="col-5 col-md-2">
-                            <input type="tel" id="areaCode" name="areaCode" placeholder="Area code">
+
+                    <div class="row mb-3 align-items-center">
+                        <div class="col-auto">
+                            <label for="areaCode" class="col-form-label">Area Code</label>
                         </div>
-                        <div class="col">
-                            <input type="tel" name="tel" placeholder="Tel. number">
+                        <div class="col-auto">
+                            <input type="text" class="form-control" id="areaCode"  placeholder="Area Code">  
+                        </div>
+                        <div class="col-auto">
+                            <label for="telephone" class="col-form-label">Tel. number</label>
+                        </div>
+                        <div class="col-auto">    
+                            <input type="text" class="form-control" id="telephone"  placeholder="Tel. number">
                         </div>
                     </div>
-                    <div class="row mb-3">
-                        <label for="email" class="col-md-2 col-form-label">Email</label>
+                    <div class="row mb-3 align-items-center">
+                        <label for="email" class="col-md-1 col-form-label">Email</label>
                         <div class="col-md-10">
                             <input type="email" id="email" name="email" placeholder="Email">
                         </div>
                     </div>
                     <div class="row mb-3">
-                        <div class="col offset-md-2">
-                            May we contact you?
+                        <div class="col auto">
+                            <label class="col-md-2 col-form-label">May we contact you?</label>
                             <input type="radio" id="contactYes" name="contactRadios" value="yes">
                             <label for="contactYes">Yes</label>
                             <input type="radio" id="contactNo" name="contactRadios" value="no">
@@ -126,20 +137,21 @@
                         </div>
                     </div>
                     <div class="row mb-3">
-                        <label for="feedback" class="col-md-2">Your Feedback</label>
-                        <div class="col-mb-10 offset-md-2">
-                            <textarea id="feedback" name="feedback" rows="8"></textarea>
+                        <label class="col-form-label id=feedback">Your Feedback</label>
+                        <div class="col-mb-10 offset-md-1">
+                            <textarea id="feedback" name="feedback" rows="8">
+                                
+                            </textarea>
                         </div>
                     </div>
-
                     <div class="row mb-3">
-                        <div class="col-md-10 offset-md-2">
+                        <div class="col-md-10 offset-md-1">
                             <button type="submit" class="btn btn-primary">Send Feedback</button>
                         </div>
-                    </div>
+                    </div>   
                 </form>
-            </div><!-- end <div col-md-10> -->
-        </div>
+            </div> <!--end class="col"-->
+        </div> <!--end <div class="row row-content">-->
 <footer>
         <div class="container">
             <div class="row">
