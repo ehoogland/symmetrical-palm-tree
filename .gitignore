@@ -1,3 +1,6 @@
 .DS_Store
 bin
 target
+node_modules
+dist
+.parcel-cache
