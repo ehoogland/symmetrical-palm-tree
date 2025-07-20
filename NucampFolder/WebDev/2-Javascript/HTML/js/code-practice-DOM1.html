@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8" />
+    <title>title</title>
+    <style>
+    #result {
+    text-align: center;
+    font-size: 5em;
+    font-family: 'Inter', 'Sans Source Pro', sans-serif;
+    margin-top: 10px;
+}
+    </style>
+</head>
+<body>
+    <div id="result"></div>
+    <script>
+        // create a ul element and append it to the DOM as a child of the document body
+        const groceryList = document.createElement('ul');
+        document.body.appendChild(groceryList);
+        
+        // create a list element and append it to the DOM as a child of the document body
+        const item1 = document.createElement('li');
+        item1.textContent = 'apples';
+
+        // create a second list element and append it to the DOM as a child of the document body
+        const item2 = document.createElement('li');
+        item2.textContent = 'coffee';
+        
+        groceryList.appendChild(item1);
+        // use appendChild to append item2 as a child of the ul element
+        groceryList.appendChild(item2);
+    </script>
+</body>
+</html>

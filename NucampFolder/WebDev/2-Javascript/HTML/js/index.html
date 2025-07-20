@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <title>JSON Example</title>
+    </head>
+    <body>
+        <!--By the end of this exercise, you will have created a JSON file, parsed it in JavaScript, 
+        and accessed its data. These are essential skills when working with modern web APIs and 
+        JavaScript applications.-->  
+
+        <!--Convert the JSON object to a string using backticks to simulate receiving JSON as a string.-->
+    <script type="text/javascript">// see backticks; also add commas between objects
+    let companies = `[
+   {
+    "name": "Nucamp",
+    "number_of_employees": 150,
+    "CEO": "Ludo Fourrage",
+    "glassdoorRating": 5.0
+   }, 
+   {
+   "name": "Microsoft",
+   "number_of_employees": 150000,
+   "CEO": "Satya Nadella",
+   "glassdoorRating": 4.7
+   }
+]`
+
+console.log(companies);  
+// convert this JSON string into a JavaScript object using parse
+companies = JSON.parse(companies);
+console.log([companies]);
+// access the data of the JSON object like a normal JavaScript object
+console.log(companies[0].name); // prints "Nucamp"
+console.log(companies[0].CEO); // prints "Ludo Fourrage"
+
+// Next, convert the updated companies' JavaScript object back into a JSON string using JSON.stringify().
+let companiesString = JSON.stringify(companies);
+// Finally, log the companiesString to the console.
+console.log(companiesString);
+/* This will output a string that represents your JSON object, which you could send over a network or save to a file
+[{"name":"Nucamp","number_of_employees":150,"CEO":"Ludo Fourrage","glassdoorRating":5},{
+"name":"Microsoft","number_of_employees":150000,"CEO":"Satya Nadella","glassdoorRating":4.7}]
+*/
+</script>
+
+</body>
+</html>

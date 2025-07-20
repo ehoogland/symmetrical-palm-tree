@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <title>Color Guessing Game</title>
+</head>
+
+<body>
+    <h1>Color Guessing Game</h1>
+    <button type="button" onclick="runGame()">Start Game</button>
+    <script>
+
+        const COLORS_ARRAY = ['aqua', 'black', 'blue', 'cyan', 'gold',
+            'gray', 'green', 'magenta', 'orange', 'red', 'white', 'yellow',
+            'grey', 'purple', 'darkBlue', 'lightBlue', 'pink', 'silver', 'maroon',
+            'olive', 'aquamarine'];
+
+        function runGame() {
+            // Generate a [pseudo-]random number from 0 inclusive to 1 exclusive, then multiply it by the array length
+            // Array length is one greater than index, so adding 1 to result is not necessary. Bind randomNumber to that value.
+            const randomNumber = Math.random() * COLORS_ARRAY.length;
+            // Turn randomNumber into an integer by applying Math.floor. The random integers correspond to the COLORS_ARRAY indices  
+            const targetIndex = Math.floor(randomNumber);
+            // Declare a const named target and bind it to the value of the COLORS_ARRAY item that has the index of targetIndex.  
+            const target = COLORS_ARRAY[targetIndex];
+
+            let numTries = 0;
+            let guess = "";
+            let correct = false;
+
+            do {
+                guess = prompt(`I am thinking of one of these colors:
+        \n${COLORS_ARRAY.sort().join(', ')}
+        \n\nWhat color am I thinking of?`);
+                if (guess === "" || guess === null) {
+                    alert('No color entered. Please start over.');
+                    return;
+                }
+                numTries += 1;
+                /* 
+                console.log("guess variable is: " + guess); was used for debugging. 
+                || or guess === null" was added added above
+                to prevent null from being passed to checkGuess, which had caused an error.   
+                console.log("target variable is: " + target); could be used for debugging
+                */
+               correct = checkGuess(guess, target);
+                if (correct) {
+                    alert(`Congratulations! You guessed the color ${target} in ${numTries} tries.`);
+                }   
+            } while (!correct);
+            // Spaces are concatenated with text in order to left-align alert box text rows. 
+            // Other ways, such as tab and prepending spaces, leave artifacts, perhaps because of 
+            // security and spoofing concerns. Future format upgrade idea: Bootstrap.
+            alert(`   ` + `You got it! The color is ${guess = target}.\nIt took you ${numTries} tries to guess correctly.`);
+            // spec calls for value of guess
+            document.body.style.backgroundColor = guess;
+        }
+
+        function checkGuess(gs, tgt) {
+            let correct = "";
+            // convert array and client guess to lower case
+            const pick = gs.toLowerCase();
+            const trgt = tgt.toLowerCase();
+            const arr = COLORS_ARRAY.map(item => item.toLowerCase());
+
+            if (!arr.includes(pick)) {
+                // note: only listed choices increment numTries
+                alert(`The color ${pick} is not listed as a choice.\nPlease try again, but choose from among the colors listed`);
+                return;
+            } else if (pick > trgt) {
+                /* The first lowercase characters of each string are compared alphabetically.
+                If the characters are the same, then the next characters of each string are compared
+                lexicographically. For example, 'black' < 'blue' lexicographically. */
+                alert(`Hint: ${pick} comes later than the color I had in mind`);
+                return correct;
+            } else if (pick < trgt) {
+                alert(`Hint: ${pick} comes before the color I had in mind.`);
+                return correct;
+            } else {
+                correct = true;
+            }
+            return correct;
+        }
+    </script>
+</body>
+</html>

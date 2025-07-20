@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8" />
+    <title>Exploring the DOM Code Demo pen</title>
+    <style>
+       body {
+        font-family: Arial, sans-serif;
+        background-color: #f5f5f5;
+        color: #333333;
+        margin: 20px;
+        }
+
+        h1,
+        h2 {
+        color: #0096dc;
+        }
+
+        .section {
+        padding: 15px;
+        margin: 10px 0;
+        border: 1px solid lightgrey;
+        border-radius: 4px;
+        }
+
+        .sub-title {
+        color: #a83ea2;
+        }
+
+        button {
+        border: none;
+        color: white;
+        padding: 10px 20px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 16px;
+        margin: 4px 2px;
+        cursor: pointer;
+        border-radius: 4px;
+        }
+
+        button:nth-of-type(odd) {
+        background-color: #0096dc; /* Primary color for odd buttons */
+        }
+
+        button:nth-of-type(even) {
+        background-color: #a83ea2; /* Secondary color for even buttons */
+        }
+
+        .input-row {
+        margin-top: 15px;
+        }
+
+        .input-row > input {
+        width: 100%;
+        max-width: 300px;
+        }
+
+        .input-row > button {
+        padding: 5px 10px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        background-color: #a83ea2;
+        font-size: 14px;
+        margin: 4px 2px;
+        cursor: pointer;
+        border-radius: 4px;
+        }
+
+        #feedback {
+        font-weight: bold;
+        }      
+    </style>
+</head>
+<body>
+    <h1 id="title">Exploring the DOM</h1>
+
+    <!-- intro section -->
+    <section>
+    <p>Today's lessons have focused on three essential aspects of working with the DOM in web development:</p>
+    <ul>
+        <li><strong>DOM Basic Concepts:</strong> Understanding what the DOM is, how HTML is represented in the DOM, and the significance of text nodes and whitespace nodes.</li>
+        <li><strong>Node Relationships:</strong> Learning how nodes in the DOM tree are related to each other, including parent-child and sibling relationships.</li>
+        <li><strong>Locating Nodes:</strong> Practicing how to find specific nodes in the DOM using various methods, such as by ID or class name.</li>
+    </ul>
+    <p>This interactive exercise will allow you to apply these concepts in a hands-on manner. Follow the instructions in each section, and look at the code to predict and understand how the DOM is manipulated. Let's get started!</p>
+    </section>
+
+    <main class="container">
+
+    <!-- node relationships section -->
+    <section class="section">
+        <h2 class="sub-title">Node Relationships</h2>
+        <p>1. Explore how nodes are related in the DOM tree. Before clicking the buttons below, look at the code. Find the function that is called by each button's click. Read the code and try to guess which nodes will be affected when highlighting the parent, children, and sibling nodes of this section. Then click on the button to see if you are correct.</p>
+        <button onclick="highlightParent()">Highlight Parent</button>
+        <button onclick="highlightChildren()">Highlight Children</button>
+        <button onclick="highlightSibling()">Highlight Sibling</button>
+        <div class="input-row">
+        <label for="element-input">2. What is the parent element of this "Node Relationships" section?</label>
+        <input type="text" id="element-input" placeholder="Enter tag name (e.g., 'div')">
+        <button onclick="checkElement()">Check Answer</button>
+        <p id="feedback"></p>
+        </div>
+    </section>
+
+    <!-- locating nodes section -->
+    <section class="section">
+        <h2 class="sub-title">Locating Nodes</h2>
+        <p>1. Practice finding nodes using different methods. Before clicking the buttons below, look at the code. Find the function that is called by each button's click. Read the code and try to guess which elements will be targeted in that function, and what will happen when you click on the button. After you predict their behaviors, click on each button to see if you are correct.</p>
+        <button onclick="findById()">Find by ID</button>
+        <button onclick="findByClass()">Find by Class</button>
+        <button onclick="findByTagName()">Find by Tag Name</button>
+        <button onclick="findByQuerySelector()">Find by Query Selector</button>
+        <p>2. Next, reflect on the actions performed by the buttons, and modify the functions to create your own manipulations. Try to make different things happen with each button. Then click on the buttons to test your changes.</p>
+    </section>
+    <script>
+        // Function to highlight the parent node of the first section
+function highlightParent() {
+  const section = document.querySelector(".section");
+  const parent = section.parentNode;
+  parent.style.backgroundColor = "#b3d6f0"; // Lighter shade of primary color for parent
+}
+
+// Function to highlight the children nodes of the first section
+function highlightChildren() {
+  const section = document.querySelector(".section");
+  const children = section.children;
+  for (let i = 0, len = children.length; i < len; i++) {
+    children[i].style.backgroundColor = "#e6b3d9"; // Lighter shade of secondary color for children
+  }
+}
+
+// Function to find an element by its ID and change its text
+function findById() {
+  const title = document.getElementById("title");
+  title.innerHTML = "ID Found: Exploring the DOM";
+}
+
+// Function to find elements by class and change their text
+function findByClass() {
+  const subTitles = document.getElementsByClassName("sub-title");
+  for (let i = 0; i < subTitles.length; i++) {
+    subTitles[i].innerHTML = "Class Found: " + subTitles[i].innerHTML;
+  }
+}
+
+// Function to find elements by tag name
+function findByTagName() {
+  const paragraphs = document.getElementsByTagName("p");
+  for (let i = 0; i < paragraphs.length; i++) {
+    paragraphs[i].style.fontWeight = "bold"; // Making all paragraphs bold
+  }
+}
+
+// Function to find elements by query selector
+function findByQuerySelector() {
+  const firstSection = document.querySelector(".section");
+  firstSection.style.border = "3px solid #0096dc"; // Use primary color
+}
+
+// Function to highlight the sibling node of the first section
+function highlightSibling() {
+  const section = document.querySelector(".section");
+  const sibling = section.nextElementSibling || section.previousElementSibling;
+  if (sibling) {
+    sibling.style.backgroundColor = "#ffd699"; // Lighter shade for sibling
+  }
+}
+
+//---------------Do not change the code below this line---------------------
+//This function checks the answer to the question and returns feedback to the ui.
+let attempts = 0;
+function checkElement() {
+  const maxAttempts = 3; // Maximum number of attempts allowed
+  const answer = document
+    .getElementById("element-input")
+    .value.trim()
+    .toLowerCase();
+  const feedback = document.getElementById("feedback");
+  const parentElementTag = document
+    .querySelector(".section")
+    .parentNode.tagName.toLowerCase();
+
+  if (answer === parentElementTag) {
+    feedback.textContent = "Correct! Great job!";
+    feedback.style.color = "green";
+    attempts = 0; // Reset the attempts for the next round
+  } else {
+    attempts++;
+    if (attempts < maxAttempts) {
+      feedback.textContent = "Incorrect. Try again.";
+      feedback.style.color = "red";
+    } else {
+      feedback.textContent =
+        "Incorrect. The correct answer is '" + parentElementTag + "'.";
+      feedback.style.color = "red";
+      attempts = 0;
+    }
+  }
+}
+
+        
+    </script>
+</main>
+
+<!-- summary -->
+<footer>
+  <h2>Summary</h2>
+  <p>Understanding how to traverse and manipulate the DOM is a key skill in web development. Experiment on your own to reinforce these concepts.</p>
+</footer>
+</body>
+</html>

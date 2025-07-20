@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <title>DMV Queue</title>
+</head>
+
+<body>
+    <h1>DMV Customer Queue System</h1>
+<button onclick="addCustomer()">Add Customer</button>
+<button onclick="callNextCustomer()">Call Next Customer</button>
+<button onclick="displayQueue()">Display Queue</button>
+
+<!-- You do not need to modify the HTML code for this exercise. -->
+
+<!-- //////// Instructions /////////// -->
+<br><br><br><br>
+<hr>
+<h2>Scenario:</h2>
+<p>Your local Department of Motor Vehicles (DMV) office wants to manage their waiting customers more efficiently. They need a system to handle a queue of customers, where they can add a customer to the queue, call the next customer to the counter, and display the list of people currently waiting in the queue.</p>
+
+<p>An employee has dabbled in some HTML and basic programming, and created a simple UI for this new queue system, but they need your help to complete the functions and make the queue system work.</p>
+
+<br>
+<h2>Tasks:</h2>
+<ol>
+	<li>First, fork this pen to save your changes.</li>
+	<li>Complete the <strong>addCustomer()</strong> function by using a push method to add the <strong>name</strong> variable to the <strong>dmvQueue</strong> array.</li>
+	<li>Complete the <strong>callNextCustomer()</strong> function by using the shift method to remove the first person from the <strong>dmvQueue</strong> array. Assign this method to a new variable called <strong>nextCustomer</strong>.</li>
+	<li>Complete the <strong>displayQueue()</strong> function by creating an alert message that uses the join method to display the list of elements in the <strong>dmvQueue</strong> array.</li>
+</ol>
+
+<br>
+<h2>Check your code:</h2>
+<ol>
+	<li>Click the "Add Customer" button a few times and enter some customer names.</li>
+	<li>Click the "Call Next Customer" button to remove a customer from the front of the queue.</li>
+	<li>Click the "Display Queue" button to see the current queue.</li>
+</ol>
+    <script>
+        //complete the functions below to make this system operational.
+
+let dmvQueue = [];
+
+function addCustomer() {
+	let name = prompt("Welcome to the DMV! What is your name?");
+	// use a push method to add the name to the dmvQueue array.
+	//dmvQueue.push(name);
+	dmvQueue.push(name);
+
+	alert("Customer " + name + " has been added to the queue.");
+}
+
+function callNextCustomer() {
+	if (dmvQueue.length > 0) {
+		// use the shift method to remove the first person in the array, and assign this method to a variable called "nextCustomer".
+		let nextCustomer = dmvQueue.shift();
+		alert("Now serving customer: " + nextCustomer);
+	} else {
+		alert("The queue is currently empty.");
+	}
+}
+
+function displayQueue() {
+	if (dmvQueue.length > 0) {
+		// create an alert message that uses the join method to display the list of people currently waiting in the queue.
+		alert("In queue: " + dmvQueue.join(", "));
+	} else {
+		alert("The queue is currently empty.");
+	}
+}
+        
+    </script>
+</body>
+</html>

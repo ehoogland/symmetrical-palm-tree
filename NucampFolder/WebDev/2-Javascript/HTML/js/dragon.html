@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Objects incl Arrays and const</title>
+
+</head>
+<body>
+    const dragon1 = {
+        color: "red", 
+        maxHP: 1000 
+    };
+    dragon1.color
+    // 'red'
+
+
+const dragon1 = {
+    color: "red", 
+    maxHP: 1000 
+};
+dragon1.color // You can query each property using dot notation
+// 'red'
+dragon1.maxHP
+//1000
+dragon1['color']
+//'red
+/*
+
+*/If you were to just type in the property name without the object name,
+ it would not work. Try it:
+
+maxHP
+
+This shows you that the property is attached to the object, 
+unlike a variable, which you can access without giving an object name first.
+*/
+
+/*
+Arrays are a special type of object, but less flexible 
+Arrays have items, as objects have properties, but array items are always accessed by a numeric index whereas objects are accessed by property names that are set by the programmer.
+You can also add custom methods to objects, whereas you cannot create custom methods for arrays.
+
+When declaring an object, you can add a method. Type the below into your console
+*/
+const dragon2 = {
+    color: "blue",
+    maxHP: 1000,
+    roar() {
+        console.log("The dragon roars ferociously.");
+    }
+};
+
+dragon2.roar();
+// The dragon roars ferociously.
+// old way of adding a method to an object is more verbose:
+const dragon3 = {
+    color: "black",
+    maxHP: 1000,
+    roar: function() {
+        console.log("The dragon roars ferociously.");
+    }
+};
+
+dragon2.roar();
+// The dragon roars ferociously.
+
+dragon1.element = "fire";
+dragon1.color = "crimson";
+//'crimson'
+dragon1.element = "fire";
+//'fire'
+dragon1
+{color: 'crimson', maxHP: 1000, element: 'fire'}
+dragon1.attack = function() { console.log("The dragon breathes a stream of white-hot flame at you!"); };
+ƒ () { console.log("The dragon breathes a stream of white-hot flame at you!"); }
+
+dragon1.attack();
+
+{color: 'crimson', maxHP: 1000, element: 'fire', attack: ƒ}
+dragon1.attack
+ƒ () { console.log("The dragon breathes a stream of white-hot flame at you!"); }
+dragon2.roar = function() { console.log("The dragon lets out a tremendous roar!"); };
+ƒ () { console.log("The dragon lets out a tremendous roar!"); }
+dragon1 = { color: "blue" };
+//VM750:1 Uncaught TypeError: Assignment to constant variable.
+//at <anonymous>:1:9
+//   (anonymous) @ VM750:1
+    const colors = ["red", "blue", "black"];
+    undefined
+    colors = ["crimson", "turquoise", "onyx"];
+//   VM758:1 Uncaught TypeError: Assignment to constant variable.
+//   at <anonymous>:1:8
+//        (anonymous) @ VM758:1
+// You CAN change items in an array
+        colors[0] = "crimson";
+        //'crimson'
+        colors[1] = "turquiose";
+        //'turquiose'
+           colors[2] = "onyx";
+        // 'onyx'
+
+            colors
+            (3) ['crimson', 'turquiose', 'onyx']
+            dragon2.element="water";
+            'water'
+            dragon2.swim = function(dir) {
+                console.log(`The dragon swims away to the ${dir}.`
+                //VM1249:2 Uncaught SyntaxError: missing ) after argument list
+                dragon2.swim = function(dir) {
+                    console.log(`The dragon swims away to the ${dir}.};`
+                    //VM1260:2 Uncaught SyntaxError: missing ) after argument list
+                    dragon2.swim = function(dir) {
+                        console.log(`The dragon swims away to the ${dir}.`);
+                    }
+                    
+                    ƒ (dir) {
+                        console.log(`The dragon swims away to the ${dir}.`);
+                    }
+                    dragon2.swim("north");
+                    // The dragon swims away to the north.
+    </script>                
+</body>                    
+</html>

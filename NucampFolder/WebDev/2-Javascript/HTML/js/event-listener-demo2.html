@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <title>Event Listener Demo 2</title>
+    <style>
+        div {
+            font-size: 24px;
+        }
+        </style>
+</head>
+<body>
+    <!-- This demo demonstrates how addEventListener() allows you to
+     add more than one handler function to the same event, on
+     the same element. But since there's no addEventListener function
+     yet only the first event handler of the two for the onmouseover event
+     is recognized. So only the text color changes, not the background color.
+     (Note that onmouseout() is a different event and does work)-->
+    <div onmouseover="changeTextColor();" onmouseover="changeBackground();" onmouseout="revert();">Move your mouse over this text then off!</div>
+
+    <script>
+        
+        const div = document.querySelector('div');
+        
+        function changeTextColor() {
+            div.style.color = 'orange';
+        }
+
+        function changeBackground() {
+            div.style.background = 'purple';
+        }
+
+        function revert() {
+            div.style.color = 'black';
+            div.style.background = 'white';
+        }
+    </script>
+</body>
+</html>

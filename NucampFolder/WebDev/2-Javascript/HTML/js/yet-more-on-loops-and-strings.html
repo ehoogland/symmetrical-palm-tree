@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8" />
+    <title>More On Loops and Strings</title>
+</head>
+<body>
+    <script>
+        // More on Loops and Strings
+
+        // This script demonstrates how to use loops to manipulate strings in JavaScript.
+const pets = ['dog', 'cat', 'fish'];
+for (let i = 0; i < pets.length; i++) {
+   console.log('I have a', pets[i]);
+}
+// JavaScript gives us an easier way to iterate over an array with a for loop, called a for ... of loop.
+// Because we don't intend to change the value of pet inside the for loop, it is appropriate to use the const variable declaration keyword:
+// We can replicate the results from the above example like this:
+
+for (const pet of pets) {
+   console.log('I have a', pet);
+}
+console.log(pets) // This will print the entire array of pets to the console. 
+
+// bracket notation is used to access the elements of an array.
+for (let i = 0; i < pets.length; i++) {
+   pets[i] = pets[i].toUpperCase();
+}
+console.log(pets)
+/*
+Iterating through arrays of data is a very common need in programming.
+Thus, there are even more ways to iterate over arrays, including the 
+array methods called array.map(), array.filter(), array.find(), array.forEach().
+
+We will not learn about these for now because they involve using a type of function 
+called a callback function, which are functions that are passed as arguments 
+into other functions. 
+
+You will learn about callback functions in Week 1 of the React course.
+*/
+// The for ... of loop is a great way to iterate over arrays, 
+// but it can also be used with strings.
+        </script>
+
+    
+</body>
+</html>

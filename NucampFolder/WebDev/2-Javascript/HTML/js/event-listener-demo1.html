@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+
+<! this demo is the first of four. Some functionality
+has not been added yet-->
+
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <title>Event Listener Demo 1</title>
+    <style>
+        div {
+            font-size: 24px;
+        }
+    </style>
+</head>
+<body>
+    <div>Move your mouse over this text then off!</div>
+
+    <script>
+        /**
+         * 
+         * document is the parent node here, the document is a
+         * global object representing the web page.
+         * .querySelector(): This is a method available on the 
+         * document object (and also on any other element object). Its purpose is to find and return the first element within the document that matches the CSS selector provided
+          as an argument. 
+          
+          If no match is found, it returns null. */
+          
+        const div = document.querySelector('div');
+        
+        div.addEventListener('mouseover', changeTextColor);
+        div.addEventListener('mouseout', revert);
+
+        function changeTextColor() {
+            div.style.color = 'orange';
+        }
+
+        function revert() {
+            div.style.color = 'black';
+        }
+    </script>
+</body>
+</html>

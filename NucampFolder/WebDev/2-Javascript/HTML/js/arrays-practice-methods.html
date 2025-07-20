@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8" />
+    <title>Arrays Practice</title>
+</head>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        margin: 20px;
+    }
+    h1, h2 {
+        color: #333;
+    }
+    ul {
+        list-style-type: none;
+        padding: 0;
+    }
+    li {
+        margin: 10px 0;
+    }
+    </style>
+<body>
+    <h1>Code Challenge: Using Arrays</h1>
+<section id="results">
+    <h2>Results</h2>
+    <ul>
+        <li><b>Challenge 1:</b> <span id="challenge1"></span></li>
+        <li><b>Challenge 2:</b> <span id="challenge2"></span></li>
+        <li><b>Challenge 3:</b> <span id="challenge3"></span></li>
+        <li><b>Challenge 4:</b> <span id="challenge4"></span></li>
+        <li><b>Challenge 5:</b> <span id="challenge5"></span></li>
+        <li><b>Challenge 6:</b> <span id="challenge6"></span></li>
+        <li><b>Challenge 7:</b> <span id="challenge7"></span></li>
+    </ul>
+</section>
+
+<hr />
+<section>
+    <h2>Instructions</h2>
+    <ul>
+        <li>Log into Codepen if you haven't, then fork this Code Challenge (find the Fork button on the bottom right) to your own account.</li>
+        <li>You will only need to edit the JS panel of this Codepen. You do not need to complete every Challenge listed below, but try as many as you can. Read the comments inside the JS panel for further instructions.</li>
+    </ul>
+    <h3>Your Challenges:</h3>
+    <ol>
+        <li>Use <b>concat()</b> with the two provided arrays, <b>states1</b> and <b>states2</b>, and place the return value inside the <b>states</b> variable on line 5, replacing the empty array [] there. In the blue Results section, you should see: "<b>Challenge 1: Iowa, Texas, Oregon, Kansas, California, Nevada</b>".</li>
+        <li>Write a statement that <b>sorts</b> the <b>animals</b> array. You do not need to set the result to any new variable, because sort() mutates the original array. In the blue Results section, you should see: "<b>Challenge 2: bonobo, hyena, koala, tiger, zebra</b>".</li>
+        <li>Write a statement to <b>reverse</b> the <b>numbers</b> array. You do not need to set the result to any new variable, because reverse() mutates the original array. In the blue Results section, you should see: "<b>Challenge 3: 0.23, 10000, 49, 68, 13, 7</b>".
+        </li>
+        <li>Write code to <b>slice()</b> the items with <b>index 2 and 3</b> from the <b>directions</b> array and assign the resulting array to the variable <b>newDirections</b>. Delete the empty array currently stored in newDirections. In the blue Results section, you should see: "<b>Challenge 4: nw, e</b>".
+        </li>
+        <li>Write code to <b>add 'owl'</b> to the <b>birds</b> array between <b>'sparrow'</b> and <b>raven'</b>, using <b>splice()</b>. In the blue Results section, you should see: "<b>Challenge 5: seagull, hawk, sparrow, owl, raven</b>".
+        </li>
+        <li>Write code to <b>remove 'burger'</b> and <b>'taco'</b> from the <b>menu</b> array, using <b>splice()</b> once. In the blue Results section, you should see: "<b>Challenge 6: gyro, sandwich, pasta
+            </b>".
+        </li>
+        <li>Write code to <b>replace</b> <b>'milkshake'</b> with <b>'lemonade'</b> in the <b>drinks</b> array, using <b>splice()</b> once. In the blue Results section, you should see: "<b>Challenge 7: lemonade, coffee, tea, mimosa</b>".
+        </li>
+    </ol>
+
+    <p>Compare your values shown in the blue Results list to the screenshot shown in the learning portal.</p>
+</section>
+
+<hr>
+
+<section>
+    <h2>Challenge Resources</h2>
+    <ul>
+        <li><a href="https://www.w3schools.com/js/js_array_methods.asp" target="_blank">W3Schools - JavaScript Array Methods</a></li>
+        <li><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array" target="_blank">MDN - Array</a></li>
+    </ul>
+</section>
+<script>
+    // Challenge 1
+    const states1 = ['Iowa', 'Texas', 'Oregon'];
+    const states2 = ['Kansas', 'California', 'Nevada'];
+    const states = states1.concat(states2);
+    document.getElementById('challenge1').textContent = states.join(', ');
+
+    // Challenge 2
+    const animals = ['zebra', 'koala', 'tiger', 'bonobo', 'hyena'];
+    animals.sort();
+    document.getElementById('challenge2').textContent = animals.join(', ');
+
+    // Challenge 3
+    const numbers = [7, 13, 68, 49, 10000, 0.23];
+    numbers.reverse();
+    document.getElementById('challenge3').textContent = numbers.join(', ');
+
+    // Challenge 4
+    const directions = ['n', 's', 'nw', 'e'];
+    const newDirections = directions.slice(2, 4);
+    document.getElementById('challenge4').textContent = newDirections.join(', ');
+
+    // Challenge 5
+    const birds = ['seagull', 'hawk', 'sparrow', 'raven'];
+    birds.splice(3, 0, 'owl');
+    document.getElementById('challenge5').textContent = birds.join(', ');
+
+    // Challenge 6
+    const menu = ['gyro', 'burger', 'sandwich', 'taco', 'pasta'];
+    menu.splice(1, 2);
+    document.getElementById('challenge6').textContent = menu.join(', ');
+
+    // Challenge 7
+    const drinks = ['milkshake', 'coffee', 'tea', 'mimosa'];
+    drinks.splice(0, 1, 'lemonade');
+    document.getElementById('challenge7').textContent = drinks.join(', ');    
+</script>
+</body>
+</html>

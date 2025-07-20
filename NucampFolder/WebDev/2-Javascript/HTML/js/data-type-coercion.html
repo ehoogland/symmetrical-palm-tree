@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <title>type-coercion</title>
+</head>
+<body>
+    <script> 
+    /* 3. (Optional Lesson) Understanding Data Type Coercion
+    Objective
+    By the end of this module, you will understand what type coercion is, 
+    the difference between implicit and explicit type coercion, and how to use it 
+    in your JavaScript programs.
+      
+    Lesson
+    Type coercion is the process of converting a value from one type to another. 
+    In JavaScript, this can happen implicitly (automatically done by the engine) 
+    or explicitly (manually done by the programmer). Understanding type coercion 
+    is critical to writing effective JavaScript code as it can lead to unexpected 
+    behavior if not understood correctly.
+    
+    Implicit Type Coercion
+    Implicit type coercion is automatic conversion done by the JavaScript engine 
+    when it expects a certain data type. It is more common but can also lead to 
+    confusing code if not handled properly.
+    
+    Consider the following example: */ 
+    let value = '10' + '5';
+    console.log(value); /* Outputs: "105"
+The JavaScript engine evaluates the expressions from left to right. 
+When it comes across an operation to perform, it looks at the operands and 
+the operator to decide what to do. In this case, we have the + operator, 
+which can be used for both arithmetic addition and string concatenation. 
+The way JavaScript decides which one to perform depends on the types of 
+the operands.
+
+In JavaScript, when the + operator is used with a string and a number, 
+the number is coerced to a string and a string concatenation is performed, 
+rather than numerical addition. This is because the string data type is less 
+flexible when it comes to operations - you can't perform mathematical operations 
+on strings (other than concatenation), but you can represent a number as a string. 
+Because of this, JavaScript makes the decision to prioritize string concatenation 
+over numerical addition in such scenarios.
+
+Explicit Type Coercion:
+Explicit type coercion is when the programmer manually converts the value from 
+one type to another. This is generally considered a better practice because it 
+makes the code clearer and less prone to bugs.
+
+Consider the following example: */
+let str = '5';
+let num = Number(str);
+console.log(num + 3); /* Outputs 8
+In this case, the Number() function is used to convert the string '5' to a number 
+before the addition operation is performed. 
+This ensures that we are performing arithmetic addition, not string concatenation.
+
+
+[let] */ value = 10 + '5';
+console.log(value); // Outputs: "105"
+
+ /*   Truthy and Falsy Values:
+In JavaScript, all values are either "truthy" or "falsy". These terms are used to describe how values are coerced to
+`true` or `false` in boolean contexts, such as conditional statements.
+For example: */
+if ('') { // an empty string is a falsy value
+    console.log("This won't print"); // this code will not run
+} else {
+    console.log("Empty strings are falsy"); // this code will run
+}
+/*
+Here's what's happening in this code:
+
+1. The if statement is checking whether '' (an empty string) is a truthy or falsy value.
+2. Because an empty string is a falsy value in JavaScript, the code inside the if block 
+does not run. So, "This won't print" doesn't get logged to the console.
+3. Instead, because the condition for the if statement is not met (because it's falsy), 
+the code inside the else block runs. So, "Empty strings are falsy" gets logged to the console.
+
+This is a key concept to understand in JavaScript, because any place where JavaScript expects 
+a boolean value (true or false) and finds something else, it will coerce that value to a boolean 
+according to these rules. That's why understanding truthy and falsy values is so important.
+
+Key Points to Remember:
+Implicit type coercion can lead to unexpected results because JavaScript decides how to convert types.
+It's generally best to use explicit type coercion whenever possible to ensure that your code behaves as expected.
+Understanding truthy and falsy values in JavaScript can help you write more effective conditional statements.
+
+Check your Understanding:
+To check your understanding, try to figure out how each of these expressions would resolve and print. Then test yourself
+in your console to see if you got it right.
+*/
+console.log(true + false);
+console.log(12 / '6');
+console.log(15 + 3 + "number");
+console.log("number" + 15 + 3);
+console.log([1] > null);
+console.log("foo" + + "bar");
+console.log('true' = true);
+console.log(false = 'false');
+console.log(null == '');
+console.log(!!"false" == !!"true");
+/*
+Explanations:
+How did you do? Let's walk through each line of code:
+*/
+console.log(true + false); /*
+JavaScript tries to evaluate this statement by performing addition. However, because the operands are not numbers,
+JavaScript performs type coercion. The boolean true is coerced into the number 1 and false into 0. This is because in
+JavaScript, true and false are often represented as 1 and 0 respectively. Then these two numbers are added together, and
+the output is 1. 
+*/
+console.log(12 / '6');
+// This time, we're trying to perform division. JavaScript cannot perform arithmetic operations on a string, 
+// so it coerces the string '6' into a number 6. Now the operation can be performed, and 12 / 6 = 2.
+
+console.log("number" + 15 + 3); /*
+Here, the first operand is a string, so when JavaScript encounters the + operator, it prioritizes string concatenation
+over addition. This is because a string can accommodate any value, but numbers are limited in the operations that can be
+performed with them. As a result, 15 and 3 are coerced to strings, and then concatenated together with "number",
+resulting in "number153".
+*/
+console.log(15 + 3 + "number"); /*
+In this scenario, the first two operands are numbers. JavaScript adds these two numbers together to get 18. 
+Only then does it encounter the + operator with a string, and therefore coerces 18 to a string and 
+performs string concatenation, resulting in "18number".
+*/
+console.log([1] > null); /*
+The > operator expects numerical or string operands. Here, JavaScript converts the array [1] 
+to its string representation "1", and then to a number 1. For null, which is generally considered 
+as 0 in numeric contexts, JavaScript converts null to 0. Now the comparison 1 > 0 evaluates to true.
+*/
+console.log("foo" + + "bar"); /*
+The + operator before "bar" is the unary plus operator, which tries to convert "bar" to a number. However, since "bar"
+cannot be converted into a number, it results in NaN. Then, JavaScript performs string concatenation of "foo" with NaN,
+resulting in "fooNaN". */
+console.log('true' == true); /*
+The == operator in JavaScript performs loose equality comparison and allows type coercion. The string 'true' is coerced
+to a number, but since it cannot be converted into a number, it results in NaN. On the other hand, the boolean true is
+coerced to 1. In JavaScript, NaN is not equal to any value, including itself, so the comparison NaN == 1 evaluates to
+false. */
+console.log(false == 'false'); /*
+Again, the == operator performs loose equality comparison. 
+The boolean false is coerced to 0 while the string 'false' is
+tried to be converted into a number. Since 'false' cannot be 
+converted into a number, it results in NaN. The comparison
+0 == NaN evaluates to false. */
+
+console.log(null == ''); /*
+In JavaScript, null is only loosely equal to itself or undefined. 
+It does not coerce into any other value when compared using ==. 
+So null is not equal to '' (empty string), and the result is false. 
+*/
+console.log(!!"false" == !!"true"); /*
+The double negation operator !! is used to convert values to their 
+boolean representation. 
+Non-empty strings are truthy in JavaScript, so !!"false" and !!"true" 
+both evaluate to true. As a result, true == true gives true.
+*/
+</script>
+</body>
+</html>

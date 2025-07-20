@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Classes Intro</title>
+    <style>
+        body {
+            font-family: "Oxygen", sans-serif;
+            margin: 1rem;
+        }
+    </style>
+</head>
+<body>
+<!-- Code for the Dragon class -->
+    <h1>Classes Intro</h1>
+    <p>In this example, we will create a simple class called <strong>Dragon</strong> that represents a dragon with a color and 
+    a maximum health points (HP). <br />
+    The class will include a constructor to initialize the properties and a method to make the dragon roar.</p>
+<script>      
+    class Dragon {
+        constructor(color, maxHP) {
+            this.color = color;
+            this.maxHP = maxHP;
+        }
+        // a default method for the Dragon class
+        // this method is not required to be overridden by subclasses
+        roar() {
+            console.log(`The ${this.color} dragon lets out a tremendous roar!`);
+        }
+    }    
+        const dragon = new Dragon("red", 1200);
+        const dragon2 = new Dragon("blue", 1000);
+        dragon//.roar();
+        dragon2.roar();
+
+       
+    </script>
+</body>
+</html>

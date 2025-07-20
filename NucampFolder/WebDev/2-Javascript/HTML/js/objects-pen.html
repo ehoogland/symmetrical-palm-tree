@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8" />
+    <meta utf-8 name="viewport" content="width=device-width, initial-scale=1">
+    <title>Objects Pen Example</title>
+    <style>
+        body { 
+    font-family: "Oxygen", sans-serif;
+    margin: 1rem;
+    }
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+        p {
+            font-size: 1.2rem;
+            line-height: 1.5;
+            color: #555;
+        }
+        pre {
+            background-color: #f4f4f4;
+            padding: 1rem;
+            border-radius: 5px;
+        }
+        </style>
+</head>
+<body>
+    <p>Complete each challenge listed below by editing the code inside the JS section of this Codepen. Place your code in the areas indicated by the comments.</p>
+<p>Use the developer console or the Codepen console (with the Console button provided by Codepen at the bottom left of your screen) to see console.log messages. 
+    Be aware that the Codepen console does not show all error messages, so if you're running into an error, try opening your browser's built-in developer console. </p>
+
+<h3>Code Challenge</h3>
+<p>Described below are 4 items. Turn each of them into an object. The first one has been completed for you as an example. 
+    Each object has at least one property and a method. A method call is already written for you as a test for each object. 
+    For the fifth item, you will create your own object.
+    <ol>
+    <li>
+        A <strong>rabbit</strong> with the property <strong>"color"</strong> set to the value of <strong>"white"</strong>. 
+        A <strong>checkWatch()</strong> method will result in a console.log that says "A white rabbit checks his watch and exclaims 'I'm late!'" -- 
+        the color "white" in this message should be referenced dynamically from the property. 
+    </li>
+    <li>
+        A <strong>spaceship</strong> with the property <strong>"name"</strong>. Name the spaceship whatever you wish. 
+        A <strong>launch()</strong> method will result in a JavaScript <strong>alert</strong> that says, "You have launched the spaceship 
+        (your spaceship name here, referencing the name property)!";
+    </li>
+    <li>
+        A shopping <strong>cart</strong> with a property <strong>"contents"</strong> initialized to an <strong>empty array</strong>. 
+        A method <strong>addItem(item)</strong> will add an item to the contents array.
+    </li>
+    <li>
+        A <strong>lever</strong> with the property <strong>"stamp"</strong> set to the string <strong>"ACME"</strong>. 
+        Write a <strong>pull()</strong> method for it and console.log: "An anvil stamped (reference the stamp property here dynamically) 
+        drops on your head." 
+    </li>
+    <li>
+        Create your own object and give it <strong>at least one property</strong> and <strong>at least one method</strong>. 
+        Then call one of the methods you created. Use your imagination! 
+        
+        <strong>Bonus challenge:</strong> Give one of the methods at least one parameter, and use the argument passed into that parameter 
+        within the method body.
+    </li>
+    </ol>
+
+    <h4>Bonus Challenge:</h4>
+    <ul><li>
+    Add to the shopping cart item a <strong>removeItem(item)</strong> method that takes a string as its argument, then checks for 
+    if a string matching that argument exists in the contents array. If so, it should remove it and console.log a success message 
+    and the new value of the contents array. If not, it should console.log an error message saying that the item is not in the cart. 
+    Test the method by calling it like this: <strong>cart.removeItem("laptop");</strong>
+    </li></ul>
+
+    <h3>Additional Resources</h3>
+    <ul>
+    <li><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Object_initializer" target="_blank">MDN - Object initializer</a>
+    </li>
+    <li><a href="http://javascript.info/object" target="_blank">JavaScript.info - Object</a>
+    </li>
+    </ul>
+    <script>
+// Code Challenge Objects
+// 1. Rabbit Object
+//    The rabbit object has a property "color" initialized to "white".
+//    The checkWatch method logs a message to the console that includes the color of the rabbit
+//    and a message indicating that the rabbit is late.
+//    "this.color" refers to the rabbit object
+//    and its property "color"
+//    "white" is bound to the "color" property
+//    so that it can be referenced dynamicallyin the console log message
+//    The console log message will display the color of the rabbit
+//    when the method is called from the rabbit object,in the console, or in an alert
+      const rabbit = {
+          color: "white",
+          checkWatch: function() {
+              console.log(`A ${this.color} rabbit checks his watch and exclaims 'I\'m late!'`);
+          }
+      };
+
+      rabbit.checkWatch();
+// 2. Spaceship Object
+//    "this.name" refers to the spaceship object and its property "name"
+//    "SS Eric Scott" is bound to the "name" propertyso that it can be referenced dynamically in the alert message
+//    The alert message will display the name of the spaceship when the method is called from the spaceship object, in the console, or in an alert
+
+      const spaceship = {
+          name: "SS Eric Scott",
+          launch: function() {     
+              alert(`You have launched the spaceship ${this.name}!`);
+              return;
+          }
+      };
+      
+spaceship.launch();
+
+// 3. Shopping Cart Object
+//    The cart object has a property "contents" initialized to an empty array.
+//    The addItem method takes an item as an argument and adds it to the contents array.
+//    The removeItem method takes an item as an argument, checks if it exists in the contents array.
+    const cart = {
+        contents: [],
+        addItem: function(item) {
+            cart.contents.push(item)
+            // Log the updated contents of the cart
+            console.log(`Added "${item}" to the cart.`);
+            console.log(`Current cart contains: ${cart.contents.join(", ")}`);
+        },
+        removeItem: function(item) {
+            const index = cart.contents.indexOf(item);
+            if (index !== -1) {
+                cart.contents.splice(index, 1);
+                // Log the updated contents of the cart
+                console.log(`Removed "${item}" from the cart.`);
+            } else {
+                console.log(`"${item}" is not in the cart.`);
+            }
+        }
+    };
+cart.addItem("laptop");
+console.log("The cart contains:", cart.contents.join(", "));
+// Test the removeItem method
+cart.removeItem("laptop");
+if (cart.contents.length === 0) {
+    console.log("The cart is now empty.");
+} else {
+    console.log("The cart still contains:", cart.contents.join(", "));
+}
+
+
+const lever = {
+    stamp: "ACME",
+    pull: function() {
+        console.log(`An anvil stamped "${this.stamp}" drops on your head.`);
+        return;
+    }
+};
+lever.pull();
+
+// Create your own object here
+const notes = function() {
+    const contents = [];
+    // Return an object with methods to add and remove items
+    return {
+        addItem: function(item) {
+            contents.push(item);
+            console.log(`Added "${item}" to notes.`);
+            console.log(`Current notes contents: "${contents.join(', ')}"`);
+        },
+        removeItem: function(item) {
+            const index = contents.indexOf(item);
+            if (index !== -1) {
+                contents.splice(index, 1);
+                console.log(`Removed "${item}" from notes.`);
+            } else {
+                console.log(`"${item}" is not in notes.`);
+            }
+        }
+    };
+};
+
+const myNotes = notes();
+myNotes.addItem("Buy groceries");
+myNotes.addItem("Call mom");
+myNotes.removeItem("Buy groceries");
+myNotes.removeItem("Go to the gym");
+        
+
+
+  
+    </script>
+    </p>
+</body>
+</html>
