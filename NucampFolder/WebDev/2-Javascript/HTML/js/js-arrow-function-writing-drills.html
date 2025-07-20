@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8" />
+    <title>JS - Arrow Function Writing Drills</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 1rem;
+        }
+    </style>
+        
+</head>
+<body>
+    <p>This Code Challenge is intended to give you more practice with writing arrow functions, and to understand how their syntax is different from function declarations and function expressions.</p>
+
+<p>For this Code Challenge, you will add code to the JS section of this Codepen. You will not need to update any code in the HTML or CSS sections.</p>
+
+<p>You can use the Codepen Console to see the console log messages. However, remember that the Codepen Console does not show error messages, so you should also open your browser's developer console as well. </p>
+
+<h3>Code Challenge</h3>
+<ul><li>In the JS section, convert each function declaration or function expression given to an arrow function. 
+    The resulting console.logs should be the same as before you did the conversion.</li></ul>
+    <script>
+    /* Drill #1: Change the below function declaration to an arrow function 
+    
+    function ftToInches(ft) { return ft * 12; };
+    */
+    const ftToInches = ft => ft * 12;
+    
+    // Test - you do not need to change this part.
+    alert(`5 feet equals: ${ftToInches(5)} inches. Now check the console!`);
+    console.log(`5 feet equals: ${ftToInches(5)} inches.`);
+    
+    /* Drill #2: Change the below function declaration to an arrow function
+    
+    function area(width, length) { return width * length; }; */
+    
+    const area = (width, length) => width * length;
+    
+    // Test - you do not need to change this part.
+    console.log(`The area of a 4x5 rectangle is: ${area(4, 5)}.`);
+    
+    /* Drill #3: Change the below function expression to an arrow function
+    const daysToHours = function(days) { return days * 24; }; */
+    const daysToHours = days => days * 24;
+    
+    // Test - you do not need to change this part.
+    console.log(`28 days is equal to ${daysToHours(28)} hours.`);
+    
+    /* Drill #4: Change the below function expression to an arrow function
+    const cardName = function(value, suit) { return `${value} of ${suit}`; }; */
+    const cardName = (value, suit) => `${value} of ${suit}`;
+    
+    // Test - you do not need to change this part.
+    console.log(`You turn the card over to reveal a ${cardName(7, "Clubs")}!`);
+    </script>
+    
+    
+    <h3>Resources</h3>
+    <ul>
+        <li><a href="https://www.w3schools.com/js/js_arrow_function.asp" target="_blank">W3Schools - Arrow Function</a></li>
+        <li><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/Arrow_functions" target="_blank">MDN - Arrow functions</a></li>
+    </ul>
+    
+</body>
+</html>

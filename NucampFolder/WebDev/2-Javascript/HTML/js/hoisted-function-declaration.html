@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <title>hoisted-function-declaration</title>
+</head>
+<body>
+    <script>
+        let costly = getPizzaCost('small', 4);  
+        /* getPizzaCost('small', 4)   // this function declaration is hoisted (you can call it before the function appears on the page)
+        // however, the alert cannot be placed before the function unless you save the result of the function call to a variable
+        // (that is, bind the variable to the value of cost returned by the function) */
+        alert(`The cost of this pizza is:  $${costly}`); 
+        
+        function getPizzaCost(size, nToppings) {
+            let cost = 10; // base cost for a small pizza
+            if (size === 'medium') {cost += 4; }
+            else if (size === 'large') { cost += 8; 
+            } 
+            cost +=nToppings;
+            // this alert has to come after the function if just using a function declaration because
+            // cost is only declared, and its value determined within the function. See commented function
+            // declaration. The function expression allows you put it in either place.
+            alert(`The cost of your pizza is:  $${cost}`); 
+     
+        return cost;
+        }
+        /* 
+        Function Hoisting
+        Function declarations are hoisted.
+        This means that before any JavaScript is executed, the code is first scanned for function declarations and any that are found are "hoisted" to the top of their scope. 
+        Practically speaking, that means you can use functions that were created with function declarations before you get to them in the code. 
+        For an example of this, take the last function call you wrote and place it above the function declaration and run the code. It should run the same. 
+        This is not always necessarily a good thing, but you should be aware of this behavior. 
+
+        */
+    </script>
+</body>
+</html>

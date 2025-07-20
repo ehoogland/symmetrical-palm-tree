@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8" />
+    <title>title</title>
+</head>
+<body>
+    <h1>More on Loops and Strings</h1>
+    <p>This is a simple HTML document to demonstrate loops and strings in JavaScript.</p>
+    <script>
+
+Iterate using a standard for loop
+
+// let's write a loop to go through each array item in turn and log it as part of a sentence.
+for (let i = 0; i < pets.length; i++) {
+   console.log('I have a', pets[i]);
+}
+/* This code initializes an iterator variable i to 0, then runs the code inside the for loop 
+for as many times as the number of items in the pets array.
+At every loop, it uses the value of i to access a different item in the array, in sequence, 
+and uses that item in a console.log() statement.
+In the loop's first iteration, the value of i is 0, and the value stored at pets[0] is 'dog', 
+so 'I have a dog' is printed, and so on.
+Expected output:
+
+I have a dog
+I have a cat
+I have a fish
+
+Iterate using the for ... of syntax
+JavaScript gives us an easier way to iterate over an array with a for loop, called a for ... of loop.
+We can replicate the results from the above example like this:
+*/
+for (const pet of pets) {
+   console.log('I have a', pet);
+}
+/*Expected output:
+
+I have a dog
+I have a cat
+I have a fish
+
+Let's break down the syntax of the for ... of loop:
+We begin with the keyword for:
+for
+We follow it with a set of parentheses:
+for ( )
+Inside the parentheses, we declare a new variable to be used inside the for loop named pet.
+Because we don't intend to change the value of pet inside the for loop, it is appropriate to use the const variable declaration keyword: */
+for (const pet of pets) {
+   console.log('I have a', pet);
+}
+/*
+When we use the for ... of syntax, JavaScript will automatically use the length of the array given after the of keyword for the number of loops to make.
+The code inside the for block will run exactly as many times as the number of items in the given array. So if the array has 5 items, the loop will run exactly 5 times, and no more.
+In the loop's first iteration, the value of the variable defined before the of keyword will be the value of the first item in the array defined after the of keyword. That means the pet variable will be assigned the value of 'dog', because 'dog' is the first item in the pets array. 
+In the loop's second iteration, the pet variable will be assigned the value of 'cat' (because it is the second item in the pets array), and so on, until each item in the array has been used once and the entire loop is completed.
+Inside the loop, whatever code you run will execute once for each item in the array, and you can use the variable pet in any way inside the loop that makes sense.
+You can name this variable as you wish; it isn't required to be pet. It could be p, for example. However, it's quite common to see arrays possessing a plural noun name (such as pets), and variables that refer to single values/items from that array having the singular form of that plural name (such as pet).
+
+
+Iterate over and mutate the values in the array
+The above examples showed looping through an array without mutating (changing) the values of the array.
+Let's look at one way to loop through an array and change its values at the same time.
+Let's double check the contents of our pets array, using a console.log(): */
+console.log(pets)
+/*
+Expected output:
+["dog", "cat", "fish"]
+
+You can see from this that the array contents have not changed since they were originally set.
+Next, enter this code into the developer console 
+(note - for the cleanest output, use Shift-Enter instead of Enter between the closing curly brace of the 
+for loop and the final console.log line -- if you use Enter instead, that's okay, but you will see an 
+additional output that says 'FISH' that you can ignore): */
+for (let i = 0; i < pets.length; i++) {
+   pets[i] = pets[i].toUpperCase();
+}
+console.log(pets)
+/*
+In this case, we are assigning a new value to each array item through what's called bracket notation.
+On the left side of the assignment operator (the = sign), we specify what it we want to change: the item at index i in the pets array, or pets[i].
+On the right side, we have the new value we want to set for that item: the current value of the array item at pets[i], set to upper case using a string method called toUpperCase().
+Expected output:
+["DOG", "CAT", "FISH"]
+
+*/
+
+        // String manipulation examples
+        // This will log each character of the string "Hello, World!" to the console
+        let str = "Hello, World!";
+        for (let i = 0; i < str.length; i++) {
+            console.log(str[i]);
+        }
+        // This will log the string in reverse order
+        for (let i = str.length - 1; i >= 0; i--) {
+            console.log(str[i]);
+        }
+        // This will log the string in uppercase
+        console.log(str.toUpperCase());
+        // This will log the string in lowercase
+        console.log(str.toLowerCase());
+        // This will log the length of the string
+        console.log("Length of the string:", str.length);
+        // This will check if the string contains the word "World"
+        console.log("Does the string contain 'World'? ", str.includes("World"));
+
+        // This will replace "World" with "JavaScript"
+        console.log("Replaced string:", str.replace("World", "JavaScript"));
+        // This will split the string into an array of words
+        console.log("Split string:", str.split(" "));
+        // This will join the array back into a string
+        let wordsArray = str.split(" ");
+        console.log("Joined string:", wordsArray.join(" "));
+        // This will trim whitespace from the string
+        let whitespaceStr = "   Hello, World!   ";
+        console.log("Trimmed string:", whitespaceStr.trim());
+        // This will check if the string starts with "Hello"
+        console.log("Does the string start with 'Hello'? ", str.startsWith("Hello"));
+        // This will check if the string ends with "!"
+        console.log("Does the string end with '!'? ", str.endsWith("!"));
+        // This will find the index of the first occurrence of "o"
+        console.log("Index of first 'o':", str.indexOf("o"));
+        // This will find the index of the last occurrence of "o"
+        console.log("Index of last 'o':", str.lastIndexOf("o"));
+        // This will extract a character at index 7
+        // This will extract a substring from the string
+        console.log("Substring (from index 7 to 12):", str.substring(7, 12));
+        // This will slice the string from index 7 to the end
+        console.log("Slice (from index 7 to end):", str.slice(7));
+        // This will repeat the string 3 times
+        console.log("Repeated string (3 times):", str.repeat(3));
+        // This will check if the string is empty
+        console.log("Is the string empty? ", str.length === 0);
+        // This will convert the string to an array of characters
+        console.log("String to array of characters:", Array.from(str));
+        // This will check if the string is a palindrome
+        function isPalindrome(s) {
+            let cleaned = s.replace(/[^a-zA-Z0-9]/g, "").toLowerCase();
+            let reversed = cleaned.split("").reverse().join("");
+            return cleaned === reversed;
+        }
+        console.log("Is 'A man, a plan, a canal: Panama' a palindrome? ", isPalindrome("A man, a plan, a canal: Panama"));              
+        // This will find the first occurrence of a character in the string
+        function findFirstOccurrence(str, char) {
+            for (let i = 0; i < str.length; i++) {
+                if (str[i] === char) {
+                    return i;
+                }
+                
+            }
+            return -1; // Character not found
+        }
+        console.log("First occurrence of 'o':", findFirstOccurrence(str, 'o'));
+        // This will find the last occurrence of a character in the string
+        function findLastOccurrence(str, char) {
+            for (let i = str.length - 1; i >= 0; i--) {
+                if (str[i] === char) {
+                    return i;
+                }
+            }
+            return -1; // Character not found
+        }
+        console.log("Last occurrence of 'o':", findLastOccurrence(str, 'o'));   
+        // This will count the number of vowels in the string
+        function countVowels(str) {
+            let count = 0;
+            const vowels = "aeiouAEIOU";
+            for (let i = 0; i < str.length; i++) {
+                if (vowels.includes(str[i])) {
+                    count++;
+                }
+            }
+            return count;
+        }
+        console.log("Number of vowels in the string:", countVowels(str));
+        // This will count the number of consonants in the string
+        function countConsonants(str) {
+            let count = 0;
+            const consonants = "bcdfghjklmnpqrstvwxyzBCDFGHJKLMNPQRSTVWXYZ";
+            for (let i = 0; i < str.length; i++) {
+                if (consonants.includes(str[i])) {
+                    count++;
+                }
+            }
+            return count;
+        }
+        console.log("Number of consonants in the string:", countConsonants(str));
+        // This will count the number of words in the string
+        function countWords(str) {
+            let words = str.trim().split(/\s+/);
+            return words.length;
+        }
+        console.log("Number of words in the string:", countWords(str));     
+        // This will reverse the words in the string
+        function reverseWords(str) {
+            return str.split(" ").reverse().join(" ");
+        }
+        console.log("Reversed words in the string:", reverseWords(str));
+        // This will capitalize the first letter of each word in the string
+        function capitalizeFirstLetter(str) {
+            let words = str.split(" ");
+            for (let i = 0; i < words.length; i++) {
+                words[i] = words[i].charAt(0).toUpperCase() + words[i].slice(1);
+            }
+            return words.join(" ");
+        }
+        console.log("Capitalized first letter of each word:", capitalizeFirstLetter(str));  
+        // This will check if the string is a valid email address
+        function isValidEmail(email) {
+            const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            return regex.test(email);
+        }
+        console.log("Is 'test@example.com' a valid email?", isValidEmail("test@example.com"));          
+        // This will check if the string is a valid URL
+        function isValidURL(url) {
+            const regex = /^(https?:\/\/)?([a-z0-9-]+\.)+[a-z]{2,})(:[0-9]+)?(\/[^\s]*)?$/i;
+            return regex.test(url);
+        }
+        console.log("Is 'https://www.example.com' a valid URL?", isValidURL("https://www.example.com"));          
+        // This will check if the string is a valid phone number
+        function isValidPhoneNumber(phone) {
+            const regex = /^\+?[1-9]\d{1,14}$/; // E.164 format
+            return regex.test(phone);
+        }
+        console.log("Is '1234567890' a valid phone number?", isValidPhoneNumber("1234567890"));
+        console.log("Is '123-456-7890' a valid phone number?", isValidPhoneNumber("123-456-7890"));
+        console.log("Is '(123) 456-7890' a valid phone number?", isValidPhoneNumber("(123) 456-7890"));
+        console.log("Is '123.456.7890' a valid phone number?", isValidPhoneNumber("123.456.7890"));                                                             
+        console.log("Is '+1234567890' a valid phone number?", isValidPhoneNumber("+1234567890"));          
+        // This will check if the string is a valid date
+        function isValidDate(dateString) {
+            const regex = /^(0[1-9]|[12][0-9]|3[01])-(0[1-9]|1[0-2])-\d{4}$/;
+            return regex.test(dateString);
+        }
+        console.log("Is '31-12-2020' a valid date?", isValidDate("31-12-2020"));
+    </script>                                                                                   
+</body>
+</html>

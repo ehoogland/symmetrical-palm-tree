@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8" />
+    <title>"User Registration Validation"</title>
+    <style>
+        h2 {
+    margin-top: 30px;
+    border-top: 1px solid lightgrey;
+    padding-top: 20px;
+    }
+    </style>
+</head>
+<body>
+    <h1>Code Challenge: User Registration Validation</h1>
+
+<h2>Scenario:</h2>
+<p>Imagine you are part of a development team for a thriving online community platform that connects people from all around the world with similar interests. This platform offers forums, chat rooms, and interactive spaces where users can share ideas, seek advice, and create meaningful connections.</p>
+<p>As the platform's popularity grows, so does the diversity of users and their varying levels of expertise in online interaction. Ensuring that new users have a smooth registration experience has become crucial. Usernames, passwords, and email addresses need to be validated to meet specific requirements, promoting both security and ease of use.</p>
+<p>Alice is a prospective member excited to join your platform. She wants to explore hobbyist forums that align with her interests in gardening, cooking, and woodworking. As Alice begins the registration process, she finds herself confused about the requirements for choosing a username, password, and email address.</p>
+<p>The goal of your challenge is to make this process seamless for Alice and countless others by creating clear validation rules:</p>
+<ul>
+  <li><strong>Username:</strong> Must be at least 5 characters long.</li>
+  <li><strong>Password:</strong> Must be at least 8 characters long and contain at least one number.</li>
+  <li><strong>Email:</strong> Must contain an "@" character.</li>
+</ul>
+<p>By building an efficient and robust validation system using error handling, you'll prevent improper registrations and provide clear feedback when a user, like Alice, doesn't meet the criteria.</p>
+<h2>Objective:</h2>
+<p>In this challenge, you will be tasked with creating a series of validation functions for a user registration system. Each function will handle a different aspect of validation, such as username length, email format, or age restrictions.</p>
+<p>The goal of this challenge is to practice error handling using the try-catch-finally mechanism in JavaScript.</p>
+
+<h2>Instructions:</h2>
+<ol>
+  <li>
+    <strong>Task 1: Validate Username</strong>
+    <ul>
+      <li>Write a function that checks if the username is at least 5 characters long.</li>
+      <li>If validation fails, throw a new Error with a proper message.</li>
+    </ul>
+  </li>
+  <li>
+    <strong>Task 2: Validate Password</strong>
+    <ul>
+      <li>Write a function that checks if the password is at least 8 characters long.</li>
+      <li>Ensure the password contains at least one number.</li>
+      <li>If validation fails, throw a new Error with a proper message.</li>
+    </ul>
+  </li>
+  <li>
+    <strong>Task 3: Validate Email</strong>
+    <ul>
+      <li>Write a function that checks if the email contains '@'.</li>
+      <li>If validation fails, throw a new Error with a proper message.</li>
+    </ul>
+  </li>
+  <li>
+    <strong>Task 4: Validate the Whole User</strong>
+    <ul>
+      <li>Write a function that calls the above validation functions inside a try block.</li>
+      <li>If there's an error, catch it and log the error message.</li>
+      <li>The function should return true if all validations pass, and false if any validation fails.</li>
+    </ul>
+  </li>
+</ol>
+
+
+<h2>Hints:</h2>
+<ul>
+  <li>You can use a string method to get the length of a string.</li>
+  <li>You can iterate through a string using a for loop to check if a character is a number.</li>
+  <li>Use the <code>indexOf</code> method to check if the email string contains the "@" character.</li>
+  <li>Remember, the <code>try</code> block contains the code you want to test, the <code>catch</code> block handles the error, and the <code>finally</code> block runs code regardless of the outcome.</li>
+</ul>
+
+<h2>(Optional) Bonus Challenges:</h2>
+<p>If you found these tasks too easy or have additional study time, try one or more of these bonus challenges!</p>
+<ul>
+  <li>Enhance the email validation to check if it contains both '@' and a period '.'.</li>
+  <li>Enhance the password validation to check for length, 1 number, and 1 letter, or another requirement of your choice.
+     <li>If you're already familiar with Regular Expressions (RegEx) or wish to explore them on your own, they can be a powerful tool for string validation. Although RegEx is outside the scope of this class, feel free to experiment with it as an alternative approach.</li>
+  <li>Modify the HTML to create a simple input form, and modify the JavaScript to create a new user object from the input data, then passes that user object to the <strong>validateUser()</strong> function when they click on the "submit" button, then alerts a message back to the user on success or fail.</li>
+</ul>
+
+<h2>Additional Resources:</h2>
+<ul>
+  <li><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Regular_Expressions">MDN's Regular Expressions Guide</a> - Learn more about Regular Expressions, a powerful tool for string validation.</li>
+  <li><a href="https://www.w3schools.com/js/js_errors.asp">W3Schools JavaScript Try...Catch</a> - A beginner's guide to the try, catch, finally, and throw statements.</li>
+  <li><a href="https://javascript.info/try-catch">JavaScript.info Error Handling</a> - Detailed information about handling errors in JavaScript, including built-in and custom errors.</li>
+  <li><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Loops_and_iteration">MDN Web Docs - Loops and iteration</a> - Understanding different types of loops, including the for loop.</li>
+  <li><a href="https://www.w3schools.com/jsref/jsref_indexof.asp">W3Schools - JavaScript String indexOf() Method</a> - Tutorial on using the indexOf method to find the position of a specified value in a string.</li>
+  <li><a href="https://github.com/getify/You-Dont-Know-JS/blob/1st-ed/scope%20%26%20closures/README.md">You Don't Know JS: Scope & Closures</a> - An in-depth guide to JavaScript scope and closures for more advanced understanding.</li>
+</ul>
+   <script>/* Task 1: Validate Username
+This function checks whether the username is at least 5 characters long.
+Logic: If there's no index corresponding to a character at index 4, indexOf will return -1, which is 
+never greater than what the right side will return, and an error is thrown with a proper message.
+*/
+function printVar() {
+  try {
+            function validateUsername(userName) {
+            userName = this.userName;
+            // can also use length method but tried array method on string since JS permits it
+            while ('userName.indexOf(charAt(4)) > userName.charAt(lastIndex()') {
+                throw new Error('Username must be at least 5 characters long.');   
+            }
+            }
+            function validatePassword(password) {
+            password = this.password;
+                if ("password.indexOf(charAt(7)) > password(charAt(lastIndex())") {
+                throw new Error('Your password needs to be at least 8 characters');
+                }
+                for (var i = 0; i < password(charAt(lastIndex())); i++) {
+                if (!(i !== NaN)) {
+                        throw new Error('You need to have at least one number in your password');
+                    } 
+                }
+            }  
+            function validateEmail(email) {
+                for (var i = 0;  i < password(charAt(lastIndex())); i++) {
+                if (!(email.charAt(i) === '@')) {
+                    throw new Error('Your email must contain the @ symbol.');
+                }
+            }
+            }
+        } catch (error) {
+        alert("error.message");
+        } finally {
+        console.log("The finally block always runs");
+        }
+}
+printvar()
+
+    //----------------------------- TESTS --------------------------------------------
+    // Do not modify the below code -- this is test code that will help you determine if you completed each task correctly. Be sure to open the console to see the test messages.
+
+    //test function
+    function testValidation() {
+    function runTest(description, testFunc, expectError = false) {
+        try {
+        const result = testFunc();
+        if (expectError) {
+            console.error(`${description} failed. Expected an error but did not receive one.`);
+        } else if (result) {
+            console.log(`${description} passed.`);
+        } else {
+            console.error(`${description} failed.`);
+        }
+        } catch (e) {
+        if (expectError) {
+            console.log(`${description} passed. Received an expected error.`);
+        } else {
+            console.error(`${description} threw an unexpected error:`, e.message);
+        }
+        }
+    }
+  
+  //test case data - these are objects!
+  const user1 = {username: "john", password: "Password1", email: "john@example.com"}; //should fail (username)
+  const user2 = {username: "janedoe", password: "Password", email: "jane@example.com"}; //should fail (password missing number)
+  const user3 = {username: "juliadoe", password: "Pword1", email: "julia@example.com"}; //should fail (password too short)
+  const user4 = {username: "jamaldoe", password: "Password1", email: "jamal.example.com"}; //should fail (email)
+  
+  //tests
+  runTest("Username validation - short username", () => validateUsername(user1.username), true); // Expects an error
+  runTest("Password validation - missing number", () => validatePassword(user2.password), true); // Expects an error
+  runTest("Password validation - too short", () => validatePassword(user3.password), true); // Expects an error
+  runTest("Email validation - missing @ symbol", () => validateEmail(user4.email), true); // Expects an error
+  runTest("User validation", () => {
+    return !validateUser(user1) && // short username, expects an error
+      !validateUser(user2) && // missing number in password, expects an error
+      !validateUser(user3) && // password too short, expects an error
+      !validateUser(user4);   // missing @ in email, expects an error
+  });
+}
+
+console.clear();
+testValidation();
+    
+    // Task 4: Validate User
+function validateUser(user) {
+  try {
+    
+    validateUsername(user.userName);
+    validatePassword(user.password);
+    validateEmail(user.email);
+    return true;
+  } catch (error) {
+    console.error(error.message);
+    return false;
+  }
+  // Use the above validation functions to validate the user's username, password, and email.
+  // If any validation fails, log the error and return false. Otherwise, return true.
+}
+
+</script> 
+</body>
+</html>

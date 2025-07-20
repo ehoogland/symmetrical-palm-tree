@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <title>Event Listener Demo 3</title>
+    <style>
+        div {
+            font-size: 24px;
+        }
+    </style>
+</head>
+<body>
+    <div>Move your mouse over this text then off!</div>
+
+    <script>
+        /**
+         * Now we are using mouseover, not onmouseover, so we
+         * can listen for more than one action on the same event.
+         * Both the text and the background change on the same event.
+         */ 
+        const div = document.querySelector('div');
+        div.addEventListener('mouseover', changeTextColor);
+        div.addEventListener('mouseover', changeBackground);
+        div.addEventListener('mouseout', revert);
+
+        function changeTextColor() {
+            div.style.color = 'orange';
+        }
+
+        function changeBackground() {
+            div.style.background = 'purple';
+        }
+
+        function revert() {
+            div.style.color = 'black';
+            div.style.background = 'white';
+        }
+    </script>
+</body>
+</html>

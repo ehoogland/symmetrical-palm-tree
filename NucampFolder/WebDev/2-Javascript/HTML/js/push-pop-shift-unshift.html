@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <title>push pop shift unshift</title>
+</head>
+<body>
+    <script>
+        let myArr = ['a', 'b', 'c', 'd'];
+        console.log(myArr);
+        myArr.push('e');
+        console.log(myArr + 
+        " the push('onto end') method returns the new length of the array, which is 5");
+        let letter = myArr.pop(); // bind letter to popped item
+        console.log(myArr + 
+        " pop() both removes the last item and returns it."); 
+        console.log("If you pop an empty array, you will get a return value of 'undefined'");
+        myArr.push('a', 'b', 'c');
+        console.log(myArr + " Notice how you can push multiple items");
+        console.log("While push() and pop() add or remove items from the end of an array " +
+        "unshift() and shift() will add or remove items from the start of the array." +
+        "myArr.shift() will remove the first item from the beginning of myArr and return it.");
+        
+        letter = myArr.shift();
+
+        console.log("Like push(), unshift() will add items to an array and return the new length.");
+myArr.unshift(1);
+console.log("Like push(), you can add more than one item at a time");
+myArr.unshift(5,6,7);
+console.log("remember how to tell these sets of methods apart -- shift() and unshift() actually shift the indices of the entire array, while push() and pop() do not. ")
+    </script>
+</body>
+</html>

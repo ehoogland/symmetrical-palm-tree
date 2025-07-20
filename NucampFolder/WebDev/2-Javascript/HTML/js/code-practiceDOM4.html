@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8" />
+    <title>DOM 2 practice</title>
+    <style>
+    #result {
+    text-align: center;
+    font-size: 5em;
+    font-family: 'Inter', 'Sans Source Pro', sans-serif;
+    margin-top: 10px;
+}
+    </style>
+</head>
+<body>
+    <div id="result"></div>
+    <script>
+        // create a ul element and append it to the DOM as a child of the document body
+        const groceryList = document.createElement('ul');
+        document.body.appendChild(groceryList);
+
+        const groceries = ['apples', 'coffee', 'eggs'];
+        
+        // an array of groceries and a for...of loop are used to create and append each grocery in 
+        // the array as a listitem child of the groceryList unordered list element.
+
+        for (const grocery of groceries) {
+            item = document.createElement('li');
+            item.textContent = grocery;
+            groceryList.appendChild(item);
+        }
+        // the removeChild() method and the firstChild property of the groceryList element 
+        // are used to remove the list's first listitem element
+        groceryList.removeChild(groceryList.firstChild);
+    
+    </script>    
+        
+        
+</body>
+</html>
