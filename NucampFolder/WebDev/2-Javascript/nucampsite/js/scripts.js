@@ -6,19 +6,22 @@ console.log('javascript connected!'); // testing
  * Carousel cycles automatically on load because pause property is set to false
  */   
 const carousel = new bootstrap.Carousel('#homeCarousel', {
-    interval: 2000,
+    // may want to change to 2000 when testing
+    interval: 5000,
     pause: false
 })
 // when the play button is clicked, begin cycling through the images
-const carouselPlay = document.getElementById('carouselPlay');
-carouselPlay.addEventListener('click', function() {
-    console.log('cycle the carousel');
-    carousel.cycle();
-})
+const carouselPlay = document.getElementById('carouselButton');
+const faIcon = document.getElementById('faButton');
 
-// when the pause button is clicked, pause the carousel
-const carouselPause = document.getElementById('carouselPause');
-carouselPause.addEventListener('click', function() {
-    console.log('pausing the carousel');
-    carousel.pause();
-})
+carouselButton.addEventListener('click', function () {
+    if (faIcon.classList.contains('fa-pause')) {
+        faIcon.classList.remove('fa-pause');
+        faIcon.classList.add('fa-play');
+        carousel.pause();
+    } else {
+        faIcon.classList.remove('fa-play');
+        faIcon.classList.add('fa-pause');
+        carousel.cycle();
+    }
+})   
