@@ -15,13 +15,14 @@
     <h1>My Shopping List</h1>
     <form id="myForm">
         <label for="item">Add an item:</label>
+        <!--javascript targets the id of the input, which is #item-->
         <input id="item" type="text" name="item">
-        <button>Add</button>
+        <button onclick="getItem()">Add</button>
     </form>
     <ul id="shoppingList">
         <!-- list items will go into this ul via DOM manipulation -->
     </ul>
-    <script>
+    <script src="js/shopping-list.js">
         // add your JavaScript code here
     </script>
 </body>
