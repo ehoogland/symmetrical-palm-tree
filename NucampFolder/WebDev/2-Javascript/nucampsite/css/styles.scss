@@ -55,6 +55,13 @@ footer {
 .carousel {
     border: solid $color-secondary;
 }
-
+// This CSS/SCSS ruleset uses absolute positioning to place the 
+// buttons in the bottom-right corner of the carousel container
+#carouselButton {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    z-index: 100;
+}
 @import 'modal';
 @import 'review-section';
