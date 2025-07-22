@@ -1,6 +1,4 @@
-const shoppingList = [];
-
-
+const list = [];
 
 function resetAndFocus() {
     document.getElementById("myForm").reset(); // Clear the HTML form's input field,
@@ -16,16 +14,16 @@ function getItem() {
     // However, we only want to get the value of the input, not the entire input element.
     // Since the value property of the input element contains the text that the user has entered,
     // we can use document.getElementById("item") to get the input element's value.
-
+    
     // The trim() method removes whitespace from both ends of the string.
     const item = document.getElementById("item").value.trim();
     if (item === "") { console.log("Please enter an item."); }
     // remember we have previously bound const item to just the trimmed value of
     // the input field and not to the entire input element.
-    if (!shoppingList.includes(item)) { // Check if the item variable is not already in the list
-        shoppingList.push(item);
+    if (!list.includes(item)) { // Check if the item variable is not already in the list
+        list.push(item);
         // research note: ES2023 nonmutating method to sort the array, toSorted()
-        shoppingList.sort(); 
+        list.toSorted();
         // Call the displayList function to update the HTML with the new item
         //displayList(); // Call the function to display the list
         console.log(`${item} has been added to the list.`); // Log the item (variable) to the console     
@@ -37,17 +35,20 @@ function getItem() {
     // to clear the HTML form's input field and set focus back to the input field.
     resetAndFocus(); // Call the function to reset and focus
     // and exit the function to prevent further execution
-    console.log(shoppingList);
-    return;
+    console.log(list); //--this is for debugging purposes
+    //displayList(); // Call the function to display the list
 }
 /**
- * Function to display the shopping list items in the HTML document.
+ * Function to display the shopping list items
  * It clears the existing list and appends each item from the shoppingList array.
  * This function is called after an item is added to the list.
  * It uses the textContent property to set the content of the list items.
-*//*
+*/
+/*
+const shoppingList = document.getElementById("shoppingList");
+
+
 function displayList() {
-    const shoppingList = document.getElementById("shoppingList");
     // alternative to using innerHTML
     shoppingList.textContent = ""; // Clear the list before displaying items
     
@@ -62,4 +63,5 @@ function displayList() {
         li.textContent = item;
         list.appendChild(li);
     });
-}*/
+}
+*/
