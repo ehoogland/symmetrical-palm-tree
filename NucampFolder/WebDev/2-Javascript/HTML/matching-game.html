@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta charset="UTF-8" />
-    <meta name="viewport"   
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Matching Game</title>
     <style>
         /* control the exact position of any images */ 
@@ -25,74 +25,57 @@
         }
     </style>
 </head>
-<body>
+<body onload="generateFaces()">
     <h1>Matching Game</h1>
     <p>Click on the extra smiling face on the left</p>
     <div id="leftSide"></div>
     <div id="rightSide"></div>
-    
-    
-    
-    
-   
-    
-    
-    
-    
-    <script img.src ='images/smiley-face.png'>
-        // The default suggestion in Part 2 of this workshop was to use 
-        // the onload attribute in the body tag:
-        
-        // <body onload="generateFaces()"> 
-            
-        // This would work, and it is a valid and intuitive way to execute 
-        // a function when the page loads, especially in a toy project or 
-        // simple application like this.
-        
-        // However--according to my google research--this is currently not 
-        // the recommended way to handle events or because it 
-        // waits for the entire page to load before executing the function
-        
-        // Set up an addEventListener on the window object; 
-        // the load event has inconsistent results used on the body, 
-        // so the window object must be used instead.
-        window.addEventListener('load', generateFaces);
-            
+    <script>
         let numberOfFaces = 5;
         const theLeftSide = document.querySelector("#leftSide");
+        const theRightSide = document.querySelector("#rightSide");
 
-        /**
-         * The generateFaces function is called when the page loads.
-         * It generates a specified number of faces and places them
-         * at random positions within the leftSide div.
-         */
+    
         function generateFaces() {
-            // In this function, the faces are generated using a for loop.
-            for (let i = 0; i < numberOfFaces; i++) { 
-                /**
-                 * Declare a variable named face and for its value,
-                 * create an img node using document.createElement()
-                 * with the appropriate argument.
-                 * As of Part 2 of this workshop, the variable face 
-                 * should point to a newly created img node that has 
-                 * not yet been attached to the DOM.
-                 */
+            for (let i = 0; i < numberOfFaces; i++) {
+
                 const face = document.createElement("img");
-                face.src = "images/smile.png";
+                face.src = 'images/smile.png';
                 face.alt = "smiley face";
-                // +1 is left out of the random number generation because its
-                // effect is minimal and that level of precision is not needed 
-                // in this use case.
+               
                 let randomTop = Math.floor(Math.random() * 400);
                 let randomLeft= Math.floor(Math.random() * 400);
+                
                 face.style.top = randomTop + "px";
                 face.style.left = randomLeft + "px";
-                // Add the newly generated face image element node as a child of the leftSide div
-                // This will place the image in the leftSide div at a random position.
-                // The appendChild() method is used to add the face element to the leftSide div
+                
                 theLeftSide.appendChild(face);
+                face.addEventListener("click", levelUp);
+                document.body.addEventListener("click", gameOver);
+                theLeftSide.lastChild.addEventListener("click", levelUp);
             }
+            const leftSideImages = theLeftSide.cloneNode(true);
+            leftSideImages.removeChild(leftSideImages.lastChild);
+            theRightSide.appendChild(leftSideImages);
         }
+        
+        function gameOver() { 
+            alert("Game Over!");
+            document.body.removeEventListener("click", gameOver);
+            theLeftSide.removeEventListener("click", levelUp);
+
+        }
+        function levelUp(event) {
+            while (theLeftSide.firstChild) {
+                theLeftSide.removeChild(theLeftSide.firstChild);
+            }
+            while (theRightSide.firstChild) {
+                theRightSide.removeChild(theRightSide.firstChild);}
+            event.stopPropagation();
+            numberOfFaces += 5;
+            generateFaces();
+        }
+
     </script>
         
         
