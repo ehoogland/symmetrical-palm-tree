@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en-US">
+
+    <meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="description" content="Virtual Party Code Challenge" />
+<meta name="author" content="Nucamp, Eric Hoogland" />
+
+<head>
+    <title>Virtual Party</title>
+    <style>
+        body {
+            font-family: Inter, sans-serif;
+            margin: 20px;
+            color: #333;
+        }
+
+        h1 {
+            color: #0096dc;
+        }
+
+        h2 {
+            color: #a83ea2;
+        }
+
+        h2,
+        h3 {
+            margin-top: 40px;
+        }
+
+        code {
+            font-weight: bold;
+            font-size: 115%;
+        }
+
+        button#launch-button {
+            background-color: #0096dc;
+            border: none;
+            color: white;
+            padding: 12px 20px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin: 10px 0;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        button#launch-button:hover {
+            background-color: #007cb0;
+        }
+
+        ol {
+            padding-left: 30px;
+        }
+
+        li {
+            margin-bottom: 10px;
+        }
+
+        a {
+            color: #0096dc;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+        hr {
+            border: 0;
+            height: 1px;
+            background: #e0e0e0;
+            margin: 20px 0;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Code Challenge: Virtual Party</h1>
+    
+    <h2>Scenario</h2>
+    <p>You are hosting a virtual party, and you want to ensure that your guests have an amazing time. You'll need to
+        send out invitations, prepare activities, open the virtual dance floor, give a host speech, and even surprise
+        your guests with a special DJ appearance!</p>
+        <p>In this exercise, you will complete the JavaScript functions to create a simulated virtual party experience using
+            both synchronous and asynchronous programming.
+        </p>
+
+            <button id="launch-button">Launch Party!</button>
+        
+    <hr>
+
+    <h2>Instructions</h2>
+
+    <h3>Task 1: Send Invitations</h3>
+    <ol>
+        <li>Complete the function named <code>sendInvitations</code>.</li>
+        <li>Inside the function, use a <code>for...of</code> loop to iterate over the array of guests.</li>
+        <li>Inside the loop, log a message to invite each guest.</li>
+        <li>In your console, call the <code>sendInvitations</code> function to test it, and make any corrections if
+            necessary.</li>
+    </ol>
+
+    <h3>Task 2: Prepare Party Activities</h3>
+    <ol>
+        <li>Complete the function named <code>prepareActivities</code>.</li>
+        <li>Inside the function, use <code>setTimeout</code> to simulate the time it takes to prepare the activities (2
+            seconds).</li>
+        <li>Inside the <code>setTimeout</code> callback, log a message announcing that the activities are ready.</li>
+        <li>Call the <code>prepareActivities</code> function to test it in your console.</li>
+    </ol>
+
+    <h3>Task 3: Virtual Dance Floor</h3>
+    <ol>
+        <li>Complete the function named <code>virtualDanceFloor</code>.</li>
+        <li>Inside the function, use <code>setInterval</code> to periodically log a message inviting guests to dance
+            (every 1 second).</li>
+        <li>Inside the <code>setInterval</code> callback, stop after logging 5 messages.</li>
+        <li>Call the <code>virtualDanceFloor</code> function to test it in your console.</li>
+    </ol>
+
+    <h3>Task 4: Host Speech</h3>
+    <ol>
+        <li>Complete the function named <code>hostSpeech</code>.</li>
+        <li>Inside the function, log a welcoming message immediately.</li>
+        <li>Use <code>setTimeout</code> to log a second message after a delay (1.5 seconds).</li>
+        <li>Call the <code>hostSpeech</code> function to test it in your console.</li>
+    </ol>
+
+    <h3>Challenge Task: Surprise Guest</h3>
+    <ol>
+        <li>Complete the function named <code>surpriseGuest</code>.</li>
+        <li>Inside the function, use <code>setTimeout</code> to log a message announcing the surprise guest after a
+            delay (3 seconds).</li>
+        <li>Call the <code>surpriseGuest</code> function to test it in your console.</li>
+    </ol>
+
+    <h3>Launch Party Event</h3>
+    <ol>
+        <li>Complete the function named <code>launchParty</code> that calls all the party functions in the proper
+            sequence.</li>
+        <li>Create an event listener for the "Launch Party!" button that calls the <code>launchParty</code> function
+            when clicked.</li>
+        <li>Click the button to start your party!</li>
+    </ol>
+
+    <hr>
+
+    <h2>Additional Resources</h2>
+    <ul>
+        <li><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/for...of">Array
+                iteration with for...of loop</a></li>
+        <li><a href="https://developer.mozilla.org/en-US/docs/Web/API/setTimeout">Using setTimeout and setInterval</a>
+        </li>
+    </ul>
+
+    <h2>Submission</h2>
+    <p>Submit the URL to your solutions in the forum below. Happy coding, and enjoy the party!</p>
+    <script>
+        // JavaScript code for the virtual party
+        const guests = [
+            'Ayaan', 'Maria', 'Chen', 'Oliver', 'Fatima', 'Satoshi', 'Lucia', 'Kalani', 'Jamal', 'Nadia', 'Thabo'
+        ];
+        /**
+         * Task 1: Send Invitations:
+         * Uses a for...of loop to send invitations to each guest.
+         * Inside the loop, logs a message inviting each guest.
+         */
+        function sendInvitations() {
+            for (const guest of guests) {
+                console.log(`Sending invitation to ${guest}`);
+            }
+        }
+        /**
+         * Task 2: Prepare Party Activities:
+         * Uses setTimeout to simulate preparation time for activities.
+         * Logs a message when activities are ready.
+         */
+        function prepareActivities() {
+            setTimeout(() => {
+                console.log('Activities are ready!');
+            }, 2000);
+        }
+        /**
+         * Task 3: Virtual Dance Floor:
+         * Uses setInterval to invite guests to the dance floor every second.
+         * Stops after inviting guests 5 times.
+         */
+        function virtualDanceFloor() {
+            let danceCount = 0;
+            const danceTimer = setInterval(() => {
+                if (danceCount < 5) {
+                    console.log('Inviting guests to the virtual dance floor!');
+                    danceCount++;
+                } else {
+                    clearInterval(danceTimer);
+                }
+            }, 1000);
+        }
+        /**
+         * Task 4: Host Speech:
+         * Logs a welcoming message immediately.
+         * Uses setTimeout to log a second message after a delay.
+         */ 
+        function hostSpeech() {
+            console.log('Welcome to the virtual party!');
+            setTimeout(() => {
+                console.log('Thank you all for coming!');
+            }, 1500);
+        }
+        /**
+         * Challenge Task: Surprise Guest:
+         * Uses setTimeout to announce a surprise guest after a delay.
+         */
+        function surpriseGuest() {
+            setTimeout(() => {
+                console.log('Surprise guest appearance by DJ Awesome!');
+            }, 3000);
+        }
+        /**
+         * Launch Party Event:
+         * Calls all party functions in the proper sequence.
+         */
+        function launchParty() {
+            console.log('Launching the virtual party!');
+            sendInvitations();
+            prepareActivities();
+            virtualDanceFloor();
+            hostSpeech();
+            surpriseGuest();
+        }
+        document.getElementById('launch-button').addEventListener('click', launchParty);
+    </script>
+</body>
+</html>
