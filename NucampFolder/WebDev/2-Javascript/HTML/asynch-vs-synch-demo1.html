@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8" />
+    <title>Asynchronous vs Synchronous</title>
+</head>
+<body>
+    <h1>Asynchronous vs Synchronous</h1>
+    <p>In programming, asynchronous and synchronous refer to the timing of operations.</p>
+    <h2>Synchronous</h2>
+    <p>Synchronous operations block the execution of code until the operation is complete.</p>
+    <h2>Asynchronous</h2>
+    <p>Asynchronous operations allow code to run without waiting for the operation to complete.</p>
+    <script>
+        function firstFunction() {
+            setTimeout(() => {
+                console.log(1);
+            }, 100);// This will log 1 after 100 milliseconds
+        };
+        /**
+         * This function is called immediately after firstFunction.
+         * It will log 2 to the console.
+         */
+        function secondFunction() {
+            console.log(2);
+        };
+        firstFunction();
+        secondFunction();
+    </script>
+</body>
+</html>

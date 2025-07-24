@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8" />
+    <title>Promises Challenge</title>
+    <style>
+        #result {
+        border: 3px solid red;
+        margin: 20px;
+        padding: 30px;
+        color: red;
+        }
+
+        #flipCoinButton {
+        padding: 10px;
+        font-size: 16px;
+        cursor: pointer;
+        margin: 10px;
+        }
+
+        code {
+        color: red;
+        }
+    </style>
+</head>
+<body>
+    <h2>Mini-Exercise: Simulating a Coin Flip with a Promise</h2>
+<p>In this exercise, you'll create a Promise that simulates flipping a coin. The function <code>performCoinFlip</code> is already defined, and it partially sets up a Promise named <code>coinFlip</code>. The outcome of the coin flip is already defined to randomly select from 'heads', 'tails', or 'edge'.</p>
+<p>Here's what you need to do:</p>
+<ol>
+    <li>Complete the promise in the coinFlip expression. Fill in the missing code where you see the "TODO" comment.</li>
+    <li>Write the conditional logic to test if the outcome variable is equal to either 'heads' or 'tails'. Fill in the missing code where you see the "TODO" comment.</li>
+    <li>If the coin lands on 'heads' or 'tails', you'll need to resolve the Promise with the outcome. Fill in the missing code where you see the "TODO" comment.</li>
+    <li>If the coin lands on 'edge', you'll need to reject the Promise with the message "Landed on the edge! Try again." Fill in the missing code where you see the "TODO" comment.</li>
+</ol>
+<p>The code to display the result of the Promise and attach the function to the "Flip Coin" button is already completed for you. Press the "Flip Coin" button to run the code.</p>
+
+<button id="flipCoinButton">Flip Coin</button>
+<div id="result">Show your result here</div>
+    <script>
+        const performCoinFlip = () => {
+  const coinFlip = new Promise((resolve, reject) => {
+    const outcomes = ['heads', 'tails', 'edge'];
+    const outcome = outcomes[Math.floor(Math.random() * outcomes.length)];
+        
+    if (outcome === 'heads' || outcome === 'tails') {
+      resolve(outcome); //Resolve the Promise with the outcome of either heads or tails 
+    } else {
+      reject("Landed on the edge! Try again.");
+    }
+  });
+
+  // Do not modify this part, it will display the result of your Promise
+  coinFlip.then((result) => {
+    document.getElementById('result').textContent = `The coin landed on ${result}!`;
+  }).catch((error) => {
+    document.getElementById('result').textContent = error;
+  });
+};
+document.getElementById('flipCoinButton').addEventListener('click', performCoinFlip);
+    </script>
+    
+</body>
+</html>
