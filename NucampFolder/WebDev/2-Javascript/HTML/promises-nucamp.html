@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8" />
+    <title>Promises in JavaScript</title>
+</head>
+<body><pre>
+    <h3>What is a Promise?</h3>
+    <p>Promises are a way to handle asynchronous operations in JavaScript. 
+        A Promise is an object that represents the eventual completion (or failure) 
+        of an asynchronous operation and its resulting value.</p>
+    <code>
+    const myPromise = new Promise((resolve, reject) => {
+        let condition = true; // This is a placeholder for the condition to test
+        if (condition) {
+            const message = "Operation successful!"; // Log the success message
+            console.log(message); // Resolve the promise with a value
+            resolve(message);
+        } else {
+            const message = "Operation failed."; 
+            console.log(message); // Log the failure message
+            reject(message); // Reject the promise with a reason
+        }
+    });
+    </code>
+    <h2>Understanding Promises in JavaScript</h2>
+    <h3>States of a Promise</h3>
+    <ul>
+        <li><strong>Pending:</strong> The initial state, neither fulfilled nor rejected.</li>
+        <li><strong>Fulfilled:</strong> The operation completed successfully.</li>
+        <li><strong>Rejected:</strong> The operation failed.</li>
+    </ul>
+    <script>
+    const myPromise = new Promise((resolve, reject) => {
+        let condition = true; // This is a placeholder for the condition to test
+        if (condition) {
+            const message = "Operation successful!"; // Log the success message
+            console.log(message); // Resolve the promise with a value
+            resolve(message);
+        } else {
+            const message = "Operation failed."; 
+            console.log(message); // Log the failure message
+            reject(message); // Reject the promise with a reason
+        }
+    });
+    </script>   
+    </pre>
+    
+</body>
+</html>
