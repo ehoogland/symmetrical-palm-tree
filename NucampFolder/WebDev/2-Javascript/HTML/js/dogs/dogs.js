@@ -7,7 +7,7 @@ async function fetchDog() {
         displayDog(data.message);
 
 
-        //document.getElementById('dog').textContent = `<img src="${data.message}" alt="Random Dog" />`;
+        document.getElementById('dog').textContent = `<img src="${data.message}" alt="Random Dog" />`;
     } catch (error) {
         console.error('There was an error fetching the dog image:', error);
     }
