@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8" />
+    <title>Async await</title>
+</head>
+<body>
+    <script>
+// Example of using async/await with fetch
+        async function fetchJoke() {
+            try {
+                const response = await fetch('https://official-joke-api.appspot.com/random_joke');
+                const joke = await response.json();
+                console.log(`Here's a joke: ${joke.setup}\n${joke.punchline}`);
+            } catch (error) {
+                console.error('There was an error!', error);
+            }
+        }
+
+        // Call the async function to fetch a joke
+        fetchJoke();
+
+
+</script>
+    
+</body>
+</html>
