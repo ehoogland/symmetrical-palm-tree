@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8" />
+    <title>fetch</title>
+</head>
+<body>
+    <script>
+        // fetch initiates an API
+    fetch('https://official-joke-api.appspot.com/random_joke')
+    .then(response => response.json())
+    .then(joke => console.log(`Here's a joke: ${joke.setup}\n${joke.punchline}`))
+    .catch(error => console.error('There was an error!', error));
+
+        
+   </script>
+</body>
+</html>
