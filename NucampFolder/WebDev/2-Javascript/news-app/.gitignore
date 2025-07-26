@@ -1,6 +1,7 @@
 # Development environment files
-.env
+
 node_modules
+.env
 .parcel-cache
 dist
 

@@ -2,14 +2,14 @@
   "name": "news-app",
   "version": "1.0.0",
   "source": "index.html",
+  "description": "A simple news application that fetches top headlines from NewsAPI.",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "parcel --open"
   },
   "keywords": [],
-  "author": "",
+  "author": "Eric Hoogland",
   "license": "ISC",
-  "description": "A simple news application that fetches top headlines from NewsAPI.",
   "devDependencies": {
     "parcel": "^2.15.4",
     "process": "^0.11.10"
