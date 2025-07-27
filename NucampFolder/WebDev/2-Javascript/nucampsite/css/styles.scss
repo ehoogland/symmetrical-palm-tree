@@ -63,5 +63,27 @@ footer {
     bottom: 0;
     z-index: 100;
 }
+
+// Weather navbar spacing improvements
+#weather {
+    margin-left: 1.5rem;
+    margin-right: 1.5rem;
+}
+
+#weather > span,
+#weather img {
+    margin-right: 0.5rem;
+}
+#weather > span:nth-child(2) {
+    white-space: nowrap;
+}
+#weather div {
+    width: 100%;
+    font-size: 0.9em;
+    color: #e0e0e0;
+    margin-top: 2px;
+}
+
 @import 'modal';
 @import 'review-section';
+@import 'weather';
