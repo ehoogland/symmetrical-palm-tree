@@ -60,13 +60,14 @@
                     <li class="nav-item"><a class="nav-link" href="contactus.html"><i
                                 class="fa-solid fa-address-card fa-lg"></i> Contact</a></li>
                 </ul>
-                
+
                 <!-- Weather Component -->
                 <div id="weather" class="d-none d-md-flex align-items-center">
                     <i id="weather-icon"></i>
                     <span id="weather-temp"></span>
                     <span id="weather-description" class="d-none d-lg-inline"></span>
                 </div>
+                
                 <!-- Login Button -->
                 <span class="navbar-text ms-auto">
                     <a role="button" data-bs-toggle="modal" data-bs-target="#loginModal">
@@ -100,8 +101,8 @@
                                 </div>
                                 <div class="col">
                                     <div class="form-check mb-3">
-                                        <input class="form-check-input" type="checkbox">
-                                        <label class="form-check-label"> Remember me</label>
+                                        <input class="form-check-input" type="checkbox" id="rememberMe" name="rememberMe">
+                                        <label class="form-check-label" for="rememberMe"> Remember me</label>
                                     </div>
                                 </div>
                             </div>
