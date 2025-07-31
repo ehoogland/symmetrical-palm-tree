@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+    <!-- Required meta tags -->
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <title>portfolio starter Weather and Jobs Cupid</title>
+</head>
+<body>
+    <div class="container">
+
+        <div class="row">
+            <div class="col">
+                <h1 class="m-3 text-center">Weather and Jobs Cupid</h1>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col text-center">
+                <button class="btn btn-primary" onclick="getInputCdegree()" >Convert C to F</button>
+
+                <button class="btn btn-success" onclick="getInputFdegree()">Convert F to C</button>
+            </div>
+        </div>
+
+
+    </div>
+
+    <main class="container">
+        <section class="row">
+
+            <div class="col-sm-10 mx-auto text-center m-5">
+
+                <h1>Hire Me Please. </h1>
+                <h3>A company secretly wants to hire you. <br/>You just have to guess correctly and meet them.</h3>
+
+                <button onclick="guessCompany()"
+                        class="btn btn-primary m-2">
+                        Guess Company
+                </button>
+
+                <button onclick="addCompany()"
+                    class="btn btn-warning m-2">
+                    Add Company
+                </button>
+
+                <button onclick="removeCompany()"
+                    class="btn btn-danger m-2">
+                    Remove Company
+                </button>
+            </div>
+
+        </section>
+
+    </main>
+
+
+    <div class="container text-center">
+        <button class="btn btn-warning m-3" onclick="testOutput()">Test Output Screen</button>
+        <div id="outputScreen" class="text-center m-3">
+            Output Screen
+
+        </div>
+    </div>
+
+    <!-- Option 1: Bootstrap Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+
+    <script>
+        console.log("Hello Weather and Jobs");
+
+        let convertCtoF = cDegree => (cDegree * 9 / 5) + 32;
+        let convertFtoC = fDegree => (fDegree - 32) * 5 / 9;
+
+        let getInputCdegree = () => {
+            superLog("get c degree");
+
+            let degreeC = prompt("Enter degree in C", "25");
+            let degreeCInt = parseInt(degreeC);
+
+            let degreeF = convertCtoF(degreeCInt) ;
+
+            superLog(`C: ${degreeCInt} = F: ${degreeF}`);
+        }
+
+        let getInputFdegree = () => {
+            superLog("get f degree");
+
+            let degreeF = prompt("Enter degree in F", "70");
+            let degreeFInt = parseInt(degreeF);
+
+            let degreeC = convertFtoC ( degreeFInt ) ;
+
+            superLog(`C: ${degreeC} = F: ${degreeFInt}`);
+        }
+
+	    let testOutput = () => superLog("testOutput button clicked");
+        let superLog = ( inputString ) => console.log( inputString );
+
+        let tempDiv = document.createElement("div");
+        tempDiv.innerText = JSON.stringify(inputString);
+
+        let outputDiv = document.getElementById("outputScreen");
+        outputDiv.prepend(tempDiv);
+
+        // Limit the number of entries to 10
+        if (outputDiv.children.length > 10) {
+            outputDiv.removeChild(outputDiv.lastChild);
+        }
+        
+        function superAlert ( inputString ) {
+            alert( inputString );
+
+            let tempDiv = document.createElement("div");
+            tempDiv.innerText = JSON.stringify(inputString);
+
+            let outputDiv = document.getElementById("outputScreen");
+            outputDiv.prepend(tempDiv);
+
+            // Limit the number of entries to 10
+            if (outputDiv.children.length > 10) {
+                outputDiv.removeChild(outputDiv.lastChild);
+            }
+        }       
+        //think of const as the address to your house
+        //the reference doesn't change
+        //but the house can, painted, add more rooms etc
+        const companiesList = [
+            "Google", "Amazon", "Apple", "Microsoft",
+            "MetaFacebook", "Netflix", "Spacex", "Tesla"
+        ];
+        companiesList.sort();
+        superLog(companiesList);
+
+
+        function guessCompany () {
+            let correctCompany = getRandomCompany ();
+
+            superLog("Hiring Company: " + correctCompany);
+            // we start as false
+            let correctlyMatched = false;
+
+            do {
+                //ask
+                let companyGuessed = prompt("What company do you want to work for...", "Google");
+
+                if (companyGuessed === null) {
+                    superLog("you cancelled. come again later");
+                    return;
+                }
+
+                correctlyMatched = checkGuess ( companyGuessed, correctCompany  );
+
+            //human logic is repeat when correctlyMatch is false, or not a match
+            //give the person another try
+            //BUT the while loop, the entire expression has to be true for it to run
+            //so we do what to get this right?...so we use the NOT !
+            } while (!correctlyMatched) 
+
+            //means matched otherwise would be in that loop
+            superLog("CONGRATS! YOU GOT YOUR DREAM COMPANY");
+
+        }
+        function checkGuess (guess, target) {
+
+            let matched = false;
+
+            //learning includes and indexOf return for a method
+            //the return data, what type what does it mean
+            //if ( companiesList.indexOf ( guess  ) === -1 ) {
+
+            //! when NOT on the list
+            if ( !companiesList.includes  ( guess  ) ) {
+            
+                superLog("sorry. not on the list or not here");
+
+                alert("sorry. not on the list or not here");
+
+            } else if ( guess === target ) {
+
+                superLog("Correct. Matched. Hired");
+                alert("Correct. Matched. Hired");
+                matched = true;
+
+            } else if ( guess > target ) { // alphabet order a < b  b > a
+
+                superLog ("Sorry the company that wants to hire you is before your guess");
+                alert("Sorry the company that wants to hire you is before your guess");
+
+            } else if ( guess < target ) { // alphabet order  a < b  b > a
+
+                superLog ("Sorry the company that wants to hire you is after your guess");
+                alert("Sorry the company that wants to hire you is after your guess");
+
+            }
+
+            return matched;
+        }
+
+        function  getRandomCompany () {
+            //the random company is the hiring company that wants you
+
+            let randomCompany = '';
+
+            //index of an array starts at 0.
+            //.9999999 * 8 = 7.99999999 floor gives 7, not afraid of out of bounds
+            //Math.random is returning 0 to 1 including 0 but NOT 1.  .999999
+
+            let randomIndex = Math.floor (    Math.random() *  companiesList.length   );
+
+            //get the actual name of the company
+            randomCompany = companiesList[randomIndex];
+
+            return randomCompany;
+        }
+
+        function addCompany () {
+
+            let companyToAdd = String(prompt("What company do you want to add?"));
+            //check if companyToAdd is empty or null
+            if (companyToAdd === "" || companyToAdd === null) {
+                alert('No company was entered. Please start over.');
+                return;
+            }
+
+            //check if company already exist on the list.
+            else if (companiesList.includes(companyToAdd)) {
+                alert("Company already exists in the list.");
+                return;
+            }
+            else {
+           
+                companiesList.push( companyToAdd );
+                companiesList.sort();
+                superLog(companiesList);
+                alert(companyToAdd + " has been added to the list.");
+            }
+        }
+        function thinkOfCompany() {
+            alert(`Examine the following list of companies and press OK after you've thought of the one you want to remove: ${companiesList.join(", ")}.`);
+            return;}
+
+        function removeCompany() {
+            thinkOfCompany();
+
+            let companyToRemove = String(prompt("What company do you want to remove?"));
+            const index = companiesList.indexOf(companyToRemove);
+            //check if companyToRemove is empty or null
+            if (companyToRemove === "" || companyToRemove === null) {
+                alert('No company was entered. Please start over.');
+                return;
+            }
+            if (index === -1) {
+                alert("Company not found in the list.");
+                return;
+            }
+            // Confirm the removal
+            if (confirm(`Are you sure you want to remove ${companyToRemove}?`)) {
+                companiesList.splice(index, 1);
+                alert(`${companyToRemove} has been removed from the following list: ${companiesList.join(", ")}.`);
+                return;
+            }
+        }
+  </script>
+</body>
+</html>
+
+        
+    </script>
+    
+</body>
+</html>
