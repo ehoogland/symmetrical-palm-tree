@@ -1,0 +1,11 @@
+{
+    "terminal.integrated.cwd": "/Users/eshoogland/Desktop/NucampFolder/WebDev/3-React",
+    "terminal.integrated.defaultLocation": "editor",
+    "terminal.integrated.startupShell.osx": "/bin/bash",
+    "terminal.integrated.defaultProfile.osx": "bash",
+    "typescript.preferences.includePackageJsonAutoImports": "on",
+    "typescript.suggest.autoImports": true,
+    "javascript.suggest.autoImports": true,
+    "typescript.preferences.includeNodeModules": true,
+    "typescript.preferences.includeModuleResolution": true
+}
