@@ -1,5 +1,7 @@
 import { Navbar, NavbarBrand } from "reactstrap";
-import NucampLogo from "./app/assets/img/logo.png";
+import NucampLogo from '../app/assets/img/logo.png'; 
+// Adjusted import path to match project structure. 
+// Was './app/assets/img/logo.png' in original code.
 
 const Header = () => {
   return (
