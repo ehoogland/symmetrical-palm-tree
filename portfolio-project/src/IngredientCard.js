@@ -1,9 +1,108 @@
 function IngredientCard({ ingredient }) {
+    // Function to get category-specific CSS class
+    const getCategoryClass = (category) => {
+        const categoryLower = category.toLowerCase().replace(/\s+/g, '-');
+        const categoryMap = {
+            'legumes': 'category-legumes',
+            'grains': 'category-grains', 
+            'grain': 'category-grains',
+            'vegetables': 'category-vegetables',
+            'fruits': 'category-fruits',
+            'seeds': 'category-seeds',
+            'spices': 'category-spices',
+            'herbs': 'category-herbs',
+            'dairy-alternatives': 'category-dairy-alternatives',
+            'spreads': 'category-spreads',
+            'condiments': 'category-condiments',
+            'sweeteners': 'category-sweeteners',
+            'breads': 'category-breads',
+            'pasta': 'category-pasta',
+            'flours': 'category-flours',
+            'baking': 'category-baking',
+            'vinegars': 'category-vinegars',
+            'soy': 'category-soy',
+            'sea-vegetables': 'category-sea-vegetables',
+            'plant-based-dairy': 'category-plant-based-dairy',
+            'plant-based-condiments': 'category-plant-based-condiments',
+            'plant-based-dietary-supplements': 'category-plant-based-dietary-supplements',
+            'meat-alternatives': 'category-meat-alternatives',
+            'dietary-supplements': 'category-dietary-supplements',
+            'plant-based-snacks': 'category-plant-based-snacks',
+            'plant-based-desserts': 'category-plant-based-desserts',
+            'plant-based-beverages': 'category-plant-based-beverages',
+            'processed-foods': 'category-processed-foods'
+        };
+        return categoryMap[categoryLower] || 'category-default';
+    };
+
+    // Parse ingredient name and alternative names
+    const parseIngredientName = (name) => {
+        // Check if name contains pipe separator with alternative names
+        const match = name.match(/^([^|]+)\s*\|\s*(.+)$/);
+        if (match) {
+            return {
+                primary: match[1].trim(),
+                alternatives: match[2].split(',').map(alt => alt.trim())
+            };
+        }
+        
+        // Fallback: Check if name contains parentheses with alternative names (for backward compatibility)
+        const parenMatch = name.match(/^([^(]+)\s*\(([^)]+)\)$/);
+        if (parenMatch) {
+            return {
+                primary: parenMatch[1].trim(),
+                alternatives: parenMatch[2].split(',').map(alt => alt.trim())
+            };
+        }
+        
+        return { primary: name, alternatives: [] };
+    };
+
+    const { primary, alternatives } = parseIngredientName(ingredient.name);
+    
+    // Dynamic font size based on name length
+    const getFontSize = (name) => {
+        if (name.length > 12) return '0.95rem';  // Smaller for long names like "Garbanzo beans"
+        if (name.length > 8) return '1.05rem';   // Medium for moderate names
+        return '1.1rem';  // Standard size for short names
+    };
+
     return (
-        <div className="bg-light border p-4 m-2">   
-          <h4 className="mb-3">{ingredient.name}</h4>
-          <p className="mb-2">Category: {ingredient.category}</p>
-          <p>Processed: {ingredient.processed ? "Yes" : "No"}</p>
+        <div className="ingredient-card d-flex flex-column h-100">   
+          <div className="mb-3 flex-grow-1">
+            <h4 className="mb-1" style={{ 
+              fontSize: getFontSize(primary),
+              lineHeight: '1.2',
+              color: 'var(--vegan-dark)',
+              fontWeight: '600'
+            }}>
+              <span className="plant-icon">🌱</span>
+              {primary}
+            </h4>
+            {alternatives.length > 0 && (
+              <small className="text-muted" style={{ 
+                fontSize: '0.7rem',  // Made even smaller
+                fontStyle: 'italic',
+                display: 'block',
+                lineHeight: '1.1'
+              }}>
+                Also known as: {alternatives.join(', ')}
+              </small>
+            )}
+          </div>
+          <div className="mt-auto">
+            <div className="mb-2">
+              <span className={`category-badge ${getCategoryClass(ingredient.category)}`}>
+                {ingredient.category}
+              </span>
+            </div>
+            <div className={`processed-indicator ${ingredient.processed ? 'processed-yes' : 'processed-no'}`}>
+              {ingredient.processed ? '🏭' : '🌿'} 
+              <span className="ms-1">
+                {ingredient.processed ? 'Processed' : 'Whole Food'}
+              </span>
+            </div>
+          </div>
         </div>
     )
 }
