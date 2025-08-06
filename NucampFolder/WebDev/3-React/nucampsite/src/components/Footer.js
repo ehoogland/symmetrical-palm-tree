@@ -3,7 +3,7 @@ import { Container, Row, Col } from 'reactstrap';
 const Footer = () => {
     
     return (
-        <footer className='sitefooter'>
+        <footer className='site-footer'>
             <Container>
                 <Row className='row-content'>
                     <Col xs={{ size: 4, offset: 1 }} sm='2'><h5>This will be site navigation!</h5></Col>
