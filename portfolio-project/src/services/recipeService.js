@@ -83,7 +83,7 @@ export const recipeService = {
       }
       const data = await response.json();
       
-      // Filter for vegan recipes (you might want to double-check these)
+      // Filter for vegan recipes
       return data.filter(recipe => 
         !recipe.title.toLowerCase().includes('chicken') &&
         !recipe.title.toLowerCase().includes('beef') &&

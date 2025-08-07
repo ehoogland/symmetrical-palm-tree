@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8" />
+    <title>filter pen</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+        }
+        h3 {
+            color: #333;
+        }
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        li {
+            margin: 10px 0;
+        }
+    </style>
+</head>
+<body>
+    <p>Complete each challenge listed below by editing the code inside the JS section of this Codepen. Place your code in the areas indicated by the comments.</p>
+<p>Use the Codepen Console (look for the Console button at the bottom left of your screen) to see console.log() messages.</p>
+
+<h3>Challenge 1</h3>
+<ul>
+  <li>Use the filter method on the pets array given at line 1. 
+    Filter out only the pets that have 5 or less letters in their name. 
+    The code has been started for you at line 4 - you will need to uncomment 
+    that line to begin (remove the //s at the beginning of the line).
+    </li>
+</ul>
+
+<h3>Challenge 2</h3>
+<ul>
+    <li>Use the filter method on the same pets array. Filter out only the pets whose names start with the letter 't'. The code has been started for you at line 9 - use the filter method on the pets array after the assignment operator. </li>
+</ul>
+
+<h3>Challenge 3</h3>
+<ul>
+    <li>Use the filter method on the numbers array given at line 13. Filter out only the numbers that are greater than 4.</li>
+</ul>
+
+<h3>Bonus Challenge</h3>
+<ul>
+    <li>Filter out only the even numbers. Research the use of the modulo operator: <strong>%</strong>.</li>
+</ul>
+
+<h3>Additional Resources</h3>
+<ul>
+  <li><a href="https://www.w3schools.com/jsref/jsref_filter.asp" target="_blank">W3Schools - Array.Filter()</a></li>
+  <li><a href="http://javascript.info/array-methods#filter" target="_blank">JavaScript.info - Array methods - filter</a></li>
+  <li><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/filter" target="_blank">MDN - Array Filter</a></li>
+  <li><a href="https://www.codecademy.com/forum_questions/543425067c82ca6013000d9f" target="_blank">Codeacademy - Modulus</a></li>
+</ul>
+    <script>
+       const pets = ["goldfish", "dog", "turtle", "tiger"];
+
+// CHALLENGE 1: Uncomment line 4 then use that line for your challenge, and uncomment the console.log() in line 6 to test your challenge.
+const petsShortNames = pets.filter( pet => pet.length < 6 );
+// The below line should console.log: ["dog", "tiger"]
+console.log(petsShortNames);
+
+// CHALLENGE 2: Uncomment line 9 and line 11 when you've finished challenge 1
+//const petsTNames = 
+// The below line should console.log: ["turtle", "tiger"] 
+const petsTNames = pets.filter( pet => pet.startsWith('t') );
+console.log(petsTNames);
+
+const numbers = [3, 7, 4, 5, 10];
+//3 - uncomment line 15 and line 17 
+const numbersBiggerThanFour = numbers.filter( number => number > 4 );
+// The below line should console.log: [7, 5, 10]
+console.log(numbersBiggerThanFour);
+
+//Bonus - uncomment line 20 and line 22
+const evenNumbers = numbers.filter( number => number % 2 === 0 );
+// The below line should console.log: [4, 10]
+console.log(evenNumbers);
+
+
+
+    </script>
+</body>
+</html>
