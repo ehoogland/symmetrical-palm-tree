@@ -1,0 +1,28 @@
+{
+    "folders": [
+        {
+            "name": "Nucampsite",
+            "path": "./nucampsite"
+        },
+        {
+            "name": "I Heart React",
+            "path": "./i-heart-react"
+        },
+        {
+            "name": "Functional Foundations",
+            "path": "./functional-foundations"
+        }
+    ],
+    "settings": {
+        "terminal.integrated.cwd": ".",
+        "terminal.integrated.defaultLocation": "editor",
+        "terminal.integrated.defaultProfile.osx": "bash"
+    },
+    "extensions": {
+        "recommendations": [
+            "ms-vscode.vscode-typescript-next",
+            "bradlc.vscode-tailwindcss",
+            "esbenp.prettier-vscode"
+        ]
+    }
+}

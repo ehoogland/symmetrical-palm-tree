@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8" />
+    <title>Find Pen</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+        }
+        h3 {
+            color: #333;
+        }
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        li {
+            margin: 10px 0;
+        }
+    </style>
+</head>
+<body>
+<p>Complete each challenge listed below by editing the code inside the JS section of this Codepen. Place your code in the areas indicated by the comments.</p>
+<p>Use the Codepen Console (look for the Console button at the bottom left of your screen) to see console.log() messages.</p>
+<p>All challenges will use the array named <strong>drinkOrders</strong> at the top of the JS section.</p>
+
+<h3>Challenge 1</h3>
+<ul>
+  <li>Console.log() the first object from the <strong>drinkOrders</strong> array that contains the <strong>customerName</strong> of <strong>'Juan'</strong>. This challenge has been completed for you as an example. 
+    </li>
+</ul>
+
+<h3>Challenge 2</h3>
+<ul>
+    <li>Console.log() the first object from the <strong>drinkOrders</strong> array that contains the <strong>drinkName</strong> of <strong>'Mojito'</strong>.</li>
+</ul>
+
+<h3>Challenge 3</h3>
+<ul>
+  <li>Console.log() only the <strong>customerName</strong> of the object from the <strong>drinkOrders</strong> array with the <strong>id</strong> of <strong>3</strong>.</li>
+</ul>
+
+<h3>Bonus Challenge</h3>
+<ul>
+    <li>Use the <strong>filter()</strong> method to create a new array containing only the objects with the <strong>customerName</strong> of <strong>'Zachary'</strong>. Then, use the <strong>find()</strong> method on this new array to retrieve and console.log the <strong>id</strong> of the object with the <strong>drinkName</strong> of <strong>'Mojito'</strong>.</li>
+</ul>
+
+<h3>Additional Resources</h3>
+<ul>
+  <li><a href="https://www.w3schools.com/jsref/jsref_find.asp" target="_blank">W3Schools - Array.Find()</a></li>
+  <li><a href="https://javascript.info/array-methods#find-and-findindex" target="_blank">JavaScript.info - Array methods - Find and FindIndex</a></li>
+  <li><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/find" target="_blank">MDN - Array Find</a></li>
+</ul>
+<script>
+const drinkOrders = [
+  { id: 0, customerName: 'Zachary', drinkName: 'Dirty Martini'},
+  { id: 1, customerName: 'Juan', drinkName: 'Zombie'},
+  { id: 2, customerName: 'Kayla', drinkName: 'Mojito'},
+  { id: 3, customerName: 'Zachary', drinkName: 'Mojito'}
+]
+
+// All challenges will use the drinkOrders array.
+
+// Challenge 1 
+// Use the find() method to retrieve the first object with the customerName of 'Juan' and console.log() it.
+console.log(drinkOrders.find(order => order.customerName === 'Juan'));
+
+
+// Challenge 2  
+// Use the find() method to retrieve the first object with the drinkName of 'Mojito' and console.log() it.
+// Write your code below this line.
+console.log(drinkOrders.find(order => order.drinkName === 'Mojito'));
+
+
+// Challenge 3 
+// Use the find() method to retrieve the object with the id of 3 from the drinkOrders array, then console.log only the name of the customer who ordered it, rather than the entire object. Hint: Use find() to get the object, then dot notation to access the id.
+// Write your code below this line.
+
+const orderWithId3 = drinkOrders.find(order => order.id === 3);
+console.log(`Name of customer with order id 3: ${orderWithId3.customerName}`);
+
+// Bonus Challenge
+// Use the filter() method to create a new array containing only the objects with 
+// the customerName of 'Zachary'. 
+// Then use the find() method on this new array to retrieve the id of the object 
+// with the drinkName of 'Mojito', and console.log() that id.
+// Write your code below this line.
+
+const zacharyOrders = drinkOrders.filter(order => order.customerName === 'Zachary');
+const mojitoOrder = zacharyOrders.find(order => order.drinkName === 'Mojito');
+console.log(`Order id of customer ${customerName='Zachary'} with drink name ${drinkName='Mojito'}: ${mojitoOrder.id}`);
+
+</script>
+
+   
+</body>
+</html>

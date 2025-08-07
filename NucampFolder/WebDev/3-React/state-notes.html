@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8" />
+    <title>State Notes</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+
+        h1 {
+            color: #333;
+        }
+
+        .note {
+            background: white;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 10px 15px;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <h1>State Notes</h1>
+    <div class="note">
+        <code><pre>
+A stateful variable is a variable whose value changes over time to reflect 
+changes in your app. 
+
+State is the status of any stateful variables at any given point in time.
+For example, a button that tracks whether it has been clicked or not is a stateful variable.
+When the button is clicked, the state of that variable changes from false to true.
+This is a stateful variable since it keeps track of changing state.
+
+<p>Global or application state is used to contain data that is shared between different parts 
+of your application, or obtained from outside of the application, such as from a server or user input.
+</p>
+<p>
+In React, state is always stored in the form of a JavaScript object. This can be either a local 
+state object which is maintained in the local scope of a specific component, or it can be a 
+global state object.</p>
+
+<p>Global state in React is usually handled by a state library such as Redux.</p>
+
+<p>In React, state is always immutable, meaning that it cannot be mutated (changed). 
+If we want to mutate the state, we must create an entirely new state object using specific 
+functions provided by React, e.g. the useState() hook. </p>
+<p>
+When using Redux, state is also immutable, and we use specific functions to create a new state object 
+when we want to change the state.
+When using Redux, global application state is maintained in a store object, 
+which contains the state of the entire application. 
+Since we used the redux template when scaffolding out our nucampsite project using create-react-app, 
+there is already a file named store.js in the nucampsite/src/app/ folder, which we will be using later.
+Also with Redux, reducer functions are used to update the global state. 
+
+We will learn more about, and implement, reducer functions later when we implement Redux in our app.
+
+Finally, the logic pertaining to the global data for each feature of our app will be accounted for 
+with a portion of our global state called a slice. This allows us to organize the global state into 
+more manageable chunks. We will implement our first slice in the following exercise
+when we implement the campsites feature in our app.
+</p>
+
+<p>Additional Resources</p>
+<ul>
+    <li>React Documentation - State and Lifecycle</li>
+    <li>Geeks for Geeks - ReactJS | State in React</li>
+    <li>Redux - Store</li>
+</ul>
+
+</pre></code>
+    </div>
+</body>
+</html>
