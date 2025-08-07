@@ -14,25 +14,25 @@ const CampsitesDirectoryPage = () => {
         console.log(newCampsite);
     };
     return (
-        <Container>{/* Container holds the Campsites Directory Page */}
+        <Container tag="div">{/* Container holds the Campsites Directory Page */}
         {/* The Campsites Directory Page will display a list of campsites and 
         details of a selected campsite. The page layout is based on Bootstrap's
         grid system, which will render a responsive layout. Recall that there are 
         12 units of width in a bootstrap row */}
-            <Row className='mb-3'>
-                <Col>
+            <Row className='mb-3' tag="div">
+                <Col tag="div">
                     <h2>Campsites Directory</h2>
-                    <Button onClick={toggleCampsite}>
+                    <Button onClick={toggleCampsite} tag="button">
                         Select Random Campsite
                     </Button>
                 </Col>
             </Row>
-            <Row>
-                <Col sm='5' md='7'> {/* two columns with props sm and md */}
+            <Row tag="div">
+                <Col sm='5' md='7' tag="div"> {/* two columns with props sm and md */}
                     {/* Display the full list of campsites; therefore no need to pass data */}
                     <CampsitesList /> 
                 </Col>
-                <Col sm='7' md='5'> 
+                <Col sm='7' md='5' tag="div"> 
                 {/* Pass in a prop to tell it which campsite's details to render */}
                 {/* Recall that JSX syntax requires curly braces around JavaScript 
                 expressions like variables and props. selectedCampsite is a variable and a prop. */}
