@@ -4,13 +4,13 @@ const CampsiteDetail = ({ campsite }) => {
      to make it easier to reference them/use them in the JSX rendering below */
     const { image, name, description } = campsite;
     return (
-        <Col md='12' className='m-4'>
+        <Col md='12' className='m-4' tag="div">
             {/* having destructured the campsite object, we can now use the variables directly
                 instead of referencing the object using dot notation (campsite.image, etc.) */}
-            <Card>
-                <CardImg top src={image} alt={name} />
-                <CardBody>
-                    <CardText>{description}</CardText>
+            <Card tag="div">
+                <CardImg top src={image} alt={name} tag="img" />
+                <CardBody tag="div">
+                    <CardText tag="p">{description}</CardText>
                 </CardBody>
             </Card>
         </Col>

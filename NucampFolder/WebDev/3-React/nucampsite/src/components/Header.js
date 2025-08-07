@@ -5,8 +5,8 @@ import NucampLogo from '../app/assets/img/logo.png';
 
 const Header = () => {
   return (
-    <Navbar dark color="primary" sticky="top" expand="md">
-      <NavbarBrand href="/">
+    <Navbar dark color="primary" sticky="top" expand="md" tag="nav">
+      <NavbarBrand href="/" tag="a">
         <img src={NucampLogo} alt="nucamp logo" />
       </NavbarBrand>
     </Navbar>

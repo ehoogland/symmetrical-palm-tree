@@ -7,9 +7,9 @@ const CampsitesList = () => {
     const campsites = selectAllCampsites();
     
     return (
-        <Row className='ms-auto'>
+        <Row className='ms-auto' tag="div">
             {campsites.map(campsite => (
-                <Col md='5' className='m-4' key={campsite.id}>
+                <Col md='5' className='m-4' key={campsite.id} tag="div">
                     <CampsiteCard campsite={campsite} />
                 </Col>
             ))}
