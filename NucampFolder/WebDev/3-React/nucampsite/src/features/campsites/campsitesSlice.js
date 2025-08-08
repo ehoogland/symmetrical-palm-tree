@@ -33,3 +33,10 @@ export const selectAllCampsites = () => {
 export const selectCampsitesById = (id) => {
     return CAMPSITES.find(campsite => campsite.id === id);
 };
+
+export const selectFeaturedCampsite = () => {
+    // Find the first campsite that is featured
+    // by checking if the featured property is true
+    // and return it.
+    return CAMPSITES.find(campsite => campsite.featured);
+}

@@ -1,9 +1,13 @@
-// extremely basic HomePage function component
+
+import { Container } from 'reactstrap';
+import DisplayList from '../features/display/DisplayList';
+
 const HomePage = () => {
     return (
-        <div>Home Page</div>
+        <Container>
+            <DisplayList />
+        </Container>
     );
-}
+};
 
 export default HomePage;
-// This is a placeholder component for the Home page.

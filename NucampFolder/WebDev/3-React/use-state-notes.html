@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8" />
+    <title>useState() Notes</title>
+</head>
+<body>
+    <h1>useState() Notes</h1>
+    <ul>
+        <li>useState() is a Hook that lets you add React state to function components.</li>
+        <li>It returns an array with two elements: the current state value and a function to update it.</li>
+        <li>You can use useState() multiple times in a single component to manage different state variables.</li>
+    </ul>
+    <h2>Example Usage</h2>
+    <pre>
+import React, { useState } from 'react';
+function App() {
+    // Declare a state variable called 'count' with an initial value of 0
+    const [count, setCount] = useState(0);
+
+    return (
+        <div>
+            <p>You clicked {count} times</p>
+            <button onClick={ () => setCount(count + 1)}>
+                Click me
+            </button>
+        </div>
+    );
+}
+<code>
+    <h2>How useState() Works</h2>
+    <p>When you call useState(), you pass the initial state value as an argument. The function returns an array with two elements:</p>
+    <ol>
+        <li>The current state value.</li>
+        <li>A function to update the state.</li>
+    </ol>
+    <p>You can destructure these values for easier access, as shown in the example above.</p>
+
+    <h2>Example of a Counter Component</h2>
+    <pre>
+function Counter() {
+    const [count, setCount] = useState(0);
+
+    return (
+        <div>
+            <p>Count: {count}</p>
+            <button onClick={ () => setCount(count + 1)}>Increment</button>
+        </div>
+    );
+}
+</pre>
+    <h2>Key Points</h2>
+    <ul>
+        <li>Initial state can be set by passing a value to useState().</li>
+        <li>The updater function can take a new value or a function that receives the previous state.</li>
+        <li>State updates are asynchronous, so the updated state may not be immediately available after 
+            calling the updater function.</li>
+    </ul>
+    <h2>Common Patterns</h2>
+
+    <ul>
+        <li>Using functional updates to ensure you are working with the most recent state:</li>
+        <pre>
+setCount(prevCount => prevCount + 1);
+        </pre>
+        <li>Using useState with objects or arrays to manage complex state:</li>
+        <pre>
+const [state, setState] = useState({ count: 0, name: 'John' });
+setState(prevState => ({ ...prevState, count: prevState.count + 1 }));
+        </pre>
+    </ul>
+    <h2>Resources</h2>
+    <ul>
+        <li><a href="https://reactjs.org/docs/hooks-state.html">React Documentation on useState</a></li>
+        <li><a href="https://reactjs.org/docs/hooks-intro.html">Introduction to Hooks</a></li>
+        <li><a href
+="https://reactjs.org/docs/hooks-faq.html">Hooks FAQ</a></li>
+    </ul>
+    <h2>Conclusion</h2>
+    <p>useState() is a powerful and essential Hook for managing state in functional components.</p>     
+    <p>Understanding how to use it effectively can greatly enhance your React applications.</p>
+</h2>
+    <footer>
+        <p>© 2023 React Notes</p>
+    </footer>
+    <h2>Video Summary</h2>
+    <ul>
+        <li>When we click the Button component in our CampsitesDirectoryPage, our toggleCampsite() function runs, 
+        and a new random campsite object is assigned to the selectedCampsite variable. 
+        This variable is passed as a prop to the CampsiteDetail component, which uses that prop to determine what campsite to show.</li>
+    <li>We can see that the value of selectedCampsite is indeed changed whenever the Button is clicked, because we logged it to the console. 
+        Yet, the campsite shown by the CampsiteDetail component never changes! Why is this?</li>
+    <li>If we take a look at the React Developer Tools browser extension's Components tab, 
+        we can see the CampsiteDetail's campsite prop does not change when we click the button.</li>
+    <li>Instead of showing the console in my developer tools, I'll select Components.</li>
+    <li>In there I'll click on CampsiteDetail.</li>
+    <li>The reason for this is that React only re-renders a component when a variable that is explicitly 
+        made a part of React's state changes. </li>
+    <li>React isn't tracking this selectedCampsite variable, so no new snapshot is being created and no new render is occurring.</li>
+    <li>Hooks are special functions provided by React that let us use React features, such as React state and lifecycle methods, 
+        inside function components.</li>
+    <li>There is one other type of component in React called class components. Hooks cannot be used inside class components, 
+        only function components.</li>
+    <li>Two of the most commonly used React hooks are called useState() and useEffect().</li>
+    <li>The useState() hook lets us hook into React state to add local state.</li>
+    <li>The useEffect() hook lets us hook into React's lifecycle methods. You will learn more about these later.</li>
+    <li>We can also write custom hooks, that let us create logic that we can re-use in multiple components.</li>
+    <li>Third-party React component libraries often use custom hooks.</li>
+
+</ul>
+    <h2>Using the useState() Hook</h2>
+
+    <p>In the previous lesson, we learned that React state is a way to store and manage data that can change over time in a React component.</p>
+    <p>In this lesson, we will learn how to use the useState() hook to create and manage local state in function components.</p>
+    <p>useState is part of the React library, so we need to import it any time we want to use it.
+    Below is an example of a basic function component that declares a variable, then renders it inside a div element. 
+    You do not need to type this code anywhere; it is an example. You will have a chance to practice using hooks yourself in the next lesson.
+</code>
+const App = () => {
+    const myCounter = 0;
+
+    return (
+        <div>
+            Count: {myCounter}
+        </div>
+    );
+};
+</code>
+<p>
+The way the above code is written, myCounter is not hooked into React state, 
+and changing its value will not force the component to re-render.
+
+How can we turn this into a React state variable using the useState() hook?
+useState is a function to which we pass an initial state value, and it will return 
+an array consisting of two items: the state, and a function to change that state. 
+By convention, we use array destructuring to destructure those items. 
+Here is an example of how we can use it:
+</p>
+<code>
+import React, { useState } from 'react';
+function App() {
+    // Declare a state variable called 'myCounter' with an initial value of 0
+    const [myCounter, setMyCounter] = useState(0);                                                          
+import { useState } from 'react';
+
+const App = () => {
+    const [myCounter, setMyCounter] = useState(0);
+
+    return (
+        <div onClick={() => setMyCounter(myCounter + 1)}>
+            Count: {myCounter}
+        </div>
+    );
+};
+</code>
+<p>
+This code uses useState() to set up a stateful variable in our component, i.e. a local React state variable. 
+We can only update its value by sending a new value in as an argument to the function returned from useState().
+When that happens, it will force the component that renders this state variable to re-render, showing the updated value.
+</p>
+<p>
+Be aware that useState() must be implemented at the top level scope of the component. 
+It cannot be used inside any code blocks such as for or if blocks, and 
+it cannot be used inside the return statement.
+In the next exercise, you will update your CampsiteDetailPage to use the useState() hook.
+</p>
+</pre>
+    </body>
+</html>
