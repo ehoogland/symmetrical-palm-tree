@@ -1,18 +1,15 @@
 import { useState } from 'react';
-import { Container, Row, Col, Button } from 'reactstrap';
+import { Container, Row, Col } from 'reactstrap';
 import CampsiteDetail from '../features/campsites/CampsiteDetail';
 import CampsitesList from '../features/campsites/CampsitesList';
-import { selectRandomCampsite } from 'features/campsites/campsitesSlice';
+import { selectCampsitesById } from 'features/campsites/campsitesSlice';
 
+// Use React state to manage the selected campsite
 const CampsitesDirectoryPage = () => {
-    // Use React state to manage the selected campsite
-    const [selectedCampsite, setSelectedCampsite] = useState(selectRandomCampsite());
+    const [campsiteId, setCampsiteId] = useState(0);
+    // not tracked by useState(), but gets rendered when campsiteId changes
+    const selectedCampsite = selectCampsitesById(campsiteId);
 
-    const toggleCampsite = () => {
-        const newCampsite = selectRandomCampsite();
-        setSelectedCampsite(newCampsite);
-        console.log(newCampsite);
-    };
     return (
         <Container tag="div">{/* Container holds the Campsites Directory Page */}
         {/* The Campsites Directory Page will display a list of campsites and 
@@ -22,15 +19,12 @@ const CampsitesDirectoryPage = () => {
             <Row className='mb-3' tag="div">
                 <Col tag="div">
                     <h2>Campsites Directory</h2>
-                    <Button onClick={toggleCampsite} tag="button">
-                        Select Random Campsite
-                    </Button>
+                    <p>Select a campsite to see its details</p>
                 </Col>
             </Row>
             <Row tag="div">
                 <Col sm='5' md='7' tag="div"> {/* two columns with props sm and md */}
-                    {/* Display the full list of campsites; therefore no need to pass data */}
-                    <CampsitesList /> 
+                    <CampsitesList setCampsiteId={setCampsiteId} /> 
                 </Col>
                 <Col sm='7' md='5' tag="div"> 
                 {/* Pass in a prop to tell it which campsite's details to render */}

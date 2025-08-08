@@ -1,23 +1,27 @@
+import { Route, Routes } from 'react-router-dom';
+import ContactPage from './pages/ContactPage';
+import HomePage from './pages/HomePage';
 import Header from './components/Header';
 import Footer from './components/Footer';
 import CampsitesDirectoryPage from 'pages/CampsitesDirectoryPage';
-// was "import CampsitesList from 'features/campsites/CampsitesList';" 
-// but after finishing CampsiteDetail.js it is imported from the features/campsites directory
-
-
 import './App.css';
 
 function App() {
   return (
     <div>
       <Header />
-      <main>
-        <CampsitesDirectoryPage /> 
-        
-      </main>
+        <Routes>
+          <Route path='/' element={<HomePage />} />
+          <Route path='contact' element={<ContactPage />} />
+          <Route path='directory' element={<CampsitesDirectoryPage />} />
+        </Routes>
       <Footer />
     </div>
   );
 }
 
 export default App;
+
+
+
+
