@@ -1,13 +1,18 @@
 import  { Card, CardImg, CardImgOverlay, CardTitle } from 'reactstrap';
+import { Link } from 'react-router-dom';
+
 const CampsiteCard = ( {campsite} ) => {
-    const { image, name } = campsite;
+    const { id,image, name } = campsite;
+    // Passes the id as a string parameter to the URL (uses React Router)
     return (
-        <Card tag="div">
-            <CardImg width='100%' src= {image} alt= {name} tag="img" />
-            <CardImgOverlay tag="div">
-                <CardTitle tag='h4'>{name}</CardTitle>
-            </CardImgOverlay>
-        </Card>
+        <Link to={`${id}`}>
+            <Card>
+                <CardImg width='100%' src={image} alt={name} />
+                <CardImgOverlay>
+                    <CardTitle>{name}</CardTitle>
+                </CardImgOverlay>
+            </Card>
+        </Link>
     );
 };
 
