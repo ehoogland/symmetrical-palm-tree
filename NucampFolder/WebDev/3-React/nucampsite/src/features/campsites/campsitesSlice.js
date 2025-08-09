@@ -31,7 +31,7 @@ export const selectAllCampsites = () => {
  * To write the function and export it at the same time, use the following syntax:
  */
 export const selectCampsitesById = (id) => {
-    return CAMPSITES.find(campsite => campsite.id === id);
+    return CAMPSITES.find(campsite => campsite.id === parseInt(id));
 };
 
 export const selectFeaturedCampsite = () => {

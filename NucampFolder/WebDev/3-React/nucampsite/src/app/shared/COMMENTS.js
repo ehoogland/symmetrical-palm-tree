@@ -1,3 +1,6 @@
+// Temporarily testing conditional rendering with empty array
+//export const COMMENTS = [];
+
 export const COMMENTS = [
     {
         id: 0,

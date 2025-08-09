@@ -1,10 +1,10 @@
-import { Card, CardImg, CardText, CardBody, Col } from 'reactstrap';
+import { Card, CardImg, CardText, CardBody } from 'reactstrap';
 const CampsiteDetail = ({ campsite }) => {
     /* Deconstruct the campsite object's properties into their own variable names
      to make it easier to reference them/use them in the JSX rendering below */
     const { image, name, description } = campsite;
     return (
-        <Col md='12' className='m-4' tag="div">
+        <div>
             {/* having destructured the campsite object, we can now use the variables directly
                 instead of referencing the object using dot notation (campsite.image, etc.) */}
             <Card tag="div">
@@ -13,7 +13,7 @@ const CampsiteDetail = ({ campsite }) => {
                     <CardText tag="p">{description}</CardText>
                 </CardBody>
             </Card>
-        </Col>
+        </div>
     );
 };
 

@@ -2,19 +2,19 @@ import { Col, Row } from 'reactstrap';
 import CampsiteCard from 'features/campsites/CampsiteCard';
 import { selectAllCampsites } from './campsitesSlice';
 
-const CampsitesList = ({ setCampsiteId }) => {
+const CampsitesList = () => {
     // Use the selector to get all campsites
     const campsites = selectAllCampsites();
 // Recall that a Col component is just a glorified div that has a width
 // based on the Bootstrap grid system. divs can be clicked too, just like buttons.
     return (
-        <Row className='ms-auto' tag="div">
+        <Row className='ms-auto'>
             {campsites.map((campsite) => (
                 <Col
-                    md='5' 
+                    md='5'
                     className='m-4' 
-                    key={campsite.id} 
-                    onClick={() => setCampsiteId(campsite.id)}> {/* Set the campsiteId when clicked. Note the callback function does call or invoke a function*/}
+                    key={campsite.id}
+                >
                     <CampsiteCard campsite={campsite} /> 
                 </Col>
             ))}
