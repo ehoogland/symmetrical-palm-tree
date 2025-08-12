@@ -1,12 +1,15 @@
-const HeartSVG  = (props) => {
-    return (
-        // Use react SVG elements to display the svg code for the heart shape rather than
-        // rendering it as an image.
-        // The SVG element is used to define the heart shape and its properties.
-         <svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 841.9 595.3'>
-            <g fill={props.col} stroke='#8a8791' strokeWidth='3'>
-                <path d='M 297.29747,550.86823 
-      C 283.52243,535.43191 249.1268,505.33855 220.86277,483.99412 
+import { Component } from 'react';
+
+class HeartSVG extends Component {
+    render() {
+        return (
+            // Use react SVG elements to display the svg code for the heart shape rather than
+            // rendering it as an image.
+            // The SVG element is used to define the heart shape and its properties.
+            <svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 841.9 595.3'>
+                <g fill={this.props.col} stroke='#8a8791' strokeWidth='3'>
+                    <path d='M 297.29747,550.86823
+      C 283.52243,535.43191 249.1268,505.33855 220.86277,483.99412
       C 137.11867,420.75228 125.72108,411.5999 91.719238,380.29088 
       C 29.03471,322.57071 2.413622,264.58086 2.5048478,185.95124 
       C 2.5493594,147.56739 5.1656152,132.77929 15.914734,110.15398 
@@ -24,7 +27,8 @@ const HeartSVG  = (props) => {
                 <g transform='translate(129.28571,-64.285714)' />
             </g>
         </svg>
-    );
-};
+        );
+    }
+}
 
 export default HeartSVG;

@@ -1,9 +1,16 @@
-/* Add header component. The Header component should return a div with a className of 'App-header', 
-and it should display the phrase 'I ❤️ React' or 'I Heart React'. 
+import { Component } from 'react';  // Step 1 of conversion to class component: Import necessary modules, in this case, React
 
-If you would like to use the heart emoji, you can copy and paste it from above.   
+class Header extends Component {
+  render() {
+    return (
+      <div className='App-header'>
+        <h1>I ❤️ React</h1>
+      </div>
+    );
+  }
+}
 
-*/
+/*
 const Header = () => {
   return <div className='App-header'><h1>I ❤️ React</h1></div>;
 };
@@ -15,5 +22,5 @@ const Header = () => {
 // The export default statement allows the Header component to be imported without using curly braces.
 // The Header component is a functional component that returns JSX to be rendered in the application.
 // It is a simple component that displays a header with the text "I ❤️ React".
-
+*/
 export default Header;
