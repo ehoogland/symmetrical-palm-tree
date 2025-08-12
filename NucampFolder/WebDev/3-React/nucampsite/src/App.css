@@ -7,15 +7,33 @@ h2,
 h3,
 .card-body > .card-title {
     font-family: 'Lobster', cursive;
+    color: #3046c5 !important;
+}
+
+.card-body h2 {
+    color: black !important;
+}
+
+.card-body .card-title {
+    color: black !important;
+}
+
+/* Comments section should use normal font, not Lobster */
+.col-md-6 h2 {
+    font-family: 'Open Sans', sans-serif !important;
+    color: black !important;
+    font-size: 1.5rem !important;
+    font-weight: 600 !important;
+}
+
+.breadcrumb-item a,
+.breadcrumb-item.active {
+    color: #3046c5;
 }
 
 .card-title {
     font-weight: 500;
     font-size: 1.25rem;
-}
-
-h2 {
-    color: #3046c5;
 }
 
 .card-img-overlay .card-title {
