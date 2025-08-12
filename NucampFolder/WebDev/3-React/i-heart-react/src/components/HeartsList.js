@@ -1,4 +1,4 @@
-// import Heart from '../Heart';
+import { Component } from 'react'
 import CandyColoredHeart from './CandyColoredHeart'
 
 const messages = [
@@ -33,15 +33,16 @@ const messages = [
 // the message is displayed inside the heart image
 // We are passing a callback function to the map method that takes
 // each message and returns a Heart component, with the message as a prop.
-
-const HeartsList = () => {
-    return (
-      <div className='hearts-container'>
-        {messages.map((message, idx) => (
-          <CandyColoredHeart key={idx} msg={message} />
-        ))}
-              </div>
-            );
-};
+class HeartsList extends Component {
+    render() {
+        return (
+            <div className='hearts-container'>
+                {messages.map((message, idx) => (
+                    <CandyColoredHeart key={idx} msg={message} />
+                ))}
+            </div>
+        );
+    }
+}
 
 export default HeartsList;
