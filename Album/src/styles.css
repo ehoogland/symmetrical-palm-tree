@@ -1,0 +1,774 @@
+/* Import edgier fonts from Google Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;400;500;600;700&family=Exo+2:wght@200;300;400;500;600;700;800;900&family=Audiowide&family=Black+Ops+One&display=swap');
+
+/* Pantone 2024-2025 Color Palette */
+:root {
+  --peach-fuzz: #FFBE98;        /* Pantone 2024 Color of the Year */
+  --mocha-mousse: #AD8B73;      /* Pantone 2025 Color of the Year */
+  --digital-lime: #D4FF00;      /* Trending 2024 */
+  --ultra-steady: #8B4F8B;      /* Trending 2024 */
+  --cosmic-cobalt: #2E2D88;     /* Trending 2024 */
+  --warm-taupe: #B8968C;        /* Complementary neutral */
+  --soft-mint: #A8E6CF;         /* Fresh accent */
+  --sunset-coral: #FF6B6B;      /* Vibrant accent */
+}
+
+body {
+  font-family: 'Exo 2', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background: linear-gradient(135deg, var(--peach-fuzz) 0%, var(--mocha-mousse) 100%);
+  min-height: 100vh;
+  margin: 0;
+  padding: 0;
+  font-weight: 400;
+}
+
+.App {
+  font-family: 'Exo 2', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  color: #333;
+}
+
+/* Remove all underlines from links */
+a {
+  text-decoration: none !important;
+}
+
+a:hover {
+  text-decoration: none !important;
+}
+
+/* Navigation styling */
+.nav-container {
+  background: linear-gradient(135deg, var(--cosmic-cobalt) 0%, var(--ultra-steady) 100%);
+  padding: 1rem 0;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.nav-list {
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 1rem;
+  margin: 0;
+  padding: 0;
+}
+
+.nav-item {
+  margin: 0;
+}
+
+.nav-link {
+  color: white !important;
+  padding: 0.5rem 1rem;
+  border-radius: 25px;
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  transition: background 0.3s ease, box-shadow 0.3s ease;
+  font-weight: 500;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.nav-link:hover {
+  background: var(--peach-fuzz);
+  color: var(--cosmic-cobalt) !important;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* Content container */
+.content-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem;
+  background: rgba(255, 255, 255, 0.9);
+  border-radius: 15px;
+  margin-top: 2rem;
+  margin-bottom: 2rem;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(10px);
+}
+
+/* Card styling */
+.album-card {
+  background: white;
+  border-radius: 15px;
+  padding: 1.5rem;
+  margin: 1rem 0;
+  border: 2px solid var(--warm-taupe);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transition: box-shadow 0.3s ease, border-color 0.3s ease;
+}
+
+.album-card:hover {
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+  border-color: var(--peach-fuzz);
+}
+
+/* Button styling */
+.btn-primary-custom {
+  background: linear-gradient(135deg, var(--cosmic-cobalt) 0%, var(--ultra-steady) 100%);
+  border: none;
+  border-radius: 25px;
+  padding: 0.75rem 1.5rem;
+  color: white;
+  font-weight: 500;
+  transition: background 0.3s ease, box-shadow 0.3s ease;
+}
+
+.btn-primary-custom:hover {
+  background: linear-gradient(135deg, var(--ultra-steady) 0%, var(--cosmic-cobalt) 100%);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+  transform: none;
+}
+
+.btn-secondary-custom {
+  background: #8B4513;
+  border: none;
+  border-radius: 25px;
+  padding: 0.75rem 1.5rem;
+  color: white;
+  font-weight: 500;
+  transition: background 0.3s ease, box-shadow 0.3s ease;
+}
+
+.btn-secondary-custom:hover {
+  background: #A0522D;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+  transform: none;
+}
+
+.btn-danger-custom {
+  background: var(--sunset-coral);
+  border: none;
+  border-radius: 25px;
+  padding: 0.75rem 1.5rem;
+  color: white;
+  font-weight: 500;
+  transition: background 0.3s ease, box-shadow 0.3s ease;
+}
+
+.btn-danger-custom:hover {
+  background: #ff5252;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+  transform: none;
+}
+
+/* Form styling */
+.form-control-custom {
+  border: 2px solid var(--warm-taupe);
+  border-radius: 10px;
+  padding: 0.75rem;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.form-control-custom:focus {
+  border-color: var(--peach-fuzz);
+  box-shadow: 0 0 0 0.2rem rgba(255, 190, 152, 0.25);
+}
+
+/* Alert styling */
+.alert-success-custom {
+  background: var(--soft-mint);
+  border: 1px solid #7dd3c7;
+  color: #2d5a4e;
+  border-radius: 10px;
+  padding: 1rem;
+  margin: 1rem 0;
+}
+
+.alert-danger-custom {
+  background: #ffe6e6;
+  border: 1px solid var(--sunset-coral);
+  color: #c62828;
+  border-radius: 10px;
+  padding: 1rem;
+  margin: 1rem 0;
+}
+
+/* Headings with edgy fonts */
+h1, h2, h3, h4, h5, h6 {
+  color: var(--cosmic-cobalt);
+  font-weight: 700;
+}
+
+h1 {
+  font-family: 'Orbitron', monospace;
+  font-weight: 900;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+}
+
+h2 {
+  font-family: 'Rajdhani', sans-serif;
+  font-weight: 700;
+  letter-spacing: 1px;
+}
+
+h3 {
+  font-family: 'Rajdhani', sans-serif;
+  font-weight: 600;
+  letter-spacing: 1px;
+}
+
+h4, h5, h6 {
+  font-family: 'Exo 2', sans-serif;
+  font-weight: 600;
+}
+
+/* Special styling for hero title - simplified and cleaner */
+.hero-title {
+  font-family: 'Black Ops One', cursive;
+  font-size: 3.5rem;
+  letter-spacing: 2px;
+  color: var(--cosmic-cobalt);
+  text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+}
+
+/* Navigation with futuristic font */
+.nav-link {
+  font-family: 'Rajdhani', sans-serif;
+  font-weight: 500;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+/* Buttons with bold styling */
+.btn-primary-custom, .btn-secondary-custom, .btn-danger-custom {
+  font-family: 'Rajdhani', sans-serif;
+  font-weight: 600;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+/* Statistics cards with tech font */
+.stat-card h2 {
+  font-family: 'Orbitron', monospace;
+  font-weight: 900;
+  letter-spacing: 2px;
+}
+
+/* Artist names in search with audiowide */
+.artist-highlight h2 {
+  font-family: 'Audiowide', cursive;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+}
+
+/* Form labels with modern styling */
+.form-label {
+  font-family: 'Rajdhani', sans-serif;
+  font-weight: 600;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+/* Homepage specific styles */
+.hero-section {
+  position: relative;
+  overflow: hidden;
+}
+
+.hero-section::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="20" cy="20" r="2" fill="rgba(255,255,255,0.1)"/><circle cx="80" cy="80" r="3" fill="rgba(255,255,255,0.1)"/><circle cx="40" cy="70" r="1.5" fill="rgba(255,255,255,0.1)"/></svg>');
+  pointer-events: none;
+}
+
+.stat-card {
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.stat-card:hover {
+  transform: translateY(-10px) scale(1.05);
+  box-shadow: 0 15px 40px rgba(0,0,0,0.2) !important;
+}
+
+.featured-album-card {
+  transition: all 0.3s ease;
+}
+
+.featured-album-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 20px 50px rgba(0,0,0,0.15) !important;
+}
+
+.album-icon {
+  transition: all 0.3s ease;
+}
+
+.featured-album-card:hover .album-icon {
+  transform: rotate(360deg) scale(1.1);
+}
+
+.action-card {
+  background: white;
+  border: 2px solid var(--warm-taupe);
+  border-radius: 15px;
+  transition: all 0.3s ease;
+  color: inherit;
+}
+
+.action-card:hover {
+  border-color: var(--peach-fuzz);
+  transform: translateY(-8px);
+  box-shadow: 0 12px 30px rgba(0,0,0,0.1);
+  color: inherit;
+}
+
+.action-icon {
+  font-size: 3rem;
+  transition: all 0.3s ease;
+}
+
+.action-card:hover .action-icon {
+  transform: scale(1.2);
+}
+
+/* Animated background for hero */
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-20px); }
+}
+
+.hero-section .btn {
+  animation: float 3s ease-in-out infinite;
+}
+
+.hero-section .btn:nth-child(2) {
+  animation-delay: 0.5s;
+}
+
+.hero-section .btn:nth-child(3) {
+  animation-delay: 1s;
+}
+
+/* Clean hero title without animations */
+.hero-section .hero-title {
+  color: var(--cosmic-cobalt);
+  text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+}
+
+/* Album Card Styling */
+.album-card {
+  border: none;
+  border-radius: 15px;
+  overflow: hidden;
+  transition: all 0.3s ease;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(10px);
+}
+
+.album-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+}
+
+.album-cover-container {
+  position: relative;
+  overflow: hidden;
+  aspect-ratio: 1;
+}
+
+.album-cover {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+}
+
+.album-card:hover .album-cover {
+  transform: scale(1.1);
+}
+
+.album-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.album-card:hover .album-overlay {
+  opacity: 1;
+}
+
+.album-card .card-title {
+  font-family: 'Rajdhani', sans-serif;
+  font-weight: 600;
+  color: var(--cosmic-cobalt);
+  font-size: 1.1rem;
+  margin-bottom: 0.5rem;
+}
+
+.album-card .artist-name {
+  font-family: 'Audiowide', cursive;
+  color: var(--ultra-steady);
+  font-size: 0.9rem;
+  font-weight: 400;
+  margin-bottom: 0.5rem;
+}
+
+.album-card .card-body {
+  padding: 1rem;
+}
+
+.album-card .text-muted {
+  font-size: 0.85rem;
+  color: var(--mocha-mousse) !important;
+}
+
+/* Album Detail Page Styling */
+.album-detail-cover img {
+  max-width: 100%;
+  border-radius: 15px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+  transition: transform 0.3s ease;
+}
+
+.album-detail-cover img:hover {
+  transform: scale(1.05);
+}
+
+.album-title-detail {
+  font-family: 'Orbitron', sans-serif;
+  font-weight: 700;
+  color: var(--cosmic-cobalt);
+  font-size: 2.5rem;
+  margin-bottom: 0.5rem;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.artist-name-detail {
+  font-family: 'Audiowide', cursive;
+  color: var(--ultra-steady);
+  font-size: 1.8rem;
+  margin-bottom: 1rem;
+  font-weight: 400;
+}
+
+.year-detail {
+  font-family: 'Rajdhani', sans-serif;
+  font-size: 1.3rem;
+  color: var(--mocha-mousse);
+  margin-bottom: 2rem;
+}
+
+.info-grid {
+  display: grid;
+  gap: 1rem;
+  background: rgba(255, 255, 255, 0.1);
+  padding: 1.5rem;
+  border-radius: 10px;
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.info-item {
+  font-family: 'Exo 2', sans-serif;
+  font-size: 1.1rem;
+  color: var(--cosmic-cobalt);
+  padding: 0.5rem 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.info-item:last-child {
+  border-bottom: none;
+}
+
+.info-item strong {
+  color: var(--ultra-steady);
+  font-weight: 600;
+}
+
+/* Scheme Code Overlay for The Schemer Album */
+.scheme-code-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.85);
+  color: #00ff00;
+  font-family: 'Courier New', monospace;
+  font-size: 0.7rem;
+  line-height: 1.2;
+  padding: 0.5rem;
+  overflow: hidden;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  text-shadow: 0 0 5px #00ff00;
+}
+
+.album-card:hover .scheme-code-overlay {
+  opacity: 1;
+}
+
+.scheme-code-overlay .code-block {
+  background: rgba(0, 20, 0, 0.9);
+  border: 1px solid #00ff00;
+  border-radius: 3px;
+  padding: 0.3rem;
+  margin: 0.1rem 0;
+  box-shadow: 0 0 10px rgba(0, 255, 0, 0.3);
+}
+
+.scheme-code-overlay .comment {
+  color: #888;
+  font-style: italic;
+}
+
+.scheme-code-overlay .keyword {
+  color: #ff6b6b;
+  font-weight: bold;
+}
+
+.scheme-code-overlay .function {
+  color: #4ecdc4;
+}
+
+.scheme-code-overlay .string {
+  color: #ffe66d;
+}
+
+/* Detail page code overlay */
+.album-detail-scheme-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.9);
+  color: #00ff00;
+  font-family: 'Courier New', monospace;
+  font-size: 0.8rem;
+  line-height: 1.3;
+  padding: 1rem;
+  overflow: auto;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  border-radius: 15px;
+  text-shadow: 0 0 5px #00ff00;
+}
+
+.album-detail-cover:hover .album-detail-scheme-overlay {
+  opacity: 1;
+}
+
+/* Cow Overlay for The Ruminant Band Album */
+.cow-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(34, 139, 34, 0.9);
+  color: white;
+  font-family: 'Comic Sans MS', cursive, sans-serif;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  text-align: center;
+  padding: 1rem;
+}
+
+.album-card:hover .cow-overlay {
+  opacity: 1;
+}
+
+.cow-face {
+  font-size: 3rem;
+  margin-bottom: 0.5rem;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
+}
+
+.cow-message {
+  background: rgba(255, 255, 255, 0.95);
+  color: #2D1B04;
+  padding: 0.5rem 1rem;
+  border-radius: 20px;
+  font-weight: bold;
+  font-size: 0.9rem;
+  border: 3px solid #654321;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+  position: relative;
+  margin-bottom: 0.5rem;
+  text-shadow: none;
+}
+
+.cow-message:before {
+  content: '';
+  position: absolute;
+  bottom: -10px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 0;
+  height: 0;
+  border-left: 10px solid transparent;
+  border-right: 10px solid transparent;
+  border-top: 10px solid #654321;
+}
+
+.cow-message:after {
+  content: '';
+  position: absolute;
+  bottom: -7px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 0;
+  height: 0;
+  border-left: 8px solid transparent;
+  border-right: 8px solid transparent;
+  border-top: 8px solid rgba(255, 255, 255, 0.95);
+}
+
+.cow-subtitle {
+  font-size: 0.7rem;
+  color: #90EE90;
+  font-style: italic;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.7);
+}
+
+/* Detail page cow overlay */
+.album-detail-cow-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(135deg, rgba(34, 139, 34, 0.95) 0%, rgba(0, 100, 0, 0.95) 100%);
+  color: white;
+  font-family: 'Comic Sans MS', cursive, sans-serif;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  text-align: center;
+  padding: 2rem;
+  border-radius: 15px;
+}
+
+.album-detail-cover:hover .album-detail-cow-overlay {
+  opacity: 1;
+}
+
+.detail-cow-face {
+  font-size: 4rem;
+  margin-bottom: 1rem;
+  text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.7);
+}
+
+.detail-cow-message {
+  background: rgba(255, 255, 255, 0.95);
+  color: #2D1B04;
+  padding: 1rem 1.5rem;
+  border-radius: 25px;
+  font-weight: bold;
+  font-size: 1.2rem;
+  border: 4px solid #654321;
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.4);
+  position: relative;
+  margin-bottom: 1rem;
+  text-shadow: none;
+}
+
+.detail-cow-message:before {
+  content: '';
+  position: absolute;
+  bottom: -15px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 0;
+  height: 0;
+  border-left: 15px solid transparent;
+  border-right: 15px solid transparent;
+  border-top: 15px solid #654321;
+}
+
+.detail-cow-message:after {
+  content: '';
+  position: absolute;
+  bottom: -11px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 0;
+  height: 0;
+  border-left: 11px solid transparent;
+  border-right: 11px solid transparent;
+  border-top: 11px solid rgba(255, 255, 255, 0.95);
+}
+
+.detail-cow-subtitle {
+  font-size: 1rem;
+  color: #90EE90;
+  font-style: italic;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
+  margin-bottom: 0.5rem;
+}
+
+.cow-facts {
+  font-size: 0.9rem;
+  color: #FFFFFF;
+  line-height: 1.4;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.9);
+  font-weight: 600;
+  background: rgba(139, 69, 19, 0.85);
+  padding: 0.8rem 1rem;
+  border-radius: 15px;
+  border: 2px solid #654321;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
+  margin-top: 1rem;
+}
+
+/* New separated cow manifesto and vegan banner */
+.cow-manifesto {
+  font-size: 0.9rem;
+  color: #F0FFF0;
+  line-height: 1.4;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.7);
+  font-style: italic;
+}
+
+.cow-vegan-banner {
+  background: rgba(139, 69, 19, 0.9);
+  color: #FFFFFF;
+  padding: 1rem 1.5rem;
+  border-radius: 15px;
+  border: 3px solid #654321;
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.4);
+  text-align: center;
+  font-weight: bold;
+  font-size: 1.1rem;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.9);
+  max-width: 400px;
+  margin: 0;
+}
+
+/* Hero section button spacing - force vertical stacking with large gaps */
+.hero-section .row .col-12 {
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+}
+
+.hero-section .btn-lg {
+  margin-top: 0.5rem;
+  margin-bottom: 0.5rem;
+}
