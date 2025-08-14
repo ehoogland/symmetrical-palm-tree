@@ -123,6 +123,111 @@ body {
   transform: rotate(15deg) scale(1.1);
 }
 
+/* Selected ingredient card styles */
+.ingredient-card.selected {
+  border-color: var(--vegan-secondary);
+  background: linear-gradient(135deg, #e8f5e8 0%, #f0f8f0 100%);
+  box-shadow: 0 8px 25px rgba(127, 176, 105, 0.3);
+}
+
+.ingredient-card.selected::before {
+  background: linear-gradient(90deg, var(--pantone-legumes), var(--pantone-vegetables));
+  height: 6px;
+}
+
+.ingredient-card.selected:hover {
+  transform: translateY(-6px) scale(1.01);
+  box-shadow: 0 10px 30px rgba(127, 176, 105, 0.4);
+}
+
+/* Selected ingredients section */
+.selected-ingredients-section {
+  background: rgba(255, 255, 255, 0.8);
+  border-radius: 15px;
+  padding: 1.5rem;
+  border: 1px solid var(--vegan-accent);
+  backdrop-filter: blur(10px);
+}
+
+.selected-ingredients-list .badge {
+  background: var(--vegan-secondary) !important;
+  border: 1px solid var(--vegan-primary);
+  transition: all 0.3s ease;
+}
+
+.selected-ingredients-list .badge:hover {
+  background: var(--vegan-primary) !important;
+  transform: translateY(-1px);
+}
+
+/* Navigation tabs styling */
+.nav-tabs-container .btn-group {
+  box-shadow: 0 4px 15px rgba(74, 124, 89, 0.15);
+  border-radius: 25px;
+  overflow: hidden;
+}
+
+.nav-tabs-container .btn {
+  border-radius: 0 !important;
+  border: none !important;
+  padding: 0.75rem 1.5rem;
+  font-weight: 500;
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+.nav-tabs-container .btn:first-child {
+  border-radius: 25px 0 0 25px !important;
+}
+
+.nav-tabs-container .btn:last-child {
+  border-radius: 0 25px 25px 0 !important;
+}
+
+.nav-tabs-container .btn:hover {
+  transform: translateY(-2px);
+}
+
+/* Enhanced selected tab styling */
+.nav-tabs-container .btn-vegan {
+  background: linear-gradient(135deg, var(--vegan-primary), var(--vegan-secondary)) !important;
+  color: white !important;
+  box-shadow: inset 0 2px 10px rgba(0,0,0,0.2);
+  transform: translateY(-1px);
+}
+
+.nav-tabs-container .btn-vegan::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 80%;
+  height: 3px;
+  background: linear-gradient(90deg, transparent, white, transparent);
+  border-radius: 2px;
+}
+
+.nav-tabs-container .btn-vegan-outline {
+  background: rgba(255,255,255,0.1) !important;
+  color: var(--vegan-primary) !important;
+  border: 2px solid var(--vegan-secondary) !important;
+}
+
+/* Favorites section styling */
+.favorites-section .card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 25px rgba(74, 124, 89, 0.15);
+}
+
+.favorites-section .btn-danger {
+  transition: all 0.3s ease;
+}
+
+.favorites-section .btn-danger:hover {
+  transform: scale(1.1);
+}
+
 /* Category badges with Pantone-inspired colors */
 .category-badge {
   display: inline-block;
@@ -431,4 +536,93 @@ body {
 
 .ingredient-card {
   animation: fadeInUp 0.6s ease-out;
+}
+
+/* Custom heart button styling */
+.heart-button-default {
+  background: linear-gradient(135deg, 
+    #a8d8a8 0%,    /* Pale sage green */
+    #c8e6c9 50%,   /* Light mint green */
+    #90c695 100%   /* Soft green for depth */
+  );
+  color: #2d5016;  /* Dark green text */
+  border: none;
+}
+
+.heart-button-default:hover {
+  background: linear-gradient(135deg, 
+    #ffb3ba 0%,    /* Light pink-red */
+    #ff9999 50%,   /* Medium pink-red */
+    #ff7f7f 100%   /* Deeper pink-red */
+  );
+  color: #330000;  /* Very dark red - much darker than background */
+  transform: translateY(-2px) scale(1.05);
+  box-shadow: 0 4px 15px rgba(255, 153, 153, 0.4);
+}
+
+.heart-button-selected {
+  background: linear-gradient(135deg, 
+    #a8d8a8 0%,    /* Pale sage green - same as default */
+    #c8e6c9 50%,   /* Light mint green - same as default */
+    #90c695 100%   /* Soft green for depth - same as default */
+  );
+  color: #dc3545;  /* Red heart on green background */
+  border: none;
+}
+
+.heart-button-selected:hover {
+  background: linear-gradient(135deg, 
+    #ffb3ba 0%,    /* Light pink-red - same as default hover */
+    #ff9999 50%,   /* Medium pink-red - same as default hover */
+    #ff7f7f 100%   /* Deeper pink-red - same as default hover */
+  );
+  color: #800000;  /* Darker red heart on hover */
+  transform: translateY(-2px) scale(1.05);
+  box-shadow: 0 4px 15px rgba(255, 153, 153, 0.4);
+}
+
+/* Remove old heart button styles */
+.heart-button:hover {
+  background: linear-gradient(135deg, #dc3545, #c82333) !important;
+  border-color: #dc3545 !important;
+  color: white !important;
+  transform: translateY(-2px) scale(1.05);
+  box-shadow: 0 4px 15px rgba(220, 53, 69, 0.4) !important;
+}
+
+.heart-button:hover.btn-vegan-outline {
+  border-color: #dc3545 !important;
+  color: white !important;
+}
+
+/* Paler green button for View Recipe */
+.btn-vegan-pale {
+  background: linear-gradient(135deg, 
+    #a8d8a8 0%,    /* Pale sage green */
+    #c8e6c9 50%,   /* Light mint green */
+    #90c695 100%   /* Soft green for depth */
+  );
+  border: none;
+  color: #2d5016;  /* Dark green text for contrast */
+  border-radius: 25px;
+  padding: 0.75rem 1.5rem;
+  font-weight: 500;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 10px rgba(168, 216, 168, 0.3);
+  text-align: center;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  white-space: nowrap;
+}
+
+.btn-vegan-pale:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(168, 216, 168, 0.4);
+  background: linear-gradient(135deg, 
+    #c8e6c9 0%,    /* Brighter pale green on hover */
+    #a8d8a8 50%,   
+    #81c784 100%   /* Slightly deeper green for contrast */
+  );
+  color: #1b5e20;
 }

@@ -1,4 +1,4 @@
-function IngredientCard({ ingredient }) {
+function IngredientCard({ ingredient, isSelected = false, onSelect }) {
     // Function to get category-specific CSS class
     const getCategoryClass = (category) => {
         const categoryLower = category.toLowerCase().replace(/\s+/g, '-');
@@ -68,7 +68,24 @@ function IngredientCard({ ingredient }) {
     };
 
     return (
-        <div className="ingredient-card d-flex flex-column h-100">   
+        <div 
+          className={`ingredient-card d-flex flex-column h-100 ${isSelected ? 'selected' : ''}`}
+          onClick={() => onSelect && onSelect(ingredient)}
+          style={{ 
+            cursor: onSelect ? 'pointer' : 'default',
+            transition: 'all 0.3s ease',
+            transform: isSelected ? 'scale(0.98)' : 'scale(1)',
+            opacity: isSelected ? '0.8' : '1'
+          }}
+        >   
+          {isSelected && (
+            <div className="selection-indicator">
+              <span className="badge bg-success position-absolute" 
+                    style={{ top: '8px', right: '8px', zIndex: 2 }}>
+                ✓
+              </span>
+            </div>
+          )}
           <div className="mb-3 flex-grow-1">
             <h4 className="mb-1" style={{ 
               fontSize: getFontSize(primary),
