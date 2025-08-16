@@ -1,4 +1,5 @@
 import { Route, Routes } from 'react-router-dom';
+import AboutPage from './pages/AboutPage';
 import ContactPage from './pages/ContactPage';
 import HomePage from './pages/HomePage';
 import Header from './components/Header';
@@ -22,7 +23,9 @@ function App() {
           {/* The element will be rendered when the path matches the URL */}
           {/* The HomePage component will be rendered when the URL path is '/' */}
           <Route path='/' element={<HomePage />} />
+          <Route path='about' element={<AboutPage />} />
           <Route path='contact' element={<ContactPage />} />
+         
           {/* The CampsitesDirectoryPage component will be rendered when the URL path is just '/directory' */}
           {/* The CampsiteDetailPage component will be rendered when the URL path is '/directory/:campsiteId' */}
           {/* The CampsiteDetailPage component will receive the campsiteId parameter from the URL */}
