@@ -1,27 +1,36 @@
-
-import StockETFCard from './StockETFCard';
-
-const tradeableStocks = [
-  { id: 0, symbol: 'AAPL', name: 'Apple Inc.', exchange: 'NASDAQ', type: 'stock' },
-  { id: 1, symbol: 'GOOGL', name: 'Alphabet Inc.', exchange: 'NASDAQ', type: 'stock' },
-  { id: 2, symbol: 'AMZN', name: 'Amazon.com Inc.', exchange: 'NASDAQ', type: 'stock' },
-  { id: 3, symbol: 'MSFT', name: 'Microsoft Corporation', exchange: 'NASDAQ', type: 'stock' },
-  { id: 4, symbol: 'ADBE', name: 'Adobe Inc.', exchange: 'NASDAQ', type: 'stock' },
-  { id: 5, symbol: 'NVDA', name: 'NVIDIA Corporation', exchange: 'NASDAQ', type: 'stock' },
-  { id: 6, symbol: 'ARM', name: 'Arm Holdings PLC-ADR', exchange: 'NASDAQ', type: 'stock' },
-  { id: 7, symbol: 'QQQ', name: 'Invesco QQQ Trust', exchange: 'NASDAQ', type: 'ETF' },
-  { id: 8, symbol: 'SPY', name: 'SPDR S&P 500 ETF Trust', exchange: 'NYSE', type: 'ETF' },
-  { id: 9, symbol: 'DIA', name: 'SPDR Dow Jones Industrial Average ETF Trust', exchange: 'NYSE', type: 'ETF' }
-];
-// Import the StockETFCard component
+import { useState } from 'react';
+import HomePage from './components/HomePage';
+import RandomPage from './components/RandomPage';
+import StockETFPage from './components/StockETFPage';
+import ColorSchemesExample from './components/ColorSchemesExample';
+import { TEST_STOCKS } from "./TEST_STOCKS";
+import { Routes, Route } from 'react-router-dom';
+import { Container } from 'react-bootstrap';
 
 function App() {
+  /**
+   * App is the main component of the application.
+   * It manages the state of tradeable stocks and renders the HomePage component.
+   * The tradeable stocks are initialized with a predefined list from TEST_STOCKS.
+   * TEST_STOCKS allows you to have a predefined list of stocks preloaded.
+
+   * We don't want the HomePage to to just re-render with the same stocks--which happens
+   * if you just import it--so we use state to manage the list of tradeable stocks.
+   * The customer can then add to, modify and filter the list.
+   */
+  const [tradeableStocks, setTradeableStocks] = useState( TEST_STOCKS );
+
   return (
     <div>
-      <h1>Tradeable Stocks</h1>
-        {tradeableStocks.map(s => (
-        <StockETFCard key={s.id} stock={s} />
-        ))}
+      <ColorSchemesExample />
+      <Container className="mt-3">
+        <Routes>
+          <Route path="/" element={<HomePage tradeableStocksList={tradeableStocks} />} />
+          <Route path="/random" element={<RandomPage tradeableStocksList={tradeableStocks} />} />
+          {/* If the route is the stock detail page, show the StockETFPage component */}
+          <Route path="/stocks/:stockId" element={<StockETFPage tradeableStocksList={tradeableStocks} />} />
+        </Routes>
+      </Container>
     </div>
   );
 }
