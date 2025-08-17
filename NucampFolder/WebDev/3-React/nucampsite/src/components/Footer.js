@@ -7,8 +7,8 @@ const Footer = () => {
         <footer className='site-footer'>
             <Container>
                 <Row className='row-content'>
-                    <Col xs={{ size: 4, offset: 1 }} sm='2'><h5>Links</h5></Col>
-                    <Col xs={{ size: 6, offset: 1 }} sm='4'>
+                    <Col xs={{ size: 4, offset: 1 }} sm='2'>
+                        <h5>Links</h5>
                         <ul className='list-unstyled'>
                             <li>
                                 <Link to='/home'>Home</Link>
@@ -24,35 +24,35 @@ const Footer = () => {
                             </li>
                         </ul>
                     </Col>
+                   
                     <Col xs='6' sm='3' className='text-center'>
                         <h5>Social</h5>
-                        <a
-                            className='btn btn-social-icon btn-instagram'
-                            href='http://instagram.com/'
-                        >
-                            <i className='fa fa-instagram' />
-                        </a>{' '}
-                            {/* When you see {' '} in JSX as you see between the anchor elements in the code above, 
-                            that is a JavaScript string with a single space. It's used to explicitly create a space 
-                            character, as otherwise a space character may be ignored. */}
-                        <a
-                            className='btn btn-social-icon btn-facebook'
-                            href='http://www.facebook.com/'
-                        >
-                            <i className='fa fa-facebook' />
-                        </a>{' '}
-                        <a
-                            className='btn btn-social-icon btn-twitter'
-                            href='http://twitter.com/'
-                        >
-                            <i className='fa fa-twitter' />
-                        </a>{' '}
-                        <a
-                            className='btn btn-social-icon btn-google'
-                            href='http://youtube.com/'
-                        >
-                            <i className='fa fa-youtube' />
-                        </a>
+                        <div className='footer-social-icons d-flex justify-content-center flex-wrap'>
+                            <a
+                                className='btn btn-social-icon btn-instagram'
+                                href='http://instagram.com/'
+                            >
+                                <i className='fa fa-instagram' />
+                            </a>{' '}
+                            <a
+                                className='btn btn-social-icon btn-facebook'
+                                href='http://www.facebook.com/'
+                            >
+                                <i className='fa fa-facebook' />
+                            </a>{' '}
+                            <a
+                                className='btn btn-social-icon btn-twitter'
+                                href='http://twitter.com/'
+                            >
+                                <i className='fa fa-twitter' />
+                            </a>{' '}
+                            <a
+                                className='btn btn-social-icon btn-google'
+                                href='http://youtube.com/'
+                            >
+                                <i className='fa fa-youtube' />
+                            </a>
+                        </div>
                     </Col>
                     <Col sm='4' className='text-center'>
                         <a
