@@ -2,14 +2,19 @@ body {
     font-family: 'Open Sans', sans-serif;
 }
 
+
 h1,
 h2,
 h3,
-.card-body > .card-title {
+.card-body
+.card-title {
     font-family: 'Lobster', cursive;
     color: #3046c5 !important;
 }
-
+.navbar-brand h1,
+.card-header h3 {
+    color: white !important
+}
 .card-body h2 {
     color: black !important;
 }
@@ -90,4 +95,15 @@ h3,
 .page-exit-active {
     opacity: 0;
     transition: 300ms ease-in;
+}
+
+.footer-social-icons {
+    gap: 0.5rem;
+}
+
+@media (max-width: 575.98px) {
+    .footer-social-icons {
+        flex-direction: column !important;
+        align-items: center !important;
+    }
 }

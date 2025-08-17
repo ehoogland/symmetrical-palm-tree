@@ -1,10 +1,11 @@
 import { Col, Row, Container, Card, CardBody, CardHeader } from 'reactstrap';
 import SubHeader from '../components/SubHeader';
+import PartnersList from '../features/partners/PartnersList';
 
 const AboutPage = () => {
     return (
         <Container>
-            <SubHeader current='About' />
+            <SubHeader current='About Us' />
             <Row className='row-content'>
                 <Col sm='6'>
                 <h3>Our Mission</h3>
@@ -20,8 +21,10 @@ const AboutPage = () => {
                 </Col>
 
                 <Col sm='6'>
-                <Card>
-                    <CardHeader className='bg-light mt-3'>About Us</CardHeader>
+                <Card >
+                    <CardHeader className='text-white bg-primary'>
+                        <h3>Facts At A Glance</h3>
+                    </CardHeader>
                     <CardBody>
                               <dl className='row'>
                                 <dt className='col-6'>Founded</dt>
@@ -57,6 +60,9 @@ const AboutPage = () => {
             <Row className='row-content' >
                 <Col xs='12'>
                     <h3>Community Partners</h3>
+                </Col>
+                <Col xs='12'>
+                    <PartnersList />
                 </Col>
             </Row>
 

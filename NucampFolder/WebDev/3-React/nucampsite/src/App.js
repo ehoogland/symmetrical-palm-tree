@@ -4,7 +4,7 @@ import ContactPage from './pages/ContactPage';
 import HomePage from './pages/HomePage';
 import Header from './components/Header';
 import Footer from './components/Footer';
-import CampsitesDirectoryPage from 'pages/CampsitesDirectoryPage';
+import CampsitesDirectoryPage from './pages/CampsitesDirectoryPage';
 import CampsiteDetailPage from './pages/CampsiteDetailPage';
 import './App.css';
 
@@ -25,7 +25,7 @@ function App() {
           <Route path='/' element={<HomePage />} />
           <Route path='about' element={<AboutPage />} />
           <Route path='contact' element={<ContactPage />} />
-         
+
           {/* The CampsitesDirectoryPage component will be rendered when the URL path is just '/directory' */}
           {/* The CampsiteDetailPage component will be rendered when the URL path is '/directory/:campsiteId' */}
           {/* The CampsiteDetailPage component will receive the campsiteId parameter from the URL */}
