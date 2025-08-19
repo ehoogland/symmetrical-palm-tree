@@ -11,11 +11,13 @@ const DisplayList = () => {
     // Use the selectors to get whatever item is returned from invoking them
     const items = [ selectFeaturedCampsite(), selectFeaturedPromotion(), selectFeaturedPartners() ]   ;
     
-// Remember that React components must return a single element, 
-// so we wrap the two Col components in a Row component. 
-// React requires a key prop for each child in a list, so we also need to provide an idx.
-// Use conditional rendering to only display the Col component if the item exists.
-// TODO: test the logic for when it doesn't exist
+/** 
+ * The two Col components are wrapped in a Row component to return a single element, as required by React.
+ * Idx provided because React requires a key prop for each child in a list.
+ * Use conditional rendering to only render the component in Col if the item exists: 'item && <Col>...</Col>'.
+ * Tested the conditional rendering logic for when an item doesn't exist by changing "featured" to "false" in
+ * CAMPSITES.js file.
+ */
     return (
         <Row>
             {items.map((item, idx) => {
