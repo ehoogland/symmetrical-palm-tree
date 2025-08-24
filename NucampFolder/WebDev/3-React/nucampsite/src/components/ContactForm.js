@@ -1,52 +1,51 @@
+import { Formik, Field, Form, ErrorMessage } from 'formik';
 import { Button, Label, Col, FormGroup } from 'reactstrap';
-import { Formik, Field, Form } from 'formik';
-import { useState } from 'react';
+import { validateContactForm } from '../utils/validateContactForm';
+
 /**
  * JavaScript object that looks a lot like the initial values object, with the same properties, but
  * the properties will be whatever the user has typed into the form fields and submitted.
  * 
  * The handleSubmit function is passed to Formik as a prop and is called when the form is submitted.
  *
- *  We will log the form values to the console. Normally we would be sending the value
- *  to a backend databasefor processing and storage.
+ *  Logs the form values to the console. Normally we would be sending the value
+ *  to a backend database for processing and storage.
  *
- *  Also log the form values in JSON format. If you want to send the content of JavaScript objects
- *  to another computer, they can't be sent as-is when, but can be easily converted to a
+ *  Logs the form values in JSON format, because if you want to send the content of JavaScript objects
+ *  to another computer, they can't be sent as-is, but can be easily converted to a
  *  JSON text string using the JSON.stringify() method. 
  * 
  *  resetForm() resets the form to its initial state after form contents have been submitted
  */
 
 const ContactForm = () => {
-    const [formKey, setFormKey] = useState(0);
     const handleSubmit = (values, { resetForm }) => {
         console.log('form values:', values);
         console.log('in JSON format:', JSON.stringify(values));
         resetForm();
-        setFormKey(prev => prev + 1);
     };
+    
     /** 
      * Prop initialValues expects a JavaScript object and is used to set the initial form values. 
-     * It is defined as an object literal by enclosing the key-value pairs in curly braces.
-     * The outer set of curly braces is required for using JavaScript inside JSX. 
-     * The inner set of curly braces is used to define a JavaScript object. 
-     *
-     * A Key prop is added to the Formik component that is set to a state variable formKey. This was
-     * done to ensure the form field cleared, as it was failing to clear firstName for some reason.
+     * It is defined as a JavaScript object literal because it encloses the key-value pairs in the inner
+     * set of curly braces. Recall that an object literal is a concise way to create an object directly 
+     * in your code.
+     * 
+     * The outer set of curly braces is required for using JavaScript inside JSX.
      * @return {JSX.Element}
      */
     return (
         <Formik
-            key={formKey}
-            initialValues={{
-                firstName: '',
-                lastName: '',
-                phoneNum: '', 
-                email: '', 
-                agree: false, 
-                contactType: 'By Phone', 
-                feedback: ''
-            }}
+        initialValues={{
+            firstName: '',
+            lastName: '',
+            phoneNum: '', 
+            email: '', 
+            agree: false, 
+            contactType: 'By Phone', 
+            feedback: ''
+        }}
+            validate={validateContactForm}
             onSubmit={handleSubmit}
         >
             <Form>
@@ -55,7 +54,13 @@ const ContactForm = () => {
                         First Name
                     </Label>
                     <Col md='10'>
-                        <Field name='firstName' placeholder='First Name' className='form-control' />
+                        <Field name='firstName'
+                            placeholder='First Name'
+                            className='form-control'
+                        />
+                        <ErrorMessage name='firstName'>
+                            {(msg) => <p className='text-danger'>{msg}</p>}
+                        </ErrorMessage>
                     </Col>
                 </FormGroup>
                 <FormGroup row>
@@ -63,7 +68,13 @@ const ContactForm = () => {
                         Last Name
                     </Label>
                     <Col md='10'>
-                        <Field name='lastName' placeholder='Last Name' className='form-control' />
+                        <Field name='lastName'
+                            placeholder='Last Name'
+                            className='form-control'
+                        />
+                        <ErrorMessage name='lastName'>
+                            {(msg) => <p className='text-danger'>{msg}</p>}
+                        </ErrorMessage>
                     </Col>
                 </FormGroup>
                 <FormGroup row>
@@ -71,7 +82,13 @@ const ContactForm = () => {
                         Phone
                     </Label>
                     <Col md='10'>
-                        <Field name='phoneNum' placeholder='Phone' className='form-control' />
+                        <Field name='phoneNum'
+                            placeholder='Phone'
+                            className='form-control'
+                        />
+                        <ErrorMessage name='phoneNum'>
+                            {(msg) => <p className='text-danger'>{msg}</p>}
+                        </ErrorMessage>
                     </Col>
                 </FormGroup>
                 <FormGroup row>
@@ -79,7 +96,13 @@ const ContactForm = () => {
                         Email
                     </Label>
                     <Col md='10'>
-                        <Field name='email' placeholder='Email' className='form-control' />
+                        <Field name='email'
+                            placeholder='Email'
+                            className='form-control'
+                        />
+                        <ErrorMessage name='email'>
+                            {(msg) => <p className='text-danger'>{msg}</p>}
+                        </ErrorMessage>
                     </Col>
                 </FormGroup>
                 <FormGroup row>
