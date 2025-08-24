@@ -1,21 +1,37 @@
+import React, { useState } from 'react';
 import Comment from './Comment';
-import { selectCommentsByCampsiteId } from './commentsSlice';   
+import CommentForm from './CommentForm';
+import { selectCommentsByCampsiteId } from './commentsSlice';
 
 const CommentsList = ({ campsiteId }) => {
-    const comments = selectCommentsByCampsiteId(campsiteId);
+    // Get initial comments for this campsite
+    const initialComments = selectCommentsByCampsiteId(campsiteId);
+    const [comments, setComments] = useState(initialComments);
 
-    if (comments && comments.length > 0) {
-        return (
-            <div>
-                {comments.map((comment) => {
-                    return <Comment key={comment.id} comment={comment} />;
-                })}
-            </div>
-        );
-    }
+    // setComments uses spread operator to add new comments. 
+    // Note that it is not destructive.
+    // 
+    const addComment = (newComment) => {
+        setComments(prevComments => [
+            ...prevComments,
+            {
+                ...newComment,
+                id: Date.now(),
+                date: new Date().toISOString()
+            }
+        ]);
+    };
+// Increased number of comments displayed to 10 in order to show added feedback.
     return (
         <div>
-            There are no comments for this campsite yet.
+            {comments.length > 0 ? (
+                comments.slice(0, 10).map((comment) => (
+                    <Comment key={comment.id} comment={comment} />
+                ))
+            ) : (
+                <div>There are no comments for this campsite yet.</div>
+            )}
+            <CommentForm campsiteId={campsiteId} addComment={addComment} />
         </div>
     );
 };

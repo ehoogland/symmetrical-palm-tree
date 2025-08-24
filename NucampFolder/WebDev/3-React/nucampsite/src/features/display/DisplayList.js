@@ -1,5 +1,5 @@
 import { Col, Row } from 'reactstrap';
-// import DisplayCard from './DisplayCard'; comment this and add AnimatedDisplayCard import
+// import DisplayCard from './DisplayCard'; commented this and added AnimatedDisplayCard import
 import  AnimatedDisplayCard from './AnimatedDisplayCard';
 import { selectFeaturedCampsite } from '../campsites/campsitesSlice';
 import { selectFeaturedPartners } from '../partners/partnersSlice';
@@ -14,7 +14,7 @@ const DisplayList = () => {
 /** 
  * The two Col components are wrapped in a Row component to return a single element, as required by React.
  * Idx provided because React requires a key prop for each child in a list.
- * Use conditional rendering to only render the component in Col if the item exists: 'item && <Col>...</Col>'.
+ * Used conditional rendering to only render the component in Col if the item exists: 'item && <Col>...</Col>'.
  * Tested the conditional rendering logic for when an item doesn't exist by changing "featured" to "false" in
  * CAMPSITES.js file.
  */
