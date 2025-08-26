@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Regular Expressions Pen</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+        }
+        h1 {
+            color: #333;
+        }
+        section {
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+<a>This syntax creates what's called a <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/RegExp" target="_blank">RegExp</a> literal, a special object in JavaScript. The pair of enclosing forward slashes tells JavaScript to look for a regex between them. The actual regex is the text between the forward slashes: <strong>^\d+$</strong></a>-->
+<section>
+  <h1>What's a Regular Expression?</h1>
+<p>Once again, let's set aside React briefly to learn about a non-React-specific 
+    programming concept you will encounter in this week's coursework: <strong>regular expressions</strong>.
+
+  <p>A regular expression, usually abbreviated as <strong>regex</strong>, is a special text string used to 
+    define a string search pattern in an efficient, powerful way. Regexes are supported in most programming 
+    languages, including Perl, Python, Java, Ruby, and yes, JavaScript. As long as you work with code, you're 
+    likely to encounter and/or use regexes, thus it is worth the time to get formally introduced to them now.
+
+  <h2>Regex Metacharacters</h2>
+<p>Regexes can be hard to read at first. They can resemble gibberish to the untrained eye. Here's an example:</p>
+
+<p><strong>^(\d{3})(\w+)$</strong></p>
+
+<p>Hold up - it's not as arcane as it may seem. You're probably familiar with the concept of wildcards, 
+    such as when you use <strong>*</strong> to stand in for "everything" -- e.g. the CSS * selector. 
+    Consider regexes as <em>wildcards gone wild</em> ... wild with specificity, that is. For example, 
+    you can use <strong>\d</strong> to match any digit from 0-9.  
+  
+<p>You can tell JavaScript when you're using a regex by using two forward slashes, like so:</p>
+
+<p><strong>/</strong>^\d+$<strong>/</strong></p>
+
+<a>This syntax creates what's called a <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/RegExp" target="_blank">RegExp</a> literal, a special object in JavaScript. The pair of enclosing forward slashes tells JavaScript to look for a regex between them. 
+    The actual regex is the text between the forward slashes: <strong>^\d+$</strong></p>
+
+<p>Let's unpack this. <strong>^</strong> matches the beginning of a string, and <strong>$</strong> matches the end. (These two are called anchors.) 
+    <strong>\d</strong> matches any single digit, and the <strong>+</strong> character means to repeat the preceding match 1 or more times. 
+    So <strong>^\d+$</strong> together means to match 1 or more digits, and nothing else (no letters or other non-numeric characters).</p>
+
+<p>These are known as regex special characters, or metacharacters. You can find a list here: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Regular_Expressions" target="_blank">https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Regular_Expressions</a>.</p>
+
+  <h2>Testing a Regular Expression</h2>
+<p>JavaScript gives you several tools for working with RegExp values, including the method test(). 
+    Syntax: <em>RegExp</em>.<strong>test</strong>(<em>strToCheck</em>). For example, try entering these lines one by one into your Developer Console 
+    (use your browser's developer console rather than Codepen's for this one): </p>
+<p>const myReg = /^\d+$/;<br />
+  myReg.test("hello"); <br />
+  myReg.test(12345); <br />
+  myReg.test("12345"); <br />
+  myReg.test("abc3456");
+</p> 
+<p>
+  You should find that you get <em>true</em> for the two strings that contain only digits, regardless whether the data type is number or string, 
+  and <em>false</em> for the tests on strings that contain letters, because the regex is looking for strings that contain numbers only.
+  </p>
+</section>
+*/
+<section id="challenge">
+<hr />
+<h1>Code Challenge</h1>
+  <p>Finally, here is your challenge. In the JS section of this Codepen, write a regex test such that only a username that has alphanumeric characters 
+    (lower and upper case letters and numbers allowed only - no spaces, no underscores), has at minimum 2 characters, and has a number as the final 
+    character (such as 'Jason1') is accepted via the form below:<p/>
+
+<form>
+  <input type="text" name="username" id="username"/>  
+  <button type="button" onclick="validate()">Submit</button>
+</form>
+  
+<p>
+  HINT: Be sure to anchor the beginning of the string.<br />
+  The test should pass for: jAsOn1, 23, 1JASON1<br />
+  The test should fail for: jAsOn_1, 1, 1jason
+</p>
+  
+<hr />
+</section>
+
+<!----original pen by https://codepen.io/minae/ -->
+
+<script>
+  function validate() {
+    let inputStr = document.getElementById("username").value;
+    
+    /**
+     * /.../ encloses the entire regex to form a JavaScript RegExp object
+     * ^ = start of string
+     * [a-zA-Z0-9]{1,} = at least one alphanumeric character (before the last digit)
+     * [0-9] = ends with a digit
+     * $ = end of string
+     */
+    const myReg = /^[a-zA-Z0-9]{1,}[0-9]$/;
+    
+    if (myReg.test(inputStr)) 
+    alert("Username accepted");
+  else
+  alert("Username must contain only alphanumeric characters, contain a mininum of two characters, and end with a digit.");
+  }
+</script>
+
+
+<footer>
+ <p>Footnote 1: There are web tools that can help you with regexes. For example, search for 'regex parser' and you're sure to get many hits, such as this parser: 
+    <a href="http://xenon.stanford.edu/~xusch/regexp/" target="_blank">http://xenon.stanford.edu/~xusch/regexp/</a>.</p>
+<p>Footnote 2: JavaScript has a special global object to deal with regular expressions, named RegExp. The word <em>regex</em> is used more generally 
+    (non-language-specific) for the concept of regular expressions, and <em>RegExp</em> is a JavaScript-specific implementation.View documentation for 
+    the RegExp object here: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/RegExp" target="_blank">https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/RegExp</a></p>
+</footer>
+</body>
+</html>

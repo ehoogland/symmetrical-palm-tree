@@ -35,30 +35,33 @@ function IngredientCard({ ingredient, isSelected = false, onSelect }) {
         return categoryMap[categoryLower] || 'category-default';
     };
 
-    // Parse ingredient name and alternative names
-    const parseIngredientName = (name) => {
-        // Check if name contains pipe separator with alternative names
-        const match = name.match(/^([^|]+)\s*\|\s*(.+)$/);
-        if (match) {
-            return {
-                primary: match[1].trim(),
-                alternatives: match[2].split(',').map(alt => alt.trim())
-            };
-        }
-        
-        // Fallback: Check if name contains parentheses with alternative names (for backward compatibility)
-        const parenMatch = name.match(/^([^(]+)\s*\(([^)]+)\)$/);
-        if (parenMatch) {
-            return {
-                primary: parenMatch[1].trim(),
-                alternatives: parenMatch[2].split(',').map(alt => alt.trim())
-            };
-        }
-        
-        return { primary: name, alternatives: [] };
-    };
+  // Parse ingredient name and alternative names
+  const parseIngredientName = (name) => {
+    const match = name.match(/^([^|]+)\s*\|\s*(.+)$/);
+    if (match) {
+      return {
+        primary: match[1].trim(),
+        alternatives: match[2].split(',').map(alt => alt.trim())
+      };
+    }
+    const parenMatch = name.match(/^([^(]+)\s*\(([^)]+)\)$/);
+    if (parenMatch) {
+      return {
+        primary: parenMatch[1].trim(),
+        alternatives: parenMatch[2].split(',').map(alt => alt.trim())
+      };
+    }
+    return { primary: name, alternatives: [] };
+  };
 
-    const { primary, alternatives } = parseIngredientName(ingredient.name);
+  // Prefer altNames from ingredient object if present
+  const { primary, alternatives: parsedAlternatives } = parseIngredientName(ingredient.name);
+  const alternatives = ingredient.altNames && Array.isArray(ingredient.altNames) && ingredient.altNames.length > 0
+    ? ingredient.altNames
+    : parsedAlternatives;
+
+  // Debug log
+  console.log('IngredientCard:', { name: ingredient.name, primary, altNames: ingredient.altNames, alternatives });
     
     // Dynamic font size based on name length
     const getFontSize = (name) => {
@@ -78,6 +81,10 @@ function IngredientCard({ ingredient, isSelected = false, onSelect }) {
             opacity: isSelected ? '0.8' : '1'
           }}
         >   
+          {/* Debug info for troubleshooting */}
+          <div style={{ fontSize: '0.7rem', color: '#888', marginBottom: '2px', display: 'none' }}>
+            {ingredient.name} | {primary}
+          </div>
           {isSelected && (
             <div className="selection-indicator">
               <span className="badge bg-success position-absolute" 
@@ -94,7 +101,7 @@ function IngredientCard({ ingredient, isSelected = false, onSelect }) {
               fontWeight: '600'
             }}>
               <span className="plant-icon">🌱</span>
-              {primary}
+              {primary && primary.trim() ? primary : 'Unknown'}
             </h4>
             {alternatives.length > 0 && (
               <small className="text-muted" style={{ 

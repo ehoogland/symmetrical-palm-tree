@@ -1,5 +1,5 @@
 /* Vegan-themed custom styles */
-
+/* Inspired by Pantone color palettes for natural, plant-based ingredients */
 /* Pantone-inspired color palette for vegan ingredients */
 :root {
   --vegan-primary: #4a7c59; /* Forest green */
@@ -162,17 +162,20 @@ body {
 
 /* Navigation tabs styling */
 .nav-tabs-container .btn-group {
-  box-shadow: 0 4px 15px rgba(74, 124, 89, 0.15);
+  box-shadow: 0 4px 15px rgba(74, 124, 89, 0.12);
   border-radius: 25px;
   overflow: hidden;
 }
 
 .nav-tabs-container .btn {
-  border-radius: 0 !important;
+  background: #f7f7f7 !important; /* very light gray tabs */
+  color: var(--vegan-primary) !important;
+  border-radius: 20px 20px 0 0;
+  padding: 0.75rem 1.25rem;
+  box-shadow: none;
   border: none !important;
-  padding: 0.75rem 1.5rem;
   font-weight: 500;
-  transition: all 0.3s ease;
+  transition: all 0.2s ease;
   position: relative;
 }
 
@@ -188,12 +191,161 @@ body {
   transform: translateY(-2px);
 }
 
+/* Stronger rule to ensure nav tab buttons are very light gray even if other rules use !important */
+.nav-tabs-container .btn.btn-vegan-outline,
+.nav-tabs-container .btn.btn-vegan-outline:not([aria-current]) {
+  background: #f7f7f7 !important;
+  color: var(--vegan-primary) !important;
+  border-color: transparent !important;
+}
+
+.nav-tabs-container .btn.btn-vegan-outline[aria-current="page"],
+.nav-tabs-container .btn.btn-vegan-outline.active {
+  /* keep the selected state visually distinct */
+  background: linear-gradient(135deg, var(--vegan-primary), var(--vegan-secondary)) !important;
+  color: white !important;
+}
+
 /* Enhanced selected tab styling */
 .nav-tabs-container .btn-vegan {
   background: linear-gradient(135deg, var(--vegan-primary), var(--vegan-secondary)) !important;
   color: white !important;
   box-shadow: inset 0 2px 10px rgba(0,0,0,0.2);
   transform: translateY(-1px);
+}
+
+/* Center tab (recipes): use primary color for contrast on light background */
+.nav-tabs-container .btn-group .btn-recipes {
+  /* inactive center tab: light background with primary text for contrast */
+  background: #f7f7f7 !important;
+  color: var(--vegan-primary) !important;
+  text-shadow: none;
+}
+
+.nav-tabs-container .btn-group .btn-recipes[aria-current="page"],
+.nav-tabs-container .btn-group .btn-recipes.active {
+  /* active/selected center tab: figure-ground reversal to vegan gradient */
+  background: linear-gradient(135deg, var(--vegan-primary), var(--vegan-secondary)) !important;
+  color: white !important;
+  border-color: transparent !important;
+}
+
+/* simple separator between tabs */
+/* Insert a green pipe between adjacent nav buttons without splitting their background */
+.nav-tabs-container .btn-group {
+  position: relative; /* allow absolute positioning inside buttons if needed */
+}
+
+/* pipe separator inserted on the second and later buttons, centered vertically and bold */
+.nav-tabs-container .btn-group .btn + .btn {
+  position: relative; /* anchor for the ::before absolute element */
+}
+.nav-tabs-container .btn-group .btn + .btn::before {
+  content: '|';
+  color: var(--vegan-accent, #2f9a6b);
+  position: absolute;
+  left: -0.5rem; /* place between the buttons */
+  top: 50%;
+  transform: translateY(-50%);
+  font-weight: 700;
+  font-size: 1.05em;
+  line-height: 1;
+}
+
+/* Responsive: for small and extra-small viewports, center the nav block under the header
+   but left-align the button-group inside that centered container. Allow buttons to wrap. */
+@media (max-width: 768px) {
+  .vegan-header .container.text-center {
+    text-align: center;
+  }
+
+  .nav-tabs-container {
+    display: block;
+    width: 100%;
+    margin-top: 0.75rem;
+    padding: 0 1rem;
+  }
+
+  /* Center the btn-group block under the header and display two buttons per row
+     On narrow screens we remove the pipe separators and visually connect the buttons
+     into a rounded 2x2 block (outer corners rounded). */
+  .nav-tabs-container .btn-group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0; /* touch edges so buttons connect */
+    width: min(540px, 100%);
+    margin: 0.25rem auto;
+    justify-content: center;
+    border-radius: 18px; /* rounded outer container */
+    overflow: hidden; /* clip inner buttons so outer radii show */
+  }
+
+  /* Each button becomes half width to form two columns. Remove internal radii so
+     only outer corners remain from the container / nth-child rules below. */
+  .nav-tabs-container .btn {
+    padding: 0.6rem 0.9rem;
+    font-size: 0.95rem;
+    flex: 0 0 50%;
+    max-width: 50%;
+    text-align: center;
+    border-radius: 0; /* remove individual rounding so edges join cleanly */
+    margin: 0;
+    box-shadow: none; /* keep flat so joins look seamless */
+  }
+
+  /* Remove the pipe separators on narrow viewports */
+  .nav-tabs-container .btn + .btn::before {
+    display: none;
+    content: none;
+  }
+
+  /* Outer corner rounding for the 2x2 layout using role classes */
+  .nav-tabs-container .btn-group .btn-ingredients {
+    border-top-left-radius: 18px;
+    border-bottom-left-radius: 0 !important; /* internal bottom-left square by request */
+  }
+  .nav-tabs-container .btn-group .btn-recipes {
+    border-top-right-radius: 18px;
+  }
+  .nav-tabs-container .btn-group .btn-favorites {
+    border-bottom-left-radius: 18px;
+  }
+  .nav-tabs-container .btn-group .btn-subscribe {
+    border-bottom-right-radius: 18px;
+    border-top-right-radius: 0 !important; /* internal top-right square by request */
+  }
+
+  /* Mobile override: ensure subscribe looks active when toggled and its top-right corner is square */
+  .nav-tabs-container .btn-subscribe.active {
+    background: linear-gradient(135deg, var(--vegan-primary), var(--vegan-secondary)) !important;
+    color: white !important;
+  }
+
+  /* Force top-right square on narrow screens in case earlier rules re-add rounding */
+  .nav-tabs-container .btn-subscribe {
+    border-top-right-radius: 0 !important;
+  }
+
+  /* When subscribe is open, dim/disable active styling for other nav buttons so only
+     the Subscribe button appears highlighted */
+  .nav-tabs-container .btn-group.subscribe-open .btn:not(.btn-subscribe) {
+    background: #f7f7f7 !important;
+    color: var(--vegan-primary) !important;
+    box-shadow: none !important;
+  }
+
+  .nav-tabs-container .btn-group.subscribe-open .btn:not(.btn-subscribe).active,
+  .nav-tabs-container .btn-group.subscribe-open .btn:not(.btn-subscribe)[aria-current="page"] {
+    /* override any .active/aria-current visual state while subscribe modal is open */
+    background: #f7f7f7 !important;
+    color: var(--vegan-primary) !important;
+  }
+}
+
+/* Force all vegan-themed buttons to have white text */
+.btn, .btn-vegan, .btn-vegan-outline {
+  color: var(--vegan-dark) !important;
+  text-shadow: none;
 }
 
 .nav-tabs-container .btn-vegan::after {
@@ -337,6 +489,11 @@ body {
 
 /* Custom buttons with vegan theme */
 .btn-vegan {
+  color: white !important;
+  text-shadow: 0 1px 3px rgba(0,0,0,0.3);
+  color: white !important;
+  color: white !important;
+  color: white !important;
   background: linear-gradient(135deg, 
     #7BA428 0%,    /* Pantone 370 C - Fresh yellow-green */
     #9ACD32 50%,   /* Yellow-green */
@@ -387,6 +544,8 @@ body {
   color: white;
 }
 
+/* Vegan-themed outline button with white text */
+/* Vegan-themed outline button: dark text by default, white on hover/active */
 .btn-vegan-outline {
   background: transparent;
   border: 2px solid var(--vegan-secondary);
@@ -400,11 +559,16 @@ body {
   align-items: center;
   justify-content: center;
   white-space: nowrap;
+  text-shadow: none;
+  color: #6b6b6b; /* Slightly darker gray for outline buttons */
 }
 
-.btn-vegan-outline:hover {
+.btn-vegan-outline:hover,
+.btn-vegan-outline.active,
+.btn-vegan-outline[aria-current="page"] {
   background: var(--vegan-secondary);
-  color: white;
+  color: white !important;
+  text-shadow: 0 1px 3px rgba(0,0,0,0.3);
   transform: translateY(-2px);
 }
 

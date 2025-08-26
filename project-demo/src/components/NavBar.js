@@ -1,7 +1,7 @@
 import { Navbar, Nav, Container } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 
-export default function ColorSchemesExample() {
+export default function NavBar() {
   return (
     <>
       {/* React Bootstrap Navbar for navigation. Uses "as" prop to render React Router Link, as opposed to
