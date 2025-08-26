@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Array Reduce Example</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 2em;
+            background: #f9f9f9;
+        }
+    </style>
+</head>
+<body>
+    <h1>Array Reduce Example</h1>
+    <p>Complete each challenge listed below by editing the code inside the JS section of this Codepen. 
+        Read the comments for each challenge in the JS section for further instructions.</p>
+<p>Use the Codepen Console to see <span class='code'>console.log()</span> messages. Open the Codepen Console via the <strong>Console</strong> button at the bottom left corner of this page.</p>
+
+<h3>Demo</h3>
+<ul>
+  <li>The code at the top of the JS panel of this Codepen demonstrates a way that <strong>Array.reduce()</strong> can be used to mimic the <strong>Array.map()</strong> method. 
+  <li>This is not a particularly useful way to use <strong>Array.reduce()</strong>, since we have the ability to use <strong>Array.map()</strong> instead to accomplish the same end more easily. 
+    However, it demonstrates some of the flexibility and power of <strong>Array.reduce()</strong>.
+    </li>
+</ul>
+
+<h3>Challenge 1</h3>
+<ul>
+    <li>Pretend that there is no <strong>Array.filter()</strong> method. Use <strong>Array.reduce()</strong> to filter out only the objects from the provided array with a <span class='code'>price</span> property of <span class='code'>10</span> or over.</li>
+</ul>
+
+<h3>Challenge 2</h3>
+<ul>
+    <li>Write a <span class='code'>switch</span> statement for the provided reducer function such that when it is used to reduce the provided array of actions, it correctly produces a new <span class='code'>state</strong> with the actions applied to it.</li>
+</ul>
+
+
+<h3>Additional Resources</h3>
+<ul>
+  <li><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/reduce" target="_blank">MDN - Array.prototype.reduce()</a></li>
+</ul>
+    <script>
+        /* Pretend there there is no Array.map() method, only Array.reduce().
+   The below code demonstrates one way that Array.reduce() could be used to
+   mimic the map method. It takes an array, and creates a new array where
+   every string in the array is prefixed with the string 'hello '. You can
+   see the result logged in the console. 
+*/
+const names = ['Nucamp', 'React', 'JavaScript'];
+const helloNames = names.reduce((acc, cur) => { 
+    acc.push(`hello ${cur}`);
+    return acc;
+}
+, []);
+console.log(helloNames);
+
+
+/* CHALLENGE 1
+   Pretend there there is no Array.filter() method, only Array.reduce().
+   How would you use Array.reduce() to mimic the filter method, thus that
+   from the array below, you can create a new array composed of only the objects
+   from the original array that contain a price property of 10 and over?
+   Part of the code has been completed for you. 
+   Complete the rest by uncommenting the return statement on line 36
+   and writing the code for what to return when cur.price is >= 10. 
+*/
+
+const gems = [
+    { type: 'amethyst', price: 8 },
+    { type: 'turquoise', price: 50 },
+    { type: 'selenite', price: 2 },
+    { type: 'topaz', price: 10 },
+    { type: 'emerald', price: 500 }
+]
+
+const gemsOverTen = gems.reduce((acc, cur) => {
+   if (cur.price < 10) return acc;
+    
+}, []);
+
+console.log(gemsOverTen)
+
+/* CHALLENGE 2
+   Examine the code below, then delete the line indicated inside the 
+   definition of the reducer function. In its place, write a switch
+   statement with a case for the 'update_hp' and 'update_pos' action 
+   types, as well as a default case.
+   Your goal is to have the state variable, when logged at the end, contain
+   an object with the content of: { hp: 800, xPosition: 205, yPosition: 190 }
+*/
+
+const actions = [
+    { type: 'update_hp', payload: -200 },
+    { type: 'update_pos', payload: { x: 5, y: -10 } }
+];
+
+const initialState = {
+    hp: 1000,
+    xPosition: 200,
+    yPosition: 200
+};
+
+const reducer = (state, action) => {
+    return state; // delete this line and replace it with a switch statement
+};
+
+const state = actions.reduce(reducer, initialState);
+console.log(state);
+    </script>
+</body>
+</html>

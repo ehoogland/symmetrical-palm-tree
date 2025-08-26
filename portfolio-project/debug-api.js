@@ -1,3 +1,9 @@
+// Debugging
+// This script is used to test API calls directly, and because there is an API key required 
+// for authentication it is included in .gitignore
+// This is a temporary script for debugging purposes and should not be used in production.
+// The script was suggested by GitHub Copilot's AI agent, either Claude Sonnet or ChatGPT.
+
 // Debug script to test API calls directly
 const API_KEY = '84e8ea20b5fb4e47a9bc0ea528319d56';
 

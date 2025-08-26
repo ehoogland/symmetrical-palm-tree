@@ -1,5 +1,6 @@
 #!/bin/bash
-
+# Simple test script for Spoonacular API with hardcoded API key
+# This script was suggested by Github Copilot's AI agent, which was Claude Sonnet
 echo "🧪 Testing Spoonacular API for Chickpeas and Oats"
 echo "================================================"
 

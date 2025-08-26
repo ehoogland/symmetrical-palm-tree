@@ -1,4 +1,5 @@
 // Mock recipe service for when API limit is reached
+// This file was suggested by GitHub Copilot's AI agent, either Claude Sonnet or ChatGPT to simulate API responses.
 export const mockRecipeData = {
   chickpeas: [
     {

@@ -1,0 +1,87 @@
+// Refactor Challenge #1
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ternary Operator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+        }
+        h1, h2, h3 {
+            color: #333;
+        }
+        code {
+            background: #f4f4f4;
+            padding: 2px 4px;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Ternary Operator</h1>
+    <p>The ternary operator is a shorthand for the if-else statement.</p>
+    <p>Syntax: <code>condition ? expr1 : expr2</code></p>
+    <p>If the condition is true, <code>expr1</code> is executed; otherwise, <code>expr2</code> is executed.</p>
+    <h2>Example: Ternary Operator</h2>
+    <p>If you do not see the Codepen Console in your browser, be sure to click the Console button on the bottom left of this screen.</p>
+
+<h3><strong>Code Challenge</strong></h3>
+There are four sets of if/else statements in the JS section of this Codepen. 
+Refactor (rewrite) each one so that it uses the ternary operator shorthand. 
+To get you started, we'll give you an answer to #1 for free:
+  <pre>console.log(1+1===2 ? 'It is true that 1+1 equals 2.' : 'It is false that 1+1 equals 2.');</pre>
+</h3>
+<p>That should help you figure out #2 and #3. #4 is a little different - see below.</p>
+<p><strong>About Refactor Challenge #4</strong><br/>
+  - For this challenge, you will refactor the code inside the function isEven. You will use the ternary operator to determine what value (true or false) to return from the function. It is possible to write this as a single-line arrow function that does not require curly braces nor a 'return' keyword.<br />
+  
+  - In the helper code at line 37, there are two examples of a ternary operator used inline. You don't need to do anything with these examples -- they are just there as demos, to show you more ways to use the ?: syntax.</p>
+
+<h3>Additional Resources</h3>
+<ul><li><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Conditional_Operator" target="_blank">MDN - Ternary (conditional) operator</a>
+
+<!-- original pen by minae lee -->
+<script>
+if (1+1===2) {
+  console.log('It is true that 1+1 equals 2.');
+} else {
+  console.log('It is false that 1+1 equals 2.');
+}
+
+
+// Uncomment the below line (line 8) and hit the Run button. You should then see the console log "It is true that 1+1 equals 2." line twice.
+console.log(1+1===2 ? 'It is true that 1+1 equals 2.' : 'It is false that 1+1 equals 2.');
+
+
+// Refactor Challenge #2 - you're on your own for this one buddy!
+if (0) {
+  console.log('0 evaluates as true.');
+} else {
+  console.log('0 evaluates as false.');
+}
+// Write your revision of the above code using the ternary operator here. Keep the above code - the expected result is that you will see "0 evaluates as false" in the console twice. 
+0 ? console.log('0 evaluates as true.') : console.log('0 evaluates as false.');
+
+// Refactor Challenge #3
+const hungry = true;
+if (hungry) {
+  console.log('Go eat something.');
+} else {
+  console.log('Keep coding!');
+}
+// Write your revision of the above code using the ternary operator here. Keep the above code - the expected result is that you will see "Go eat something!" in the console twice. 
+hungry ? console.log('Go eat something.') : console.log('Keep coding!');
+// Refactor Challenge #4! The code you need to refactor is inside the function. For this one, go ahead and replace the contents of this function, rewritten using the ternary operator. You should be able to accomplish this in a single line. 
+const isEven = (dice) => (Math.floor(dice / 2) * 2 === dice) ? true : false;
+// This is just code to supplement Refactor Challenge #4; you do not need to do anything with it.
+const MAX = 6;
+const dice = Math.floor(Math.random() * MAX + 1);
+console.log(`You need to roll an odd number to win:\n
+  You roll the dice... It tumbles and comes to a stop, showing ${dice} ${(dice > 1) ? 'pips' : 'pip'}! -- ${isEven(dice) ? 'Better luck next time!' : 'You win!'}`);
+
+  </script>
+  </body>
+  </html>>

@@ -2,7 +2,7 @@ import { useState } from 'react';
 import HomePage from './components/HomePage';
 import RandomPage from './components/RandomPage';
 import StockETFPage from './components/StockETFPage';
-import ColorSchemesExample from './components/ColorSchemesExample';
+import ColorSchemesExample from './components/NavBar';
 import { TEST_STOCKS } from "./TEST_STOCKS";
 import { Routes, Route } from 'react-router-dom';
 import { Container } from 'react-bootstrap';

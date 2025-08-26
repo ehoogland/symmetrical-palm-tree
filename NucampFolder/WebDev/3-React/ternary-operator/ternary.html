@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ternary Operator</title>
+</head>
+<body>
+    <h1>Ternary Operator</h1>
+    <p>The ternary operator is a shorthand for the if-else statement.</p>
+    <p>Syntax: <code>condition ? expr1 : expr2</code></p>
+    <p>If the condition is true, <code>expr1</code> is executed; otherwise, <code>expr2</code> is executed.</p>
+    <h2>Example: Ternary Operator</h2>
+    <!-- This creates a lightswitch object with a switchState property initialized to "on",
+     along with a flipSwitch method that toggles the switchState property to its opposite. -->
+    <script>
+        const lightswitch = {
+            switchState: "on",
+            flipSwitch() {
+                this.switchState = this.switchState === "on" ? "off" : "on";
+            }
+        }
+// if
+        function canVote(age) {
+    if (age >= 18) {
+        return true;
+    }
+    return false;
+}
+/** The return statement cannot be used inside a ternary operation because it's not an expression, 
+ *  it's a statement.
+
+* In order to mimic the original function, you can return the result of the ternary operation
+*/
+        function canVote(age) {
+            return (age >= 18) ? true : false; // but not (age>=18) : return true : return false;
+        }
+        </script>
+<!--
+lightswitch.flipSwitch();
+lightswitch
+console.log(lightswitch.switchState); // "on"
+        lightswitch.flipSwitch();
+        console.log(lightswitch.switchState); // "off"
+        lightswitch.flipSwitch();
+        console.log(lightswitch.switchState); // "on"
+-->
+</body>
+</html>

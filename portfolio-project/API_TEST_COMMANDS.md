@@ -1,3 +1,4 @@
+# This script was suggested by Github Copilot. Because it contains API keys, it is included in .gitignore and is not included in version control. It should not be included in production.
 # API Testing Commands for Spoonacular
 
 ## Simple API Test Command
