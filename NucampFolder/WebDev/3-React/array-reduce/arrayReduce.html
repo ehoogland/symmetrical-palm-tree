@@ -75,8 +75,11 @@ const gems = [
 ]
 
 const gemsOverTen = gems.reduce((acc, cur) => {
-   if (cur.price < 10) return acc;
-    
+    if (cur.price < 10) return acc;
+
+    acc.push(cur);
+    return acc;
+
 }, []);
 
 console.log(gemsOverTen)
@@ -102,7 +105,19 @@ const initialState = {
 };
 
 const reducer = (state, action) => {
-    return state; // delete this line and replace it with a switch statement
+    console.log(action);
+    switch (action.type) {
+        case 'update_hp':
+            return { ...state, hp: state.hp + action.payload };
+        case 'update_pos':
+            return {
+                ...state,
+                xPosition: state.xPosition + action.payload.x,
+                yPosition: state.yPosition + action.payload.y
+            };
+        default:
+            return state;
+    }
 };
 
 const state = actions.reduce(reducer, initialState);

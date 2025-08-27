@@ -1,8 +1,24 @@
+
+import { createSlice } from '@reduxjs/toolkit';
 import { CAMPSITES } from '../../app/shared/CAMPSITES';
 // use lowercase file names for any files that do not export 
 // a React component (e.g., data, utility functions)
 
-
+const initialState = {
+    campsitesArray: CAMPSITES
+};
+// set up the campsites slice with the name of campsites, and it
+// contains the initial state, for now just the array of campsites from
+// the local campsites.js file.
+// At first, we will not define any reducers.
+const campsitesSlice = createSlice({
+    name: 'campsites',
+    initialState
+    
+});
+// We've pulled out the slice reducer, though we have not defined any
+// case reducers yet, since we don't need any way to update the campsites data.
+export const campsitesReducer = campsitesSlice.reducer;
 
 
 export const selectAllCampsites = () => {

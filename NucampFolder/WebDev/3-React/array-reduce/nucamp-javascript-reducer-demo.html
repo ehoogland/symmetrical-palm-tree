@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>JavaScript Reducer Demo</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 2em;
+            background: #f9f9f9;
+            color: #333;
+        }
+        h1 {
+            color: #007acc;
+        }
+        .container {
+            background: #fff;
+            padding: 2em;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            max-width: 600px;
+            margin: auto;
+        }
+        button {
+            background: #007acc;
+            color: #fff;
+            border: none;
+            padding: 0.5em 1em;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-top: 1em;
+        }
+        button:hover {
+            background: #005fa3;
+        }
+        #result {
+            margin-top: 1em;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>JavaScript Reducer Demo</h1>
+        <p>This demo showcases a simple use of the <code>Array.reduce()</code> method to sum an array of numbers.</p>
+        <button onclick="sumArray()">Sum Array</button>
+        <div id="result"></div>
+    </div>
+    <script>
+        function sumArray() {
+            const numbers = [1, 2, 3, 4, 5];
+            const sum = numbers.reduce((acc, curr) => acc + curr, 0);
+            document.getElementById('result').textContent = `Sum: ${sum}`;
+        }
+    </script>
+</body>
+</html>
