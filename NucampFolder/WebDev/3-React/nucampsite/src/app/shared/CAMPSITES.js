@@ -29,7 +29,7 @@ export const CAMPSITES = [
         elevation: 2901,
         featured: true,
         description:
-            'Let NuCamp be your guide to this off-the-beaten-path, hike-in-only campground.'
+            'Let Nucamp be your guide to this off-the-beaten-path, hike-in-only campground.'
     },
     {
         id: 3,
