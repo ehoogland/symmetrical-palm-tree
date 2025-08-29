@@ -4,7 +4,7 @@ import { Col, Row } from 'reactstrap';
 // import DisplayCard from './DisplayCard'; commented this and added AnimatedDisplayCard import
 import  AnimatedDisplayCard from './AnimatedDisplayCard';
 import { selectFeaturedCampsite } from '../campsites/campsitesSlice';
-import { selectFeaturedPartners } from '../partners/partnersSlice';
+import { selectFeaturedPartner } from '../partners/partnersSlice';
 import { selectFeaturedPromotion } from './promotions/promotionsSlice';
 // Now if the information in the selected item changes, we don't have to change
 // the DisplayList component (this file), since it is retrieving that item at runtime.
@@ -17,9 +17,9 @@ import { selectFeaturedPromotion } from './promotions/promotionsSlice';
 const DisplayList = () => {
     // Use the selectors to get whatever item is returned from invoking them
     const items = useSelector((state) => [
-        selectFeaturedCampsite(state),
-        selectFeaturedPromotion(state),
-        selectFeaturedPartners(state)
+    selectFeaturedCampsite(state),
+    selectFeaturedPromotion(state),
+    selectFeaturedPartner(state)
     ]);
     // Log to see what's in the items array for debugging
     console.log('items:', items);

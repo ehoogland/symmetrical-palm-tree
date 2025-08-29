@@ -1,39 +1,34 @@
-import React, { useState } from 'react';
+import { useSelector } from 'react-redux';
+import { Col } from 'reactstrap';
 import Comment from './Comment';
 import CommentForm from './CommentForm';
 import { selectCommentsByCampsiteId } from './commentsSlice';
 
 const CommentsList = ({ campsiteId }) => {
     // Get initial comments for this campsite
-    const initialComments = selectCommentsByCampsiteId(campsiteId);
-    const [comments, setComments] = useState(initialComments);
+    const comments = useSelector(selectCommentsByCampsiteId(campsiteId));
 
-    // setComments uses spread operator to add new comments. 
-    // Note that it is not destructive.
-    // 
-    const addComment = (newComment) => {
-        setComments(prevComments => [
-            ...prevComments,
-            {
-                ...newComment,
-                id: Date.now(),
-                date: new Date().toISOString()
-            }
-        ]);
-    };
-// Increased number of comments displayed to 10 in order to show added feedback.
+    if (comments && comments.length > 0) {
+        return (
+            <Col md='5' className='m-1'>
+                <h4>Comments</h4>
+                {comments.map((comment) => {
+                    return <Comment key={comment.id} comment={comment} />
+                })}
+                <CommentForm campsiteId={campsiteId} /> 
+            </Col>
+        );
+    }
     return (
-        <div>
-            {comments.length > 0 ? (
-                comments.slice(0, 10).map((comment) => (
-                    <Comment key={comment.id} comment={comment} />
-                ))
-            ) : (
+        <Col md='5' className='m-1'>
+            <h4>Comments</h4>
+            <div>
                 <div>There are no comments for this campsite yet.</div>
-            )}
-            <CommentForm campsiteId={campsiteId} addComment={addComment} />
-        </div>
+            </div>
+            <CommentForm campsiteId={campsiteId} />
+        </Col>
     );
 };
 
 export default CommentsList;
+          

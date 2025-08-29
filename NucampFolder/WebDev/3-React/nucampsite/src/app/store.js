@@ -1,5 +1,8 @@
 import { configureStore } from '@reduxjs/toolkit';
 import { campsitesReducer } from '../features/campsites/campsitesSlice';
+import { commentsReducer } from '../features/Comments/commentsSlice'; 
+import partnersReducer from '../features/partners/partnersSlice';
+import { promotionsReducer } from '../features/display/promotions/promotionsSlice';
 /**
  * The counter feature, including the counterSlice reducer were included
  * in the Redux template as example code, and were replaced by
@@ -22,10 +25,14 @@ import counterReducer from '../features/counter/counterSlice'; */
  * and includes some useful middleware like loggerby default.
  * Replace counterReducer example code with campsiteReducer.
  * Add it to the store by passing it into the configureStore
- * function as a property of the reducer object */
+ * function as a property of the reducer object
+ */
 export const store = configureStore({
   reducer: {
     
-    campsites: campsitesReducer,
+  campsites: campsitesReducer,
+  comments: commentsReducer,
+  partners: partnersReducer,
+  promotions: promotionsReducer,
   },
 });
