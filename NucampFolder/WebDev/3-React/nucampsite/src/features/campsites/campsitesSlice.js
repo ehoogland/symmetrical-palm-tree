@@ -14,7 +14,7 @@ const initialState = {
 const campsitesSlice = createSlice({
     name: 'campsites',
     initialState
-    
+
 });
 /** 
  * We've pulled out the campsites slice reducer, though we have not defined any
@@ -22,12 +22,12 @@ const campsitesSlice = createSlice({
  */
 export const campsitesReducer = campsitesSlice.reducer;
 /** 
- * When these functions are called back by React's useSelector, useSelector has access to
- * the Redux store state, and useSelector will pass the global state variable
- * to selectAllCampsites and selectFeaturedCampsite will receive it via their
- * parameter list (state), then they will use state.campsites.campsitesArray for its
- * return value.
- * 
+ * When the following functions are called back by React's useSelector,
+ * useSelector has access to the Redux store state, and useSelector will pass
+ * the global state variable to selectAllCampsites.
+ *
+ * selectFeaturedCampsite will receive it via their parameter list (state), and then 
+ * use state.campsites.campsitesArray for its return value.
 */
 
 /**
