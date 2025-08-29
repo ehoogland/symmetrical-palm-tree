@@ -25,7 +25,7 @@ import counterReducer from '../features/counter/counterSlice'; */
  * function as a property of the reducer object */
 export const store = configureStore({
   reducer: {
-    //counter: counterReducer,
+    
     campsites: campsitesReducer,
   },
 });
