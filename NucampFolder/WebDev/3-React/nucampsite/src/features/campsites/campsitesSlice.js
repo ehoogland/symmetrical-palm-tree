@@ -35,9 +35,8 @@ const initialState = {
 };
 
 // set up the campsites slice with the name of campsites, and it
-// contains the initial state, for now just the array of campsites from
-// the local campsites.js file.
-// At first, we will not define any reducers.
+// contains the initial state for the array of campsites
+// fetchCampsites thunk and our reducers make sure the state is updated correctly
 const campsitesSlice = createSlice({
     name: 'campsites',
     initialState,

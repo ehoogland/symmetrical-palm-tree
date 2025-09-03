@@ -4,6 +4,8 @@ import { useSelector } from 'react-redux';
 import { Col, Row } from 'reactstrap';
 import CampsiteCard from './CampsiteCard';
 import { selectAllCampsites } from './campsitesSlice';
+import Error from '../../components/Error';
+import Loading from '../../components/Loading';
 /**
  * CampsitesList component
  * @returns {JSX.Element}
@@ -19,7 +21,43 @@ const CampsitesList = () => {
     const campsites = useSelector(selectAllCampsites);
     // Log to see what's going on, i.e., being returned by the selector; this shows whether
     // there are any issues with the selector or the state
-    // console.log('campsites:', campsites);
+    console.log('campsites:', campsites);
+
+    /**
+     * @param {Object} state - The Redux state
+     * @returns {Object} - The campsites state, an object containing the isLoading, errMsg, and campsitesArray properties.
+     * @description This selector retrieves the campsites state from the Redux store.
+     * We need to get the isLoading, errMsg, and campsitesArray properties from the campsites state
+     * and pass them to the component as props.
+     *
+     * Instead of defining a function name and passing the function name to useSelector
+     * we can use the selector directly inside the useSelector call.
+     * This selector could also be done by placing the useSelector in campsitesSlice.js, which
+     * would allow us to encapsulate the state selection logic.
+     * However, for simplicity and clarity, we'll keep it here for now.
+     * Additionally, it keeps the component more readable by reducing the number of hooks used.
+     * This approach also makes it easier to manage and test a component's state.
+     * Finally, it can improve performance by minimizing the number of re-renders.
+     */
+   const isLoading  = useSelector((state) => state.campsites.isLoading);
+   const errMsg = useSelector((state) => state.campsites.errMsg);
+   if (isLoading) {
+       return (
+           <Row>
+               {/* Show a loading spinner (from Loading component) while data is being fetched */}
+               <Loading />
+           </Row>
+       );
+   }
+
+    if (errMsg) {
+        return (
+            <Row>
+                {/* pass errMsg as a prop to the Error component so that it can display it */}
+                <Error errMsg={errMsg} />
+            </Row>
+        );
+    }
     // Recall that a Col component is just a glorified div that has a width
     // based on the Bootstrap grid system. divs can be clicked too, just like buttons.
     return (
