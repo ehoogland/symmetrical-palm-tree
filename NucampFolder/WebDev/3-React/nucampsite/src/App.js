@@ -9,7 +9,8 @@ import Footer from './components/Footer';
 import CampsitesDirectoryPage from './pages/CampsitesDirectoryPage';
 import CampsiteDetailPage from './pages/CampsiteDetailPage';
 import { fetchCampsites } from './features/campsites/campsitesSlice';
-import { fetchPartners } from 'features/partners/partnersSlice';  
+import { fetchPartners } from './features/partners/partnersSlice';
+import { fetchPromotions } from './features/display/promotions/promotionsSlice';  
 import './App.css';
 // By convention, set up a dispatch variable to receive the useDispatch hook
 function App() {
@@ -21,6 +22,7 @@ function App() {
     if (process.env.NODE_ENV !== 'test') {
       dispatch(fetchCampsites());
       dispatch(fetchPartners());
+      dispatch(fetchPromotions());
     }
   }, [dispatch]);
 
