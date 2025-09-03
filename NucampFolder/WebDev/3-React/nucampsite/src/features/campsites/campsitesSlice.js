@@ -55,13 +55,7 @@ const campsitesSlice = createSlice({
         },
         [fetchCampsites.rejected]: (state, action) => {
             state.isLoading = false;
-            // Log the full rejected action in development only so we can see the
-            // exact error in the browser console while debugging. Avoid logging
-            // in tests and production to prevent noisy output.
-            if (process.env.NODE_ENV !== 'production' && process.env.NODE_ENV !== 'test') {
-                // eslint-disable-next-line no-console
-                console.error('fetchCampsites rejected action:', action);
-            }
+            // Debug log removed - issue resolved. Keep errMsg for UI consumption.
             state.errMsg = action.error ? action.error.message : 'Fetch failed';
         }
     }
