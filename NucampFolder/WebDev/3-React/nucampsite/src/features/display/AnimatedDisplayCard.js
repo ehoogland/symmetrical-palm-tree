@@ -7,6 +7,10 @@ import { useSpring, animated} from 'react-spring';
 const AnimatedDisplayCard = ({ item }) => {
     // Destructure the item object to extract image, name, and description
     const { image, name, description } = item;
+    // If the image filename looks like a logo, we want to avoid cropping it.
+    // Logos often contain the word "logo" in their filename; detect that and
+    // toggle a CSS class so they use object-fit: contain instead of cover.
+    const isLogo = typeof image === 'string' && /logo/i.test(image);
     // Destructure the useState hook to get toggle and setToggle
     // useState is a React hook that allows you to add state to functional components
     // Since useState returns an array, use array destructuring, i.e., brackets.
@@ -27,6 +31,7 @@ const AnimatedDisplayCard = ({ item }) => {
         <animated.div style= { animatedStyle } >
             <Card>
                 <CardImg
+                    className={isLogo ? 'display-card-img logo' : 'display-card-img'}
                     src={image}
                     alt={name}
                     onError={(e) => {
