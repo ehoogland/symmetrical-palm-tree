@@ -1,6 +1,7 @@
 // Presentation component for displaying a card with image, title, and description
 import { Card, CardImg, CardText, CardBody, CardTitle } from 'reactstrap';
 import { useState, useEffect } from 'react';
+import placeholderImg from '../../app/assets/img/unicorn.png';
 import { useSpring, animated} from 'react-spring';
 
 const AnimatedDisplayCard = ({ item }) => {
@@ -25,7 +26,15 @@ const AnimatedDisplayCard = ({ item }) => {
     return (
         <animated.div style= { animatedStyle } >
             <Card>
-                <CardImg src={image} alt={name} />
+                <CardImg
+                    src={image}
+                    alt={name}
+                    onError={(e) => {
+                        // log and show placeholder when remote image fails
+                        console.warn('Image failed to load, using placeholder for', name, e?.target?.src);
+                        e.currentTarget.src = placeholderImg;
+                    }}
+                />
                 <CardBody>
                     <CardTitle>{name}</CardTitle>
                     <CardText>{description}</CardText>
