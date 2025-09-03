@@ -9,13 +9,19 @@ import Footer from './components/Footer';
 import CampsitesDirectoryPage from './pages/CampsitesDirectoryPage';
 import CampsiteDetailPage from './pages/CampsiteDetailPage';
 import { fetchCampsites } from './features/campsites/campsitesSlice';
+import { fetchPartners } from 'features/partners/partnersSlice';  
 import './App.css';
 // By convention, set up a dispatch variable to receive the useDispatch hook
 function App() {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(fetchCampsites());
+    // Don't dispatch async network thunks while running unit tests; they
+    // trigger jsdom/network handles that prevent Jest from exiting.
+    if (process.env.NODE_ENV !== 'test') {
+      dispatch(fetchCampsites());
+      dispatch(fetchPartners());
+    }
   }, [dispatch]);
 
   return (
