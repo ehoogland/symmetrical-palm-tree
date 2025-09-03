@@ -41,6 +41,20 @@ h3,
     font-size: 1.25rem;
 }
 
+/* Ensure featured display images have consistent height and crop cleanly */
+.display-card-img {
+    width: 100%;
+    height: 200px; /* match card heights visually */
+    object-fit: cover; /* crop without distortion */
+}
+
+/* Logo images: don't crop text, center them and preserve aspect ratio */
+.display-card-img.logo {
+    object-fit: contain;
+    background: white; /* keep logos readable against any background */
+}
+
+
 .card-img-overlay .card-title {
     color: white;
     background-color: rgba(0, 0, 0, 0.5);
