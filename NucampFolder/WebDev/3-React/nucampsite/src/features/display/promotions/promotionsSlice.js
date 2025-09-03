@@ -1,34 +1,31 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { PROMOTIONS } from '../../../app/shared/PROMOTIONS';
 
-// use lowercase file names for any files that do not export 
-// a React component (e.g., data, utility functions)
+// Temporary runtime check - logs the imported promotions array when this module loads
+// console.log('PROMOTIONS imported in promotionsSlice:', PROMOTIONS);
 
-/**
- * Initial state for the promotions slice
- */
 const initialState = {
-    promotionsArray: PROMOTIONS
+    promotions: PROMOTIONS,
 };
-/**
- * Promotions slice
- */
+
 const promotionsSlice = createSlice({
     name: 'promotions',
-    initialState
+    initialState,
+    reducers: {
+        // reducer added so the slice has at least one reducer
+        // store.js as displayed in VSCode using Prettier had highlighted
+        // the promotions slice differently than the other slices.
+        setPromotions(state, action) {
+            state.promotions = action.payload;
+        },
+    },
 });
-/**
- * Promotions reducer
- */
+
+export const selectFeaturedPromotion = (state) =>
+    state.promotions.promotions.find((promotion) => promotion.featured);
+
+// Export the generated action so other parts of the app can update promotions if needed.
+export const { setPromotions } = promotionsSlice.actions;
+
+// Export the promotions reducer
 export const promotionsReducer = promotionsSlice.reducer;
-/**
- * Select a featured promotion
- * @param {Object} state - The Redux state
- * @returns {Object} - The featured promotion or undefined
- */
-export const selectFeaturedPromotion = (state) => {
-    /* Find the first promotion that is featured
-       by checking if the featured property is true
-       and return it. */
-    return state.promotions.promotionsArray.find(promotion => promotion.featured);
-};

@@ -25,8 +25,8 @@ const root = createRoot(container);
  * It also has useful methods such as dispatch, which is typically accessed via the 
  * useDispatch hook.
  */
-console.log(store.dispatch);
-console.log(store.getState());
+// console.log(store.dispatch);
+// console.log(store.getState());
 
 root.render(
   <React.StrictMode>

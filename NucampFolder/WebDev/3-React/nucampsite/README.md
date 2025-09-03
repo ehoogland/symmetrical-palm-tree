@@ -44,3 +44,17 @@ You don't have to ever use `eject`. The curated feature set is suitable for smal
 You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
 
 To learn React, check out the [React documentation](https://reactjs.org/).
+
+## Development notes
+
+- The frontend uses `src/app/shared/baseUrl.js`. You can override the API host using the env var `REACT_APP_BASE_URL`.
+	For example: `REACT_APP_BASE_URL=http://localhost:3001 npm start`.
+
+- During development Create React App can proxy API requests to the backend. A `proxy` entry has been added to `package.json` pointing to `http://localhost:3001`.
+
+- If images or API calls fail, check that your backend is running and that `baseUrl`/`REACT_APP_BASE_URL` and the CRA `proxy` are configured correctly.
+
+- To debug:
+	- Check the network tab for failing requests.
+	- `curl http://localhost:3001/campsites` to confirm the API returns JSON.
+	- `lsof -nP -iTCP:3000 -sTCP:LISTEN` to confirm the frontend dev server is running.

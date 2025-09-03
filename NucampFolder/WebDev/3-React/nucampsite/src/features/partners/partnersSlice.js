@@ -47,4 +47,5 @@ export const selectFeaturedPartner = (state) => {
  * @module partnersSlice
  * @requires PARTNERS
  */
-export default partnersSlice.reducer;
+export const partnersReducer = partnersSlice.reducer;
+

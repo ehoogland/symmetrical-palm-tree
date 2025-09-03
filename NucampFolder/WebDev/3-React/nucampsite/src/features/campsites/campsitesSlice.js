@@ -1,27 +1,83 @@
 // use lowercase file names for any files that do not export 
 // a React component (e.g., data, utility functions)
-import { createSlice } from '@reduxjs/toolkit';
-// use all caps for files that export a React component
-import { CAMPSITES } from '../../app/shared/CAMPSITES';
+import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+import { baseUrl } from '../../app/shared/baseUrl';
+import { mapImageURL } from '../../utils/mapImageURL';
+// import { CAMPSITES } from '../../app/shared/CAMPSITES'; -- no longer using this local data
 
+/**
+ * @description action to fetch campsites from the server
+ * If the fetch fails, the promise is rejected with an error message including the status code
+ * If the fetch is successful, the promise is resolved with the array of campsites
+ * @exports {Function} fetchCampsites -- the function is exported for use in other parts of the application
+ * @returns {Promise} - A promise that resolves to the array of campsites. Note async will wrap in a promise
+ * any response that is not a promise
+ * The call to createAsyncThunk() will return into the value of fetchCampsites a type of function that Redux 
+ * calls a "Redux thunk action creator". This function is used to fetch the campsites data in an asynchronous way.
+ */
+export const fetchCampsites = createAsyncThunk(
+    'campsites/fetchCampsites',
+    async () => {
+        const response = await fetch(baseUrl + 'campsites');
+        if (!response.ok) {
+            return Promise.reject('Unable to fetch, status: ' + response.status);
+        }
+        const data = await response.json();
+        return data;
+    }
+);
+
+// set up the initial state object for the campsites slice
 const initialState = {
-    campsitesArray: CAMPSITES
+    campsitesArray: [],
+    isLoading: true,
+    errMsg: ''
 };
+
 // set up the campsites slice with the name of campsites, and it
 // contains the initial state, for now just the array of campsites from
 // the local campsites.js file.
 // At first, we will not define any reducers.
 const campsitesSlice = createSlice({
     name: 'campsites',
-    initialState
+    initialState,
+    reducers: {},
+    extraReducers: {
+        [fetchCampsites.pending]: (state) => {
+            state.isLoading = true;
+        },
+        [fetchCampsites.fulfilled]: (state, action) => {
+            state.isLoading = false;
+            state.errMsg = '';
+            // Map image paths to full URLs based on baseUrl so the browser
+            // will request images from the API server (not the frontend origin).
+            state.campsitesArray = mapImageURL(action.payload);
+        },
+        [fetchCampsites.rejected]: (state, action) => {
+            state.isLoading = false;
+            // Log the full rejected action in development only so we can see the
+            // exact error in the browser console while debugging. Avoid logging
+            // in tests and production to prevent noisy output.
+            if (process.env.NODE_ENV !== 'production' && process.env.NODE_ENV !== 'test') {
+                // eslint-disable-next-line no-console
+                console.error('fetchCampsites rejected action:', action);
+            }
+            state.errMsg = action.error ? action.error.message : 'Fetch failed';
+        }
+    }
 
 });
-/** 
- * We've pulled out the campsites slice reducer, though we have not defined any
- * case reducers yet, since we don't yet need any way to update the campsites data. 
- */
+
+/**
+ * Select and export all campsites
+ * @module campsitesSlice
+ * @exports {Function} selectAllCampsites
+ * @exports {Function} selectFeaturedCampsite
+ * @exports {Function} selectCampsiteById
+*/
 export const campsitesReducer = campsitesSlice.reducer;
-/** 
+
+/**
  * When the following functions are called back by React's useSelector,
  * useSelector has access to the Redux store state, and useSelector will pass
  * the global state variable to selectAllCampsites.
@@ -46,49 +102,21 @@ export const selectAllCampsites = (state) => {
 */
 export const selectFeaturedCampsite = (state) => {
     return state.campsites.campsitesArray.find(campsite => campsite.featured);
+    /**
+     * [F]ind is a higher-order function that returns the first element in the array
+     * that satisfies the provided testing function. In this case, it returns the campsite
+     * with the matching id. If no campsite is found, it returns undefined.
+     * This function takes a callback function as its argument. This pure function
+     * does not modify the state or have any side effects.
+     * To write the function and export it at the same time, 
+     * use the following syntax:
+     */
 };
+/**
+ * Select a campsite by its ID from the Redux state.
+ * @param {number} id - The ID of the campsite to select
+ * @returns {Object|undefined} - The campsite object if found, otherwise undefined.
+ */
 export const selectCampsiteById = (id) => (state) => {
     return state.campsites.campsitesArray.find(campsite => campsite.id === parseInt(id));
-};
-
-
-
-/** This is commented to avoid confusion with the toggleCampsite 
- * function in CampsitesDirectoryPage.js and as instructed in the second
- * Hooks exercise useState(). 
- * 
- * This function was fine as a placeholder, but now that
- * we have a Redux store, we can use the selectAllCampsites() function to
- * get all campsites and then select a random one from that array.
- * To select a random campsite from the array, we can use the Math.random()
- * function to generate a random index.
- * 
- * export const selectRandomCampsite = () => {
- * const campsites = selectAllCampsites();
- * return campsites[Math.floor(campsites.length * Math.random())];
- * };
- * export const selectRandomCampsite = () => {
- * return CAMPSITES[Math.floor(CAMPSITES.length * Math.random())];
- * };
- */
-
-/**
- * [F]ind is a higher-order function that returns the first element in the array
- * that satisfies the provided testing function. In this case, it returns the campsite
- * with the matching id. If no campsite is found, it returns undefined.
- * This function takes a callback function as its argument. This pure function
- * does not modify the state or have any side effects.
- * To write the function and export it at the same time, 
- * use the following syntax:
- */
-
-export const selectCampsitesById = (id) => {
-    return CAMPSITES.find(campsite => campsite.id === parseInt(id));
-};
-
-export const selectFeaturedCampsiteFromData = () => {
-    // Find the first campsite that is featured
-    // by checking if the featured property is true
-    // and return it.
-    return CAMPSITES.find(campsite => campsite.featured);
 };

@@ -1,23 +1,50 @@
 import { Formik, Field, Form, ErrorMessage } from 'formik'; 
 import { useState } from "react";
-import { Button, Modal, ModalHeader, ModalBody, FormGroup, Label } from "reactstrap";
+import { useDispatch } from "react-redux";
+import { 
+    Button, 
+    Modal, 
+    ModalHeader, 
+    ModalBody, 
+    FormGroup, 
+    Label 
+} from "reactstrap";
 import { validateCommentForm } from '../../utils/validateCommentForm';
+import { addComment } from './commentsSlice';
 // CommentForm component lets users add comments to a campsite.
 // Formik form handling and validation
-const CommentForm = ({ campsiteId, addComment }) => {
+const CommentForm = ({ campsiteId }) => {
     /* The useState hook for modalOpen and setModalOpen is set up
         and initialized to false by passing false to useState */
     const [modalOpen, setModalOpen] = useState(false);
+    /**
+     * useDispatch hook to get the dispatch function
+     * This function is used to dispatch actions to the Redux store.
+     * @see https://react-redux.js.org/api/hooks#usedispatch
+     * @returns {Function} - The dispatch function.
+     * @example
+     * const dispatch = useDispatch();
+     * dispatch(addComment(comment));
+     * @method {Function} dispatch is a method of the Redux store object.
+     */
+    const dispatch = useDispatch();
 
     const handleSubmit = (values, { resetForm }) => {
         const comment = {
             campsiteId: parseInt(campsiteId),
             rating: parseInt(values.rating),
             text: values.commentText,
-            author: values.author
+            author: values.author,
+            date: new Date(Date.now()).toISOString()
         };
-        // Call the addComment function passed as a prop
-        addComment(comment);
+        // The addComment action creator function is dispatched with the new comment.
+        // It will run and return an action object with a type property of 'comments/addComment'
+        // and a payload property of the new comment object. That action object will be
+        // dispatched by the dispatch function which will cause the case reducer for addComment
+        // to run, pushing this new comment object into the comments array that is part of the global
+        // state in the Redux store. Then, since our Comments component is getting its data from that
+        // same single source of truth, it will automatically update to show the new comment.
+        dispatch(addComment(comment));
         // Log the returned values for debugging
         // console.log('addComment values:', values);
         // console.log('in JSON format:', JSON.stringify(values));
@@ -31,6 +58,7 @@ const CommentForm = ({ campsiteId, addComment }) => {
         // reset properly because the component would
         // close (unmount) before resetForm() is called.
         resetForm();
+    // console.log('comment:', comment);
         setModalOpen(false);
     };
     /* CommentForm renders a Button that opens a Modal. 
