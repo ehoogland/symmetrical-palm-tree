@@ -37,7 +37,7 @@ export const fetchPromotions = createAsyncThunk(
 );
 // Set up the initial state [object]for the promotions slice
 const initialState = {
-  promotions: [],
+  promotionsArray: [],
   isLoading: false,
   errMsg: '' // set to error message if fetch fails. Initially empty.
 };
@@ -45,7 +45,12 @@ const initialState = {
 const promotionsSlice = createSlice({
     name: 'promotions',
     initialState,
-      reducers: {},
+      reducers: {
+        // allow manual seeding/updating of promotions in tests or dev
+        setPromotions(state, action) {
+          state.promotionsArray = action.payload;
+        }
+      },
       extraReducers: { // Use computed property name syntax
         [fetchPromotions.pending]: (state) => {
           state.isLoading = true; // immer in Redux toolkit converts "mutating" code to safe immutable updates.
@@ -58,7 +63,7 @@ const promotionsSlice = createSlice({
           const payload = Array.isArray(action.payload)
             ? action.payload
             : (action.payload && action.payload.promotions) || [];
-          state.promotions = mapImageURL(payload);
+          state.promotionsArray = mapImageURL(payload);
         },
         [fetchPromotions.rejected]: (state, action) => {
           state.isLoading = false; // non-mutating update
@@ -101,10 +106,17 @@ export const promotionsReducer = promotionsSlice.reducer;
 /**
  * Selectors
  */
-export const selectAllPromotions = (state) => state.promotions.promotions;
+export const selectAllPromotions = (state) => state.promotions.promotionsArray;
 
-export const selectFeaturedPromotion = (state) =>
-  state.promotions.promotions && state.promotions.promotions.find((promotion) => promotion.featured);
+export const selectFeaturedPromotion = (state) => {
+  return {
+    featuredItem: state.promotions.promotionsArray.find(
+      (promotion) => promotion.featured
+    ),
+    isLoading: state.promotions.isLoading,
+    errMsg: state.promotions.errMsg
+  };
+};
 
 export const selectPromotionById = (id) => (state) =>
-  state.promotions.promotions && state.promotions.promotions.find((promotion) => promotion.id === parseInt(id));
+  state.promotions.promotionsArray && state.promotions.promotionsArray.find((promotion) => promotion.id === parseInt(id));

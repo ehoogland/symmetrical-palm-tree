@@ -104,10 +104,16 @@ export const selectAllCampsites = (state) => {
 /**
  * Select a featured campsite from the Redux state.
  * @param {Object} state - The Redux state
- * @returns {Object|undefined} - The featured campsite object if found, otherwise undefined.
+ * @returns {Object} - An object containing the featured campsite, isLoading, and errMsg properties.
 */
 export const selectFeaturedCampsite = (state) => {
-    return state.campsites.campsitesArray.find(campsite => campsite.featured);
+    return {
+        featuredItem: state.campsites.campsitesArray.find(
+            campsite => campsite.featured
+        ),
+        isLoading: state.campsites.isLoading,
+        errMsg: state.campsites.errMsg
+    };
 };
 /**
  * [F]ind is a higher-order function that returns the first element in the array
