@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import IngredientCard from '../IngredientCard';
 import { recipeService } from '../services/recipeService';
 import { Link } from 'react-router-dom';

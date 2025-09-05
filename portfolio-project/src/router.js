@@ -1,5 +1,4 @@
-import React from 'react';
-import { createBrowserRouter } from 'react-router-dom';
+import { createBrowserRouter, Navigate } from 'react-router-dom';
 import App from './App';
 import RecipeDetails from './components/RecipeDetails';
 import RecipesPage from './pages/RecipesPage';
@@ -16,11 +15,14 @@ const routes = [
       { path: 'ingredients', element: <IngredientsPage /> },
       { path: 'favorites', element: <FavoritesPage /> },
       { path: 'recipe/:id', element: <RecipeDetails /> },
-      { path: '*', element: <RecipesPage /> },
+      // This route will catch all unmatched paths and redirect to home
+      { path: '*', element: <Navigate to="/" replace /> },
     ],
   },
 ];
-
+/**
+ * Create the router instance with the defined routes.
+ */
 const router = createBrowserRouter(routes, {
   future: {
     v7_startTransition: true,
