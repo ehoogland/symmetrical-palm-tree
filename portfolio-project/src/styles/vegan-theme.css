@@ -59,12 +59,17 @@ body {
 
 /* Header styling with plant theme */
 .vegan-header {
-  background: linear-gradient(135deg, var(--vegan-primary) 0%, var(--vegan-secondary) 100%);
-  color: white;
+  /* Intermediate gradient between the original primary and the footer dark color
+    to improve contrast but retain the brand greens. */
+  background: linear-gradient(135deg, var(--vegan-primary) 30%, var(--vegan-dark) 100%);
+  color: var(--vegan-light);
   padding: 2rem 0;
   margin-bottom: 2rem;
   border-radius: 0 0 20px 20px;
-  box-shadow: 0 4px 15px rgba(74, 124, 89, 0.3);
+  box-shadow: 0 6px 20px rgba(0,0,0,0.25);
+  /* subtle inner glow and bottom divider to separate header from content */
+  border-bottom: 1px solid rgba(255,255,255,0.05);
+  box-shadow: 0 6px 20px rgba(0,0,0,0.25), inset 0 -8px 18px rgba(0,0,0,0.06);
 }
 
 .vegan-header h1 {
@@ -76,8 +81,10 @@ body {
 
 .vegan-header .subtitle {
   font-size: 1.1rem;
-  opacity: 0.9;
-  font-weight: 300;
+  opacity: 1;
+  font-weight: 400;
+  color: var(--vegan-light);
+  text-shadow: 0 1px 0 rgba(0,0,0,0.15);
 }
 
 /* Enhanced ingredient cards with Pantone-inspired styling */
@@ -281,7 +288,7 @@ body {
   }
 
   /* Each button becomes half width to form two columns. Remove internal radii so
-     only outer corners remain from the container / nth-child rules below. */
+     only outer corners remain from the container; corners are applied via role classes. */
   .nav-tabs-container .btn {
     padding: 0.6rem 0.9rem;
     font-size: 0.95rem;
