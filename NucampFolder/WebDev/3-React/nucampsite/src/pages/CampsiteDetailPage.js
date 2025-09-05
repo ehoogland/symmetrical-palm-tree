@@ -58,8 +58,12 @@ console.log('campsite:', campsite);
     } else {
         content = (
             <>
-                <CampsiteDetail campsite={campsite} />
-                <CommentsList campsiteId={campsiteId} />
+                <Col md='7'>
+                    <CampsiteDetail campsite={campsite} />
+                </Col>
+                <Col md='5'>
+                    <CommentsList campsiteId={campsiteId} />
+                </Col>
             </>
         );
     }

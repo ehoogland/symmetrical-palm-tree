@@ -10,7 +10,7 @@ import {
     Label 
 } from "reactstrap";
 import { validateCommentForm } from '../../utils/validateCommentForm';
-import { addComment } from './commentsSlice';
+import { postComment } from './commentsSlice';
 // CommentForm component lets users add comments to a campsite.
 // Formik form handling and validation
 const CommentForm = ({ campsiteId }) => {
@@ -37,14 +37,14 @@ const CommentForm = ({ campsiteId }) => {
             author: values.author,
             date: new Date(Date.now()).toISOString()
         };
-        // The addComment action creator function is dispatched with the new comment.
-        // It will run and return an action object with a type property of 'comments/addComment'
+        // The postComment action creator function is dispatched with the new comment.
+        // It will run and return an action object with a type property of 'comments/postComment'
         // and a payload property of the new comment object. That action object will be
-        // dispatched by the dispatch function which will cause the case reducer for addComment
+        // dispatched by the dispatch function which will cause the case reducer for postComment
         // to run, pushing this new comment object into the comments array that is part of the global
         // state in the Redux store. Then, since our Comments component is getting its data from that
         // same single source of truth, it will automatically update to show the new comment.
-        dispatch(addComment(comment));
+        dispatch(postComment(comment));
         // Log the returned values for debugging
         // console.log('addComment values:', values);
         // console.log('in JSON format:', JSON.stringify(values));
@@ -58,7 +58,7 @@ const CommentForm = ({ campsiteId }) => {
         // reset properly because the component would
         // close (unmount) before resetForm() is called.
         resetForm();
-    // console.log('comment:', comment);
+        // console.log('comment:', comment);
         setModalOpen(false);
     };
     /* CommentForm renders a Button that opens a Modal. 

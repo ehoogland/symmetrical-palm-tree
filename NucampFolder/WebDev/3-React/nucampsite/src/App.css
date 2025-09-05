@@ -54,6 +54,22 @@ h3,
     background: white; /* keep logos readable against any background */
 }
 
+/* Detail page campsite image: make it responsive and allow room for side content */
+.detail-card-img {
+    width: 100%;
+    height: auto; /* let height scale naturally */
+    max-height: 75vh; /* cap height on tall screens */
+    object-fit: cover;
+    display: block;
+}
+
+@media (max-width: 767.98px) {
+    /* On small screens stack vertically; comments go below image */
+    .detail-card-img {
+        max-height: 40vh;
+    }
+}
+
 
 .card-img-overlay .card-title {
     color: white;
@@ -119,5 +135,23 @@ h3,
     .footer-social-icons {
         flex-direction: column !important;
         align-items: center !important;
+    }
+}
+
+/* Comments column adjustments */
+.comments-column {
+    width: 100%;
+}
+.comments-list .comment {
+    white-space: nowrap; /* keep comment content on one line */
+    overflow: hidden;
+    text-overflow: ellipsis; /* truncate with ellipsis if too long */
+    margin-bottom: 0.5rem;
+}
+
+@media (max-width: 767.98px) {
+    /* On small screens, allow wrapping for readability */
+    .comments-list .comment {
+        white-space: normal;
     }
 }

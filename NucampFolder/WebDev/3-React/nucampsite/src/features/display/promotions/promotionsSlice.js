@@ -9,7 +9,6 @@ import { mapImageURL } from '../../../utils/mapImageURL';
  * async will wrap in a promise any response that is not a promise
  * @description action to fetch the list of promotions from the server
  * and map the image URLs.
- * @promise {Promise} - A promise that resolves to the array of promotions.
  * @return {Promise} - A promise that resolves to the array of promotions or throws an error message.
  * It returns into the value of fetchPromotions a type of function that Redux
  * refers to as a "Redux thunk action creator".
@@ -46,10 +45,10 @@ const promotionsSlice = createSlice({
     name: 'promotions',
     initialState,
       reducers: {
+        // standard reducer logic, with auto-generated action types per reducer
         // allow manual seeding/updating of promotions in tests or dev
-        setPromotions(state, action) {
-          state.promotionsArray = action.payload;
-        }
+        // setPromotions(state, action) {
+        // state.promotionsArray = action.payload;
       },
       extraReducers: { // Use computed property name syntax
         [fetchPromotions.pending]: (state) => {

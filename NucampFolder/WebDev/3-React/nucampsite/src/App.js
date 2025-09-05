@@ -10,19 +10,25 @@ import CampsitesDirectoryPage from './pages/CampsitesDirectoryPage';
 import CampsiteDetailPage from './pages/CampsiteDetailPage';
 import { fetchCampsites } from './features/campsites/campsitesSlice';
 import { fetchPartners } from './features/partners/partnersSlice';
-import { fetchPromotions } from './features/display/promotions/promotionsSlice';  
+import { fetchPromotions } from './features/display/promotions/promotionsSlice';
+import { fetchComments } from './features/Comments/commentsSlice';
 import './App.css';
+
 // By convention, set up a dispatch variable to receive the useDispatch hook
 function App() {
   const dispatch = useDispatch();
-
+  // useEffect hook to dispatch async thunks to fetch data when the component mounts
   useEffect(() => {
     // Don't dispatch async network thunks while running unit tests; they
-    // trigger jsdom/network handles that prevent Jest from exiting.
+    // trigger jsdom/network handles that prevent Jest from exiting. jsdom
+    // is the JavaScript implementation of the DOM that Jest uses to run tests.
+    // It simulates a web browser environment in Node.js, which is necessary
+    // for testing React components that interact with the DOM.
     if (process.env.NODE_ENV !== 'test') {
       dispatch(fetchCampsites());
       dispatch(fetchPartners());
       dispatch(fetchPromotions());
+      dispatch(fetchComments());
     }
   }, [dispatch]);
 

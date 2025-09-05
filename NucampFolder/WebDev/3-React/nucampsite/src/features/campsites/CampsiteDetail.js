@@ -14,7 +14,7 @@ const CampsiteDetail = ({ campsite }) => {
             {/* having destructured the campsite object, we can now use the variables directly
                 instead of referencing the object using dot notation (campsite.image, etc.) */}
             <Card>
-                <CardImg top src={image} alt={name} />
+                <CardImg className="detail-card-img" top src={image} alt={name} />
                 <CardBody>
                     <h2>{name}</h2>
                 </CardBody>
