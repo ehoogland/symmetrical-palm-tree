@@ -1,18 +1,27 @@
 The URL of your deployed project: TBA
+
 The link to your updated GitHub project repository (you should have a README file in your repo)
-https://github.com/ehoogland/symmetrical-palm-tree/edit/main/portfolio-project
-A brief recap of what you learned while building this project, including something that surprised you, something that excited you, and something that frustrated you.
+
+https://github.com/ehoogland/symmetrical-palm-tree/edit/main/portfolio-project/README.md
+
+A brief recap of what you learned while building this project, including something that surprised you, something that excited you, and something that frustrated you:
+
 I learned that making a good project required asking good questions based on having learned (at least some of) the material.
+
 I was excited and surprised about what I was able to produce with the help of my "pair programming" partner, Co-Pilot. It's a lot less daunting than in the past.
+
 GitHub can frustrate you, but it takes time to move beyond git add., git commit, etc.
 
 A feature in your project that you are especially proud of:
+
 I feel the project was consistent with my interests and values. I even use my project to get vegan recipes. Well, at least concepts for recipes.
 
 If you will continue working on your project, what will be the next thing you want to add?  
+
 I want to add a database to persist my data non-locally.
 
 If you are done with this project and moving on, what are you excited to begin learning about next? 
+
 I have a new project idea of fetching stock market data and having user-generated additions to a favorites 
 list of tradeable stocks suitable for swing trading.
 
