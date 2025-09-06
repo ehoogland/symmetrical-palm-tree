@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import IngredientCard from '../IngredientCard';
-import { recipeService } from '../services/recipeService';
+import { recipeService } from '../services';
 import { Link } from 'react-router-dom';
 
 const RecipeSearch = ({ 
@@ -14,7 +14,7 @@ const RecipeSearch = ({
   addToFavorites,
   removeFromFavorites,
   isRecipeFavorite,
-  useMockData
+
 }) => {
   const [searchQuery, setSearchQuery] = useState('');
   const [localSelectedIngredients, setLocalSelectedIngredients] = useState([]);
@@ -82,23 +82,13 @@ const RecipeSearch = ({
 
     try {
       let results;
-      // Dynamically import mock service if needed
-      const { mockRecipeService } = useMockData ? await import('../services/mockRecipeService') : {};
       if (allSelected.length > 0) {
         // Use ingredients-based search
         const ingredientNames = allSelected.map(name => name.split(' | ')[0]).filter(name => name.trim() !== '');
         console.log('🔍 Searching with ingredient names:', ingredientNames);
-        if (useMockData) {
-          results = await mockRecipeService.findRecipesByIngredients(ingredientNames);
-        } else {
-          results = await recipeService.findRecipesByIngredients(ingredientNames);
-        }
+        results = await recipeService.findRecipesByIngredients(ingredientNames);
       } else if (searchQuery.trim()) {
-        if (useMockData) {
-          results = await mockRecipeService.searchVeganRecipes(searchQuery);
-        } else {
-          results = await recipeService.searchVeganRecipes(searchQuery);
-        }
+        results = await recipeService.searchVeganRecipes(searchQuery);
       }
       setSearchResults(results || []);
     } catch (err) {
@@ -311,76 +301,85 @@ const RecipeSearch = ({
             </div>
           </div>
           <div className="row">
-            {searchResults.map(recipe => (
-              <div key={recipe.id} className="col-md-4 mb-4">
-                <Link to={`/recipe/${recipe.id}`} style={{ textDecoration: 'none', color: 'inherit' }}>
-                  <div className="card h-100" style={{ 
-                    borderRadius: '15px', 
-                    border: '2px solid var(--vegan-accent)',
-                    overflow: 'hidden',
-                    transition: 'all 0.3s ease'
-                  }}>
-                    <div className="position-relative">
-                      {recipe.image && (
-                        <img 
-                          src={recipe.image} 
-                          className="card-img-top" 
-                          alt={recipe.title}
-                          style={{ height: '200px', objectFit: 'cover' }}
-                        />
+            {searchResults.map(recipe => {
+              const key = recipe?.id ?? recipe?.spoonacularId ?? Math.random();
+              const card = (
+                <div className="card h-100" style={{ 
+                  borderRadius: '15px', 
+                  border: '2px solid var(--vegan-accent)',
+                  overflow: 'hidden',
+                  transition: 'all 0.3s ease'
+                }}>
+                  <div className="position-relative">
+                    {recipe.image && (
+                      <img 
+                        src={recipe.image} 
+                        className="card-img-top" 
+                        alt={recipe.title}
+                        style={{ height: '200px', objectFit: 'cover' }}
+                      />
+                    )}
+                  </div>
+                  <div className="card-body d-flex flex-column">
+                    <h5 className="card-title" style={{ color: 'var(--vegan-primary)' }}>
+                      🍽️ {recipe.title}
+                    </h5>
+                    {recipe.summary && (
+                      <p className="card-text flex-grow-1" 
+                         style={{ color: 'var(--vegan-dark)', fontSize: '0.9rem' }}
+                         dangerouslySetInnerHTML={{ __html: recipe.summary.substring(0, 150) + '...' }}>
+                      </p>
+                    )}
+                    <div className="mt-auto">
+                      {recipe.readyInMinutes && (
+                        <small style={{ color: 'var(--vegan-earth)' }}>
+                          ⏱️ Ready in {recipe.readyInMinutes} minutes
+                        </small>
                       )}
-                    </div>
-                    <div className="card-body d-flex flex-column">
-                      <h5 className="card-title" style={{ color: 'var(--vegan-primary)' }}>
-                        🍽️ {recipe.title}
-                      </h5>
-                      {recipe.summary && (
-                        <p className="card-text flex-grow-1" 
-                           style={{ color: 'var(--vegan-dark)', fontSize: '0.9rem' }}
-                           dangerouslySetInnerHTML={{ 
-                             __html: recipe.summary.substring(0, 150) + '...' 
-                           }}>
-                        </p>
-                      )}
-                      <div className="mt-auto">
-                        {recipe.readyInMinutes && (
-                          <small style={{ color: 'var(--vegan-earth)' }}>
-                            ⏱️ Ready in {recipe.readyInMinutes} minutes
-                          </small>
-                        )}
-                        <br />
-                        <div className="d-flex justify-content-between align-items-center mt-2">
-                          <button
-                            className={`btn ${isRecipeFavorite(recipe.id) ? 'heart-button-selected' : 'heart-button-default'}`}
-                            style={{ 
-                              borderRadius: '25px',
-                              fontSize: '20px',
-                              padding: '8px 16px',
-                              minWidth: '60px',
-                              fontWeight: 'bold',
-                              boxShadow: '0 2px 8px rgba(0,0,0,0.15)',
-                              transition: 'all 0.3s ease',
-                              border: 'none'
-                            }}
-                            onClick={(e) => {
-                              e.preventDefault();
-                              if (isRecipeFavorite(recipe.id)) {
-                                removeFromFavorites(recipe.id);
-                              } else {
-                                addToFavorites(recipe);
-                              }
-                            }}
-                            title={isRecipeFavorite(recipe.id) ? 'Remove from favorites' : 'Add to favorites'}
-                          >
-                            {isRecipeFavorite(recipe.id) ? '❤️' : '♡'}
-                          </button>
-                        </div>
+                      <br />
+                      <div className="d-flex justify-content-between align-items-center mt-2">
+                        <button
+                          className={`btn ${isRecipeFavorite(recipe.id) ? 'heart-button-selected' : 'heart-button-default'}`}
+                          style={{ 
+                            borderRadius: '25px',
+                            fontSize: '20px',
+                            padding: '8px 16px',
+                            minWidth: '60px',
+                            fontWeight: 'bold',
+                            boxShadow: '0 2px 8px rgba(0,0,0,0.15)',
+                            transition: 'all 0.3s ease',
+                            border: 'none'
+                          }}
+                          onClick={(e) => {
+                            e.preventDefault();
+                            if (isRecipeFavorite(recipe.id)) {
+                              removeFromFavorites(recipe.id);
+                            } else {
+                              addToFavorites(recipe);
+                            }
+                          }}
+                          title={isRecipeFavorite(recipe.id) ? 'Remove from favorites' : 'Add to favorites'}
+                        >
+                          {isRecipeFavorite(recipe.id) ? '❤️' : '♡'}
+                        </button>
                       </div>
                     </div>
                   </div>
-                </Link>
-              </div>
-            ))}
+                </div>
+              );
+
+              return (
+                <div key={key} className="col-md-4 mb-4">
+                  {(recipe && (recipe.id || recipe.spoonacularId)) ? (
+                    <Link to={`/recipe/${recipe.id || recipe.spoonacularId}`} style={{ textDecoration: 'none', color: 'inherit' }}>
+                      {card}
+                    </Link>
+                  ) : (
+                    card
+                  )}
+                </div>
+              );
+            })}
           </div>
         </div>
       )}
