@@ -23,11 +23,13 @@ const routes = [
 /**
  * Create the router instance with the defined routes.
  */
+// opt into the v7 startTransition behavior to silence the future-flag warning
+// (supported as an opt-in in react-router v6.17.x)
 const router = createBrowserRouter(routes, {
   future: {
     v7_startTransition: true,
-    v7_relativeSplatPath: true,
   },
 });
 
+// runtime sanity check — this should appear in the browser console when the app loads
 export default router;

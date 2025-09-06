@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { Formik, Form, Field } from 'formik';
 import PhoneInput, { isValidPhoneNumber } from 'react-phone-number-input';
 // If you want the built-in styles, import the CSS once in your app (e.g., in index.css):
@@ -33,6 +33,12 @@ const validate = values => {
 
 export default function SubscribeForm({ onClose }) {
   const [submitted, setSubmitted] = useState(false);
+  const emailRef = useRef(null);
+
+  useEffect(() => {
+    // focus the email input when the form mounts
+    emailRef.current?.focus?.();
+  }, []);
 
   return (
     <div style={{ maxWidth: 480, margin: '1rem auto', padding: '1rem', background: 'var(--vegan-light)', borderRadius: 12, border: '1px solid var(--vegan-accent)' }}>
@@ -65,7 +71,17 @@ export default function SubscribeForm({ onClose }) {
             <Form>
               <div className="mb-3">
                 <label htmlFor="email" className="form-label">Email</label>
-                <Field type="email" name="email" id="email" className="form-control" />
+                <Field name="email">
+                  {({ field }) => (
+                    <input
+                      {...field}
+                      type="email"
+                      id="email"
+                      className="form-control"
+                      ref={emailRef}
+                    />
+                  )}
+                </Field>
                 <div className="text-danger">{touched.email && errors.email ? errors.email : null}</div>
               </div>
 
@@ -115,3 +131,4 @@ export default function SubscribeForm({ onClose }) {
     </div>
   );
 }
+// end SubscribeForm
