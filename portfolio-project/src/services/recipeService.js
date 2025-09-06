@@ -1,6 +1,6 @@
 
 // Spoonacular API service
-
+import { mockRecipeService } from './mockRecipeService';
 // Note that the key is loaded from environment variables and should be kept secret
 // .gitignore filters out .env files so they are not included in version control
 const SPOONACULAR_API_KEY = process.env.REACT_APP_SPOONACULAR_API_KEY;
@@ -34,7 +34,7 @@ const isVeganRecipe = (recipe) => {
   
   // Simplified filtering - only the most obvious non-vegan terms
   // More comprehensive filtering was too exclusive
-  // TODO: Use regex for more flexible matching
+  // TODO: Use regex for more flexible matching or the 
   const nonVeganTerms = [
     'bacon', 'ham', 'beef', 'pork', 'chicken', 'turkey', 'fish', 'salmon', 
     'shrimp', 'crab', 'lobster', 'cheese', 'butter', 'cream cheese', 'egg'
@@ -69,77 +69,125 @@ const isVeganRecipe = (recipe) => {
 export const recipeService = {
   // Search for vegan recipes
   searchVeganRecipes: async (query = '', includeIngredients = '', number = 12) => {
-  const params = new URLSearchParams({
-    apiKey: SPOONACULAR_API_KEY,
-    diet: 'vegan',
-    intolerances: 'dairy,egg,seafood',
-    query,
-    includeIngredients,
-    number: number * 2,
-    addRecipeInformation: true
-  });
-  const response = await fetch(`${BASE_URL}/complexSearch?${params}`);
-  if (!response.ok) {
-    if (response.status === 401) {
-      console.error('🔑 API Key Error (401)');
-      throw new Error(`API Key unauthorized (401). Check your Spoonacular API key.`);
-    }
-    throw new Error(`HTTP error! status: ${response.status}`);
-  }
-  const data = await response.json();
-  const filteredResults = data.results.filter(isVeganRecipe);
-  return filteredResults.slice(0, number);
-},
+    const params = new URLSearchParams({
+      apiKey: SPOONACULAR_API_KEY,
+      diet: 'vegan',    
+      intolerances: 'dairy,egg,seafood',
+      query,
+      includeIngredients,
+      number: number * 2,
+      addRecipeInformation: true,
+      fillIngredients: true   
+    });
 
+    try {
+      const response = await fetch(`${BASE_URL}/complexSearch?${params}`);
+      if (!response.ok) {
+        if (response.status === 401) {
+          console.error('🔑 API Key Error (401)');
+          throw new Error(`API Key unauthorized (401). Check your Spoonacular API key.`);
+        }
+        if (response.status === 402) {
+          console.warn('💳 API Limit Reached (402) - Using mock data');
+          return await mockRecipeService.searchVeganRecipes(query, includeIngredients, number);
+        }
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      const data = await response.json();
+      const filteredResults = data.results.filter(isVeganRecipe);
+      return filteredResults.slice(0, number);
+    } catch (error) {
+      if (error.message.includes('Failed to fetch') || error.message.includes('402')) {
+        console.warn('🌐 Network/Limit Error - Using mock data');
+        return await mockRecipeService.searchVeganRecipes(query, includeIngredients, number);
+      }
+      console.error('Error fetching recipes:', error);
+      throw error;
+    }
+  },
+
+  // Get recipe details
   getRecipeDetails: async (recipeId) => {
-  const params = new URLSearchParams({
-    apiKey: SPOONACULAR_API_KEY,
-    includeNutrition: false
-  });
-  const response = await fetch(`${BASE_URL}/${recipeId}/information?${params}`);
-  if (!response.ok) {
-    throw new Error(`HTTP error! status: ${response.status}`);
-  }
-  return await response.json();
-},
+    const params = new URLSearchParams({
+      apiKey: SPOONACULAR_API_KEY,
+      includeNutrition: false
+    });
+
+    try {
+      const response = await fetch(`${BASE_URL}/${recipeId}/information?${params}`);
+      if (!response.ok) {
+        if (response.status === 402) {
+          console.warn('💳 API Limit Reached (402) - Using mock data');
+          return await mockRecipeService.getRecipeDetails(recipeId);
+        }
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      return await response.json();
+    } catch (error) {
+      if (error.message.includes('Failed to fetch') || error.message.includes('402')) {
+        console.warn('🌐 Network/Limit Error - Using mock data');
+        return await mockRecipeService.getRecipeDetails(recipeId);
+      }
+      console.error('Error fetching recipe details:', error);
+      throw error;
+    }
+  },
+
   // Find recipes by ingredients
   findRecipesByIngredients: async (ingredients, number = 12) => {
-  const ingredientString = ingredients.join(',');
-  // Try vegan search first
-  const veganParams = new URLSearchParams({
-    apiKey: SPOONACULAR_API_KEY,
-    diet: 'vegan',
-    includeIngredients: ingredientString,
-    number: number,
-    addRecipeInformation: true,
-    fillIngredients: true
-  });
-  const veganUrl = `${BASE_URL}/complexSearch?${veganParams}`;
-  const veganResponse = await fetch(veganUrl);
-  if (veganResponse.ok) {
-    const veganData = await veganResponse.json();
-    if (veganData.results && veganData.results.length > 0) {
-      return veganData.results;
+    const ingredientString = ingredients.join(',');
+    try {
+      // Try vegan search first
+      const veganParams = new URLSearchParams({
+        apiKey: SPOONACULAR_API_KEY,
+        diet: 'vegan',
+        includeIngredients: ingredientString,
+        number: number,
+        addRecipeInformation: true,
+        fillIngredients: true
+      });
+      const veganUrl = `${BASE_URL}/complexSearch?${veganParams}`;
+      const veganResponse = await fetch(veganUrl);
+      if (veganResponse.status === 402) {
+        console.warn('💳 API Limit Reached (402) - Using mock data');
+        return await mockRecipeService.findRecipesByIngredients(ingredients, number);
+      }
+      if (veganResponse.ok) {
+        const veganData = await veganResponse.json();
+        if (veganData.results && veganData.results.length > 0) {
+          return veganData.results;
+        }
+      }
+      // Fallback to ingredient search
+      const params = new URLSearchParams({
+        apiKey: SPOONACULAR_API_KEY,
+        ingredients: ingredientString,
+        number: number * 2,
+        ranking: 1,
+        ignorePantry: true
+      });
+      const url = `${BASE_URL}/findByIngredients?${params}`;
+      const response = await fetch(url);
+      if (response.status === 402) {
+        console.warn('💳 API Limit Reached (402) - Using mock data');
+        return await mockRecipeService.findRecipesByIngredients(ingredients, number);
+      }
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      const data = await response.json();
+      if (data.length === 0) {
+        return [];
+      }
+      const filteredRecipes = data.filter(isVeganRecipe);
+      return filteredRecipes.slice(0, number);
+    } catch (error) {
+      if (error.message.includes('Failed to fetch') || error.message.includes('402')) {
+        console.warn('🌐 Network/Limit Error - Using mock data');
+        return await mockRecipeService.findRecipesByIngredients(ingredients, number);
+      }
+      console.error('❌ Error finding recipes by ingredients:', error);
+      throw error;
     }
-  }
-  // Fallback to ingredient search
-  const params = new URLSearchParams({
-    apiKey: SPOONACULAR_API_KEY,
-    ingredients: ingredientString,
-    number: number * 2,
-    ranking: 1,
-    ignorePantry: true
-  });
-  const url = `${BASE_URL}/findByIngredients?${params}`;
-  const response = await fetch(url);
-  if (!response.ok) {
-    throw new Error(`HTTP error! status: ${response.status}`);
-  }
-  const data = await response.json();
-  if (data.length === 0) {
-    return [];
-  }
-    const filteredRecipes = data.filter(isVeganRecipe);
-    return filteredRecipes.slice(0, number);
   }
 };
