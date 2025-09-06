@@ -1,8 +1,5 @@
-// Service selector: export recipeService from real or mock implementation based on env
-import { recipeService as realRecipeService } from './recipeService';
-import { mockRecipeService } from './mockRecipeService';
+// Service entrypoint - export the real recipeService implementation.
+import { recipeService } from './recipeService';
 
-const useMock = process.env.REACT_APP_USE_MOCK === 'true';
-
-export const recipeService = useMock ? mockRecipeService : realRecipeService;
+export { recipeService };
 export default recipeService;
