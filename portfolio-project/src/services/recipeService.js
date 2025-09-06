@@ -1,6 +1,6 @@
 
 // Spoonacular API service
-import { mockRecipeService } from './mockRecipeService';
+// Using live Spoonacular API; mock service removed
 // Note that the key is loaded from environment variables and should be kept secret
 // .gitignore filters out .env files so they are not included in version control
 const SPOONACULAR_API_KEY = process.env.REACT_APP_SPOONACULAR_API_KEY;
@@ -88,8 +88,8 @@ export const recipeService = {
           throw new Error(`API Key unauthorized (401). Check your Spoonacular API key.`);
         }
         if (response.status === 402) {
-          console.warn('💳 API Limit Reached (402) - Using mock data');
-          return await mockRecipeService.searchVeganRecipes(query, includeIngredients, number);
+          console.warn('💳 API Limit Reached (402) - No mock available; throwing');
+          throw new Error('API limit reached (402)');
         }
         throw new Error(`HTTP error! status: ${response.status}`);
       }
@@ -98,8 +98,8 @@ export const recipeService = {
       return filteredResults.slice(0, number);
     } catch (error) {
       if (error.message.includes('Failed to fetch') || error.message.includes('402')) {
-        console.warn('🌐 Network/Limit Error - Using mock data');
-        return await mockRecipeService.searchVeganRecipes(query, includeIngredients, number);
+        console.warn('🌐 Network/Limit Error - No mock available; rethrowing');
+        throw error;
       }
       console.error('Error fetching recipes:', error);
       throw error;
@@ -117,16 +117,16 @@ export const recipeService = {
       const response = await fetch(`${BASE_URL}/${recipeId}/information?${params}`);
       if (!response.ok) {
         if (response.status === 402) {
-          console.warn('💳 API Limit Reached (402) - Using mock data');
-          return await mockRecipeService.getRecipeDetails(recipeId);
+          console.warn('💳 API Limit Reached (402) - No mock available; throwing');
+          throw new Error('API limit reached (402)');
         }
         throw new Error(`HTTP error! status: ${response.status}`);
       }
       return await response.json();
     } catch (error) {
       if (error.message.includes('Failed to fetch') || error.message.includes('402')) {
-        console.warn('🌐 Network/Limit Error - Using mock data');
-        return await mockRecipeService.getRecipeDetails(recipeId);
+        console.warn('🌐 Network/Limit Error - No mock available; rethrowing');
+        throw error;
       }
       console.error('Error fetching recipe details:', error);
       throw error;
@@ -149,8 +149,8 @@ export const recipeService = {
       const veganUrl = `${BASE_URL}/complexSearch?${veganParams}`;
       const veganResponse = await fetch(veganUrl);
       if (veganResponse.status === 402) {
-        console.warn('💳 API Limit Reached (402) - Using mock data');
-        return await mockRecipeService.findRecipesByIngredients(ingredients, number);
+        console.warn('💳 API Limit Reached (402) - No mock available; trying fallback search');
+        // proceed to fallback ingredient-based search below
       }
       if (veganResponse.ok) {
         const veganData = await veganResponse.json();
@@ -169,8 +169,8 @@ export const recipeService = {
       const url = `${BASE_URL}/findByIngredients?${params}`;
       const response = await fetch(url);
       if (response.status === 402) {
-        console.warn('💳 API Limit Reached (402) - Using mock data');
-        return await mockRecipeService.findRecipesByIngredients(ingredients, number);
+        console.warn('💳 API Limit Reached (402) - No mock available; throwing');
+        throw new Error('API limit reached (402)');
       }
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
@@ -183,8 +183,8 @@ export const recipeService = {
       return filteredRecipes.slice(0, number);
     } catch (error) {
       if (error.message.includes('Failed to fetch') || error.message.includes('402')) {
-        console.warn('🌐 Network/Limit Error - Using mock data');
-        return await mockRecipeService.findRecipesByIngredients(ingredients, number);
+        console.warn('🌐 Network/Limit Error - No mock available; rethrowing');
+        throw error;
       }
       console.error('❌ Error finding recipes by ingredients:', error);
       throw error;
