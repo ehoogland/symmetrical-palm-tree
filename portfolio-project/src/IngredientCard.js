@@ -1,4 +1,4 @@
-function IngredientCard({ ingredient, isSelected = false, onSelect }) {
+function IngredientCard({ ingredient, isSelected = false, onSelect, onRemove }) {
     // Function to get category-specific CSS class
     const getCategoryClass = (category) => {
         const categoryLower = category.toLowerCase().replace(/\s+/g, '-');
@@ -36,6 +36,8 @@ function IngredientCard({ ingredient, isSelected = false, onSelect }) {
     };
 
   // Parse ingredient name and alternative names
+  // Handles formats like "Chickpeas | Garbanzo beans, Ceci" or 
+  // "Chickpeas (Garbanzo beans, Ceci)"
   const parseIngredientName = (name) => {
     const match = name.match(/^([^|]+)\s*\|\s*(.+)$/);
     if (match) {
@@ -78,9 +80,35 @@ function IngredientCard({ ingredient, isSelected = false, onSelect }) {
             cursor: onSelect ? 'pointer' : 'default',
             transition: 'all 0.3s ease',
             transform: isSelected ? 'scale(0.98)' : 'scale(1)',
-            opacity: isSelected ? '0.8' : '1'
+            opacity: isSelected ? '0.8' : '1',
+            position: 'relative'
           }}
         >   
+          {/* Remove button (shows if onRemove prop provided) */}
+          {onRemove && (
+            <label
+              className="position-absolute d-flex align-items-center"
+              style={{ bottom: 8, right: 8, zIndex: 2, background: 'rgba(255,255,255,0.85)', padding: '4px 8px', borderRadius: 12, cursor: 'pointer' }}
+              title="Remove ingredient"
+            >
+              <input
+                type="checkbox"
+                className="form-check-input"
+                style={{ width: 16, height: 16, marginRight: 6 }}
+                onClick={e => e.stopPropagation()}
+                onChange={e => {
+                  // stop bubbling and invoke remove when checked; then reset checkbox
+                  e.stopPropagation();
+                  if (e.target.checked) {
+                    onRemove(ingredient);
+                    // uncheck so it remains unobtrusive
+                    e.target.checked = false;
+                  }
+                }}
+              />
+              <small style={{ margin: 0, fontSize: '0.8rem', color: 'var(--vegan-dark)' }}>Remove</small>
+            </label>
+          )}
           {/* Debug info for troubleshooting */}
           <div style={{ fontSize: '0.7rem', color: '#888', marginBottom: '2px', display: 'none' }}>
             {ingredient.name} | {primary}
