@@ -1,5 +1,16 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 
+/**
+ * Ingredients slice
+ *
+ * State shape:
+ * {
+ *   veganList: Array<Object>,
+ *   selected: Array<Object>,
+ *   loading: boolean,
+ *   error: string|null,
+ * }
+ */
 const API_URL = 'http://localhost:3000/ingredients';
 
 // Async thunks for CRUD
@@ -89,29 +100,67 @@ const ingredientsSlice = createSlice({
       state.selected = [];
     }
   },
-  extraReducers: {
-    [fetchIngredients.pending]: (state) => {
-      state.loading = true;
-      state.error = null;
-    },
-    [fetchIngredients.fulfilled]: (state, action) => {
-      state.loading = false;
-      state.veganList = action.payload;
-    },
-    [fetchIngredients.rejected]: (state, action) => {
-      state.loading = false;
-      state.error = action.payload;
-    },
-    [addIngredient.fulfilled]: (state, action) => {
-      state.veganList.push(action.payload);
-    },
-    [updateIngredient.fulfilled]: (state, action) => {
-      const idx = state.veganList.findIndex(i => i.id === action.payload.id);
-      if (idx !== -1) state.veganList[idx] = action.payload;
-    },
-    [deleteIngredient.fulfilled]: (state, action) => {
-      state.veganList = state.veganList.filter(i => i.id !== action.payload);
-    },
+  /**
+   * Migration note: switched from object-style `extraReducers` to the
+   * "builder callback" notation to avoid the RTK deprecation warning and
+   * to be compatible with RTK 2.x+.
+   *
+   * Kept the previous object-style handlers commented below for
+   * quick comparison during review. They were removed because the
+   * object notation is deprecated (lossy typings and limited matcher
+   * capabilities). The builder API is the recommended pattern.
+   *
+   * Previous handlers (commented):
+   *
+   * // extraReducers: {
+   * //   [fetchIngredients.pending]: (state) => {
+   * //     state.loading = true;
+   * //     state.error = null;
+   * //   },
+   * //   [fetchIngredients.fulfilled]: (state, action) => {
+   * //     state.loading = false;
+   * //     state.veganList = action.payload;
+   * //   },
+   * //   [fetchIngredients.rejected]: (state, action) => {
+   * //     state.loading = false;
+   * //     state.error = action.payload;
+   * //   },
+   * //   [addIngredient.fulfilled]: (state, action) => {
+   * //     state.veganList.push(action.payload);
+   * //   },
+   * //   [updateIngredient.fulfilled]: (state, action) => {
+   * //     const idx = state.veganList.findIndex(i => i.id === action.payload.id);
+   * //     if (idx !== -1) state.veganList[idx] = action.payload;
+   * //   },
+   * //   [deleteIngredient.fulfilled]: (state, action) => {
+   * //     state.veganList = state.veganList.filter(i => i.id !== action.payload);
+   * //   },
+   * // },
+   */
+  extraReducers: (builder) => {
+    builder
+      .addCase(fetchIngredients.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(fetchIngredients.fulfilled, (state, action) => {
+        state.loading = false;
+        state.veganList = action.payload;
+      })
+      .addCase(fetchIngredients.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      })
+      .addCase(addIngredient.fulfilled, (state, action) => {
+        state.veganList.push(action.payload);
+      })
+      .addCase(updateIngredient.fulfilled, (state, action) => {
+        const idx = state.veganList.findIndex(i => i.id === action.payload.id);
+        if (idx !== -1) state.veganList[idx] = action.payload;
+      })
+      .addCase(deleteIngredient.fulfilled, (state, action) => {
+        state.veganList = state.veganList.filter(i => i.id !== action.payload);
+      });
   },
 });
 

@@ -1,7 +1,18 @@
 import { veganIngredientList } from '../data/veganIngredients';
 
-// Simple in-memory mock server that intercepts fetch calls in development.
-// It supports GET /ingredients, GET/POST/DELETE /favorites
+/**
+ * Development mock server (in-browser)
+ *
+ * Intercepts `window.fetch` when `startMockServer()` is called in development.
+ * Persists user-added favorites and ingredients to `localStorage` under
+ * the keys `mock:favorites` and `mock:ingredients` so data survives reloads.
+ *
+ * Supported endpoints (subset):
+ * - GET /ingredients
+ * - POST /ingredients
+ * - DELETE /ingredients/:id (only user-added)
+ * - GET/POST/DELETE /favorites
+ */
 
 const STORAGE_KEY = 'mock:favorites';
 const ING_STORAGE_KEY = 'mock:ingredients';

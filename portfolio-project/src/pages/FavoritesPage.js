@@ -3,6 +3,13 @@ import { NavLink } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { fetchFavorites, removeFavorite } from '../store/slices/favoritesSlice';
 
+/**
+ * FavoritesPage
+ *
+ * Shows favorites persisted on the dev server. Loads favorites on mount and
+ * allows removing a favorite (the thunk will resolve the correct server id
+ * and then remove the item from the store).
+ */
 export default function FavoritesPage() {
   const favorites = useSelector(state => state.favorites.list || []);
   const loading = useSelector(state => state.favorites.loading);

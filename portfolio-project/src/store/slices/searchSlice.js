@@ -1,5 +1,11 @@
 import { createSlice } from '@reduxjs/toolkit';
 
+/**
+ * Migration note: this slice does not use `extraReducers` (object-style)
+ * and therefore did not require migration to the builder callback API.
+ * Keeping this note here for consistency with other slices that were
+ * migrated; no functional changes are made below.
+ */
 const searchSlice = createSlice({
   name: 'search',
   initialState: {

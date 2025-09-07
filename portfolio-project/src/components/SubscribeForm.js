@@ -31,6 +31,30 @@ const validate = values => {
   return errors;
 };
 
+/**
+ * SubscribeFormProps
+ * @typedef {Object} SubscribeFormProps
+ * @property {() => void} onClose - Callback invoked when the form should close
+ */
+
+/**
+ * Form values for SubscribeForm
+ * @typedef {Object} SubscribeFormValues
+ * @property {string} email
+ * @property {string} phone
+ * @property {boolean} optInEmail
+ * @property {boolean} optInSMS
+ */
+
+/**
+ * SubscribeForm
+ *
+ * Renders a subscription form (email + optional phone). Focuses the email input
+ * on mount. Uses Formik for validation and local fake submission handling.
+ *
+ * @param {SubscribeFormProps} props
+ * @returns {JSX.Element}
+ */
 export default function SubscribeForm({ onClose }) {
   const [submitted, setSubmitted] = useState(false);
   const emailRef = useRef(null);
