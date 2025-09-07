@@ -1,18 +1,16 @@
 /**
- * Redux store
+ * Store entrypoint (re-export)
  *
- * The configureStore call wires together the app slices. Exporting the
- * configured store makes it easy to provide to React tests using a
- * `<Provider store={store}>` wrapper.
+ * The concrete store implementation lives in `./store.js`. We re-export
+ * it from `index.js` so existing imports (e.g. `import store from './store'`)
+ * continue to work unchanged.
  */
-import { configureStore } from '@reduxjs/toolkit';
-import favoritesReducer from './slices/favoritesSlice';
-import ingredientsReducer from './slices/ingredientsSlice';
-import searchReducer from './slices/searchSlice';
-import uiReducer from './slices/uiSlice';
-import apiDataReducer from './slices/apiDataSlice';
+
+// Re-export the configured store implementation
+export { default } from './store';
 
 /**
+ * RootState typedef for editor/JSdoc consumers.
  * @typedef {Object} RootState
  * @property {import('./slices/favoritesSlice').default} favorites
  * @property {import('./slices/ingredientsSlice').default} ingredients
@@ -20,15 +18,3 @@ import apiDataReducer from './slices/apiDataSlice';
  * @property {import('./slices/uiSlice').default} ui
  * @property {import('./slices/apiDataSlice').default} apiData
  */
-
-const store = configureStore({
-  reducer: {
-    favorites: favoritesReducer,
-    ingredients: ingredientsReducer,
-    search: searchReducer,
-    ui: uiReducer,
-    apiData: apiDataReducer,
-  },
-});
-
-export default store;
