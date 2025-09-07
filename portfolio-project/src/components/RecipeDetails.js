@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+/** @typedef {import('../types').RecipeDetails} RecipeDetails */
 import { useParams } from 'react-router-dom';
 import { recipeService } from '../services';
 
@@ -9,23 +10,27 @@ import { recipeService } from '../services';
  *
  * Behavior:
  * - Reads the recipe `id` from the route params via `useParams()`.
- * - Uses an AbortController to cancel in-flight fetches when the component unmounts
- *   or when `id` changes. The controller.signal is passed to `recipeService.getRecipeDetails`.
- * - Manages local loading/error state and guards against setting state after unmount
- *   by relying on fetch cancellation.
+ * @useParams
+ * - Uses an AbortController to cancel in-flight fetches when the component unmounts.
+ * - Fetches recipe details from the service and handles loading and error states.
+ * - Renders loading, error, or "no recipe" states as appropriate.
+ * @useEffect
+ * This effect fetches the recipe details when the component mounts or when the ID changes.
+ * It also sets up an AbortController to cancel [in-flight] fetches if the component unmounts
  *
  * There are no props; the component reads the id from the URL.
  *
  * @returns {JSX.Element}
  */
 function RecipeDetails() {
+
   const { id } = useParams();
-  /** @type {[import('../services/recipe').RecipeDetails|null, Function]} */
   const [recipe, setRecipe] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
 
-  /** Fetch recipe details by ID
+  /** 
+   * Fetch recipe details by ID
    * This effect runs on component mount and when the ID changes.
    * It fetches the recipe details from the service and handles loading and error states.
    * setRecipe, setLoading, setError are setters returned by React hooks in the same component
@@ -33,8 +38,8 @@ function RecipeDetails() {
    * stable (their identity never changes), so you do not need to include them in the effect dependency array.
    * @param {string} id - The ID of the recipe to fetch. This comes from the URL params via useParams().
    * It is included in the effect dependency array so the effect re-runs if the ID changes.
- 
-   *
+   * @throws {Error} On HTTP errors or network failures. If aborted, fetch rejects with AbortError.
+   * @returns {void}
    */
   useEffect(() => {
 

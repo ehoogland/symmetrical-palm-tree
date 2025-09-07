@@ -1,12 +1,12 @@
-
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+/** @typedef {import('../../../types').FavoriteItem} FavoriteItem */
 
 /**
  * Favorites slice
  *
  * State shape:
  * {
- *   list: Array<Object>,
+ *   list: FavoriteItem[],
  *   loading: boolean,
  *   error: string|null,
  * }

@@ -1,12 +1,14 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 
+/** @typedef {import('../../types').Ingredient} Ingredient */
+
 /**
  * Ingredients slice
  *
  * State shape:
  * {
- *   veganList: Array<Object>,
- *   selected: Array<Object>,
+ *   veganList: Ingredient[],
+ *   selected: Ingredient[],
  *   loading: boolean,
  *   error: string|null,
  * }

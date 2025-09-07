@@ -1,10 +1,10 @@
 import { createSlice } from '@reduxjs/toolkit';
+/** @typedef {import('../../../types').RootState} RootState */
 
 /**
- * Migration note: `uiSlice` doesn't use `extraReducers` and therefore
- * didn't require conversion to the builder callback form. We add this
- * comment for consistency across slice files and to make the codebase
- * easier to review.
+ * UI slice
+ *
+ * Contains small UI flags used across the app. No async reducers are defined.
  */
 const initialState = {
 

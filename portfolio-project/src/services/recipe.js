@@ -1,17 +1,22 @@
 
 /**
  * Spoonacular API service
- * Note that the key is loaded from environment variables and should be kept secret
- * .gitignore filters out .env files so they are not included in version control
  *
- * Exposes helper methods that return Promises for common recipe operations:
- * - searchVeganRecipes(query, includeIngredients, number)
+ * This module wraps the Spoonacular REST API. It intentionally keeps a thin
+ * surface area (promise-based methods) so components and thunks can call it
+ * and optionally pass an AbortSignal to cancel in-flight requests.
+ *
+ * Security: the API key is read from `process.env.REACT_APP_SPOONACULAR_API_KEY`.
+ * Do not commit production keys to the repository.
+ *
+ * Public methods:
+ * - searchVeganRecipes(query, includeIngredients, number, options)
  * - getRecipeDetails(recipeId, options)
- * - findRecipesByIngredients(ingredients, number)
+ * - findRecipesByIngredients(ingredients, number, options)
  *
- * Notes:
- * - getRecipeDetails accepts an optional `options` object with a `signal` (AbortSignal)
- *   so callers may cancel in-flight fetch requests using AbortController.
+ * Cancellation: callers may pass an `options` object with an AbortSignal
+ * (e.g. `{ signal: controller.signal }`). When aborted, fetch will reject
+ * with an AbortError which callers should handle appropriately.
  */
 
 /**
@@ -107,20 +112,33 @@ export const recipeService = {
    * @returns {Promise<Object[]>} Array of recipe result objects
    * @throws {Error} On HTTP/network errors or when API limits are reached
    */
-  searchVeganRecipes: async (query = '', includeIngredients = '', number = 12) => {
+  /**
+   * Search for vegan recipes using Spoonacular's complexSearch endpoint.
+   * Supports cancellation via an optional `options.signal` AbortSignal.
+   *
+   * New signature (backwards-compatible):
+   *   searchVeganRecipes(query = '', includeIngredients = '', number = 12, options = {})
+   *
+   * @param {string} [query='']
+   * @param {string} [includeIngredients='']
+   * @param {number} [number=12]
+   * @param {{signal?: AbortSignal}} [options]
+   */
+  searchVeganRecipes: async (query = '', includeIngredients = '', number = 12, options = {}) => {
+    const { signal } = options || {};
     const params = new URLSearchParams({
       apiKey: SPOONACULAR_API_KEY,
-      diet: 'vegan',    
+      diet: 'vegan',
       intolerances: 'dairy,egg,seafood',
       query,
       includeIngredients,
       number: number * 2,
       addRecipeInformation: true,
-      fillIngredients: true   
+      fillIngredients: true,
     });
 
     try {
-      const response = await fetch(`${BASE_URL}/complexSearch?${params}`);
+      const response = await fetch(`${BASE_URL}/complexSearch?${params}`, { signal });
       if (!response.ok) {
         if (response.status === 401) {
           console.error('🔑 API Key Error (401)');
@@ -133,10 +151,12 @@ export const recipeService = {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
       const data = await response.json();
-      const filteredResults = data.results.filter(isVeganRecipe);
+      const filteredResults = (data.results || []).filter(isVeganRecipe);
       return filteredResults.slice(0, number);
     } catch (error) {
-      if (error.message.includes('Failed to fetch') || error.message.includes('402')) {
+      // Let AbortError bubble up so callers using AbortController can detect cancellation
+      if (error.name === 'AbortError') throw error;
+      if (error.message && (error.message.includes('Failed to fetch') || error.message.includes('402'))) {
         console.warn('🌐 Network/Limit Error - No mock available; rethrowing');
         throw error;
       }
@@ -192,7 +212,8 @@ export const recipeService = {
    * @returns {Promise<Object[]>} Array of recipe summaries
    * @throws {Error} On network/HTTP errors or when API limits are reached
    */
-  findRecipesByIngredients: async (ingredients, number = 12) => {
+  findRecipesByIngredients: async (ingredients, number = 12, options = {}) => {
+    const { signal } = options || {};
     const ingredientString = ingredients.join(',');
     try {
       // Try vegan search first
@@ -205,7 +226,7 @@ export const recipeService = {
         fillIngredients: true
       });
       const veganUrl = `${BASE_URL}/complexSearch?${veganParams}`;
-      const veganResponse = await fetch(veganUrl);
+      const veganResponse = await fetch(veganUrl, { signal });
       if (veganResponse.status === 402) {
         console.warn('💳 API Limit Reached (402) - No mock available; trying fallback search');
         // proceed to fallback ingredient-based search below
@@ -225,7 +246,7 @@ export const recipeService = {
         ignorePantry: true
       });
       const url = `${BASE_URL}/findByIngredients?${params}`;
-      const response = await fetch(url);
+      const response = await fetch(url, { signal });
       if (response.status === 402) {
         console.warn('💳 API Limit Reached (402) - No mock available; throwing');
         throw new Error('API limit reached (402)');

@@ -29,7 +29,15 @@ export default function IngredientsPage() {
   const seededIds = React.useMemo(() => new Set((seededIngredients || []).map(i => i.id)), []);
 
   useEffect(() => {
-    dispatch(fetchIngredients());
+    // Dispatch the thunk and capture the returned promise so we can abort
+    // the underlying request if the component unmounts quickly.
+    const promise = dispatch(fetchIngredients());
+    return () => {
+      // The promise returned by dispatching an async thunk exposes an
+      // `abort()` method which will trigger the thunk's internal
+      // AbortController (thunkAPI.signal).
+      if (promise && typeof promise.abort === 'function') promise.abort();
+    };
   }, [dispatch]);
 
   const handleAddIngredient = (e) => {

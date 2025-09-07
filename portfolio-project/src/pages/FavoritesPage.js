@@ -17,7 +17,10 @@ export default function FavoritesPage() {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(fetchFavorites());
+    const promise = dispatch(fetchFavorites());
+    return () => {
+      if (promise && typeof promise.abort === 'function') promise.abort();
+    };
   }, [dispatch]);
 
   return (

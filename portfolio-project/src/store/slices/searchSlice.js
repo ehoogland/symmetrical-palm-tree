@@ -1,10 +1,18 @@
 import { createSlice } from '@reduxjs/toolkit';
+/** @typedef {import('../../../types').RecipeSummary} RecipeSummary */
 
 /**
- * Migration note: this slice does not use `extraReducers` (object-style)
- * and therefore did not require migration to the builder callback API.
- * Keeping this note here for consistency with other slices that were
- * migrated; no functional changes are made below.
+ * Search slice
+ *
+ * State shape:
+ * {
+ *   query: string,
+ *   results: Array<Object>,
+ *   loading: boolean,
+ *   error: string|null,
+ * }
+ *
+ * Note: No extraReducers used here.
  */
 const searchSlice = createSlice({
   name: 'search',
