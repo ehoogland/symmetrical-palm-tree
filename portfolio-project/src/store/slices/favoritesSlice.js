@@ -1,6 +1,21 @@
 
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 
+/**
+ * Favorites slice
+ *
+ * State shape:
+ * {
+ *   list: Array<Object>,
+ *   loading: boolean,
+ *   error: string|null,
+ * }
+ *
+ * Thunks:
+ * - fetchFavorites(): load favourites from the dev server
+ * - addFavorite(favorite): persist a favorite (stores spoonacularId)
+ * - removeFavorite(id): deletes by server id or stored spoonacularId
+ */
 const API_URL = 'http://localhost:3000/favorites';
 
 export const fetchFavorites = createAsyncThunk(
@@ -83,26 +98,57 @@ const favoritesSlice = createSlice({
     error: null,
   },
   reducers: {},
-  extraReducers: {
-    [fetchFavorites.pending]: (state) => {
-      state.loading = true;
-      state.error = null;
-    },
-    [fetchFavorites.fulfilled]: (state, action) => {
-      state.loading = false;
-      state.list = action.payload;
-    },
-    [fetchFavorites.rejected]: (state, action) => {
-      state.loading = false;
-      state.error = action.payload;
-    },
-    [addFavorite.fulfilled]: (state, action) => {
-      state.list.push(action.payload);
-    },
-    [removeFavorite.fulfilled]: (state, action) => {
-      const payload = String(action.payload);
-      state.list = state.list.filter(f => String(f.id) !== payload && String(f.spoonacularId || '') !== payload);
-    },
+  /**
+   * Migration note: switched from object-style `extraReducers` to the
+   * builder callback notation to follow Redux Toolkit recommendations
+   * and remove deprecation warnings. The previous object mapping is
+   * left commented below for easy comparison.
+   *
+   * Previous handlers (commented):
+   *
+   * // extraReducers: {
+   * //   [fetchFavorites.pending]: (state) => {
+   * //     state.loading = true;
+   * //     state.error = null;
+   * //   },
+   * //   [fetchFavorites.fulfilled]: (state, action) => {
+   * //     state.loading = false;
+   * //     state.list = action.payload;
+   * //   },
+   * //   [fetchFavorites.rejected]: (state, action) => {
+   * //     state.loading = false;
+   * //     state.error = action.payload;
+   * //   },
+   * //   [addFavorite.fulfilled]: (state, action) => {
+   * //     state.list.push(action.payload);
+   * //   },
+   * //   [removeFavorite.fulfilled]: (state, action) => {
+   * //     const payload = String(action.payload);
+   * //     state.list = state.list.filter(f => String(f.id) !== payload && String(f.spoonacularId || '') !== payload);
+   * //   },
+   * // },
+   */
+  extraReducers: (builder) => {
+    builder
+      .addCase(fetchFavorites.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(fetchFavorites.fulfilled, (state, action) => {
+        state.loading = false;
+        state.list = action.payload;
+      })
+      .addCase(fetchFavorites.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      })
+      .addCase(addFavorite.fulfilled, (state, action) => {
+        state.list.push(action.payload);
+      })
+      .addCase(removeFavorite.fulfilled, (state, action) => {
+        const payload = String(action.payload);
+        state.list = state.list.filter(f => String(f.id) !== payload && String(f.spoonacularId || '') !== payload);
+      });
   },
 });
 

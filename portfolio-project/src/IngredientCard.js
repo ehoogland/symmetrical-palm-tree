@@ -1,3 +1,13 @@
+/**
+ * IngredientCard component
+ *
+ * @param {{
+ *   ingredient: { id?: number|string, name: string, altNames?: string[], category?: string, processed?: boolean },
+ *   isSelected?: boolean,
+ *   onSelect?: function,
+ *   onRemove?: function
+ * }} props
+ */
 function IngredientCard({ ingredient, isSelected = false, onSelect, onRemove }) {
     // Function to get category-specific CSS class
     const getCategoryClass = (category) => {

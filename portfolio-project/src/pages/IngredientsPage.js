@@ -5,6 +5,16 @@ import { NavLink } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { toggleSelectedIngredient, clearSelected, fetchIngredients, addIngredient, deleteIngredient } from '../store/slices/ingredientsSlice';
 
+/**
+ * IngredientsPage
+ *
+ * Page that lists vegan ingredients. Reads ingredient list from the Redux store
+ * and provides add/delete/select interactions via dispatched thunks and actions.
+ *
+ * - fetchIngredients is dispatched on mount to populate the store
+ * - addIngredient dispatches a POST to the dev server
+ * - deleteIngredient dispatches a DELETE for user-added ingredients
+ */
 export default function IngredientsPage() {
   const [newName, setNewName] = useState('');
   const [newCategory, setNewCategory] = useState('');

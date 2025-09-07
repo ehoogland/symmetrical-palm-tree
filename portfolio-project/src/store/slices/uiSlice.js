@@ -1,5 +1,11 @@
 import { createSlice } from '@reduxjs/toolkit';
 
+/**
+ * Migration note: `uiSlice` doesn't use `extraReducers` and therefore
+ * didn't require conversion to the builder callback form. We add this
+ * comment for consistency across slice files and to make the codebase
+ * easier to review.
+ */
 const initialState = {
 
   showSubscribe: false,
