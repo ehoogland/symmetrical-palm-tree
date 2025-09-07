@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+/** @typedef {import('../types').Ingredient} Ingredient */
 import IngredientCard from '../IngredientCard';
 import { veganIngredientList as seededIngredients } from '../data/veganIngredients';
 import { NavLink } from 'react-router-dom';

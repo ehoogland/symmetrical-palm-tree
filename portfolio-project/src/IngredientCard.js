@@ -1,8 +1,10 @@
+/** @typedef {import('./types').Ingredient} Ingredient */
+
 /**
  * IngredientCard component
  *
  * @param {{
- *   ingredient: { id?: number|string, name: string, altNames?: string[], category?: string, processed?: boolean },
+ *   ingredient: Ingredient,
  *   isSelected?: boolean,
  *   onSelect?: function,
  *   onRemove?: function
@@ -169,4 +171,4 @@ function IngredientCard({ ingredient, isSelected = false, onSelect, onRemove }) 
     )
 }
 
-export default IngredientCard;  
+export default IngredientCard;
