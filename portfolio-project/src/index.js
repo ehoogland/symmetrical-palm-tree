@@ -11,7 +11,7 @@
  *   when `process.env.NODE_ENV === 'development'` so it is excluded from
  *   production bundles.
  *
- * - The app is wrapped with `react-redux`'s `Provider` and `react-router`'s
+ * - The app is wrapped with react-redux's `Provider` and react-router's
  *   `BrowserRouter` so routes are reflected in the browser URL and the store
  *   is the single source of truth for ingredients/favorites.
  *
@@ -20,6 +20,10 @@
  *   json-server to host static assets alongside the API. Keep the mock server
  *   client out of production by ensuring `NODE_ENV` is `production` when
  *   building — the dynamic import is already gated by the `development` env.
+ *   Gated means that the code is conditionally included based on the environment.
+ *   This way the mock server code is not included in production bundles.
+ *
+ * Deployment note (serving the built app from a static file server):
  * - Run json-server to serve API endpoints (e.g., favorites/ingredients) and
  *   the static files from `public/`. Do not enable the in-browser mock server
  *   in that environment; instead let json-server act as the persistent dev API.

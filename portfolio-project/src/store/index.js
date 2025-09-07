@@ -1,9 +1,9 @@
 /**
  * Store entrypoint (re-export)
  *
- * The concrete store implementation lives in `./store.js`. We re-export
- * it from `index.js` so existing imports (e.g. `import store from './store'`)
- * continue to work unchanged.
+ * The concrete store implementation lives in `./store.js`. This re-export
+ * from `index.js` allows existing imports (e.g. `import store from './store'`)
+ * to continue to work unchanged.
  */
 
 // Re-export the configured store implementation
