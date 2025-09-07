@@ -1,4 +1,3 @@
-
 /**
  * Spoonacular API service
  *
@@ -18,6 +17,9 @@
  * (e.g. `{ signal: controller.signal }`). When aborted, fetch will reject
  * with an AbortError which callers should handle appropriately.
  */
+
+/** @typedef {import('../types').RecipeSummary} RecipeSummary */
+/** @typedef {import('../types').RecipeDetails} RecipeDetails */
 
 /**
  * @typedef {Object} RecipeSummary

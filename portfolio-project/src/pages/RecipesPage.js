@@ -1,4 +1,6 @@
 import React from 'react';
+/** @typedef {import('../types').RecipeSummary} RecipeSummary */
+/** @typedef {import('../types').Ingredient} Ingredient */
 import { useSelector, useDispatch } from 'react-redux';
 import RecipeSearch from '../components/RecipeSearch';
 import { addFavorite, removeFavorite } from '../store/slices/favoritesSlice';

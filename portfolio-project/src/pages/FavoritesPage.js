@@ -1,4 +1,6 @@
 import React, { useEffect } from 'react';
+/** @typedef {import('../types').RecipeSummary} RecipeSummary */
+/** @typedef {import('../types').FavoriteItem} FavoriteItem */
 import { NavLink } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { fetchFavorites, removeFavorite } from '../store/slices/favoritesSlice';

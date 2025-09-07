@@ -20,6 +20,7 @@ import { recipeService } from '../services';
  *
  * There are no props; the component reads the id from the URL.
  *
+ *
  * @returns {JSX.Element}
  */
 function RecipeDetails() {
