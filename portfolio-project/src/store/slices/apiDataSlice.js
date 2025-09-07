@@ -1,8 +1,20 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 
+/** @typedef {import('../../../types').RootState} RootState */
+
 // Adjust the endpoint as needed for your mock server
 const API_URL = 'http://localhost:3000/your-endpoint';
 
+/**
+ * ApiData slice
+ *
+ * State shape:
+ * {
+ *   data: any,
+ *   loading: boolean,
+ *   error: string|null,
+ * }
+ */
 export const fetchApiData = createAsyncThunk(
   'apiData/fetchApiData',
   async (_, { rejectWithValue }) => {

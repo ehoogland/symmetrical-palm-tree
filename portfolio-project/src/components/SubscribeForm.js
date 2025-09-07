@@ -49,8 +49,11 @@ const validate = values => {
 /**
  * SubscribeForm
  *
- * Renders a subscription form (email + optional phone). Focuses the email input
- * on mount. Uses Formik for validation and local fake submission handling.
+ * Renders a subscription form and simulates a server response with a timeout. The simulated
+ * submit uses `submitTimeoutRef` which is cleared on unmount to avoid state updates on an
+ * unmounted component.
+ *
+ * Focuses the email input on mount. Uses Formik for validation and local fake submission handling.
  *
  * @param {SubscribeFormProps} props
  * @returns {JSX.Element}
@@ -58,10 +61,16 @@ const validate = values => {
 export default function SubscribeForm({ onClose }) {
   const [submitted, setSubmitted] = useState(false);
   const emailRef = useRef(null);
+  const submitTimeoutRef = useRef(null);
 
   useEffect(() => {
     // focus the email input when the form mounts
     emailRef.current?.focus?.();
+    return () => {
+      if (submitTimeoutRef.current) {
+        try { clearTimeout(submitTimeoutRef.current); } catch (e) { /* ignore */ }
+      }
+    };
   }, []);
 
   return (
@@ -79,7 +88,11 @@ export default function SubscribeForm({ onClose }) {
             console.log('Subscribe form submitted (payload):', payload);
 
             // Fake API: simulate server-side validation error for certain emails
-            setTimeout(() => {
+            // clear any previous simulated submit timeout
+            if (submitTimeoutRef.current) {
+              try { clearTimeout(submitTimeoutRef.current); } catch (e) { /* ignore */ }
+            }
+            submitTimeoutRef.current = setTimeout(() => {
               if (payload.email === 'reject@example.com') {
                 setErrors({ email: 'This email is already subscribed' });
                 setSubmitting(false);
@@ -88,6 +101,7 @@ export default function SubscribeForm({ onClose }) {
               setSubmitted(true);
               setSubmitting(false);
               resetForm();
+              submitTimeoutRef.current = null;
             }, 600);
           }}
         >

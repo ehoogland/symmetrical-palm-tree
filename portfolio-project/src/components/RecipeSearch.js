@@ -1,8 +1,39 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import IngredientCard from '../IngredientCard';
 import { recipeService } from '../services';
 import { Link } from 'react-router-dom';
 
+/** @typedef {import('../types').RecipeSummary} RecipeSummary */
+/** @typedef {import('../types').Ingredient} Ingredient */
+
+/**
+ * RecipeSearchProps
+ * @typedef {Object} RecipeSearchProps
+ * @property {Array<Object>} veganIngredients - list of available ingredient objects (id, name, ...)
+ * @property {Array<Object>} selectedIngredients - globally selected ingredients from the store
+ * @property {Array<Object>} searchResults - current recipe search results
+ * @property {(results:Array<Object>) => void} setSearchResults - setter for search results
+ * @property {boolean} loading - whether a search is in progress
+ * @property {(loading:boolean) => void} setLoading - setter for loading state
+ * @property {Array<Object>} favorites - favorites list
+ * @property {(recipe:Object) => void} addToFavorites - add recipe to favorites
+ * @property {(id:number|string) => void} removeFromFavorites - remove recipe from favorites
+ * @property {(id:number|string) => boolean} isRecipeFavorite - predicate to test favorite membership
+ */
+
+/**
+ * RecipeSearch
+ *
+ * Search UI for finding vegan recipes using the Spoonacular-backed `recipeService`.
+ * Implementation notes:
+ * - Uses an AbortController per search and stores the controller in `lastSearchRef` so
+ *   in-flight requests are cancelled when a new search starts or when the component unmounts.
+ * - Uses `debounceRef` to debounce auto-searches when toggling ingredient selection.
+ * - Uses `errorTimeoutRef` to clear transient error messages; both timers are cleared on unmount.
+ *
+ * @param {RecipeSearchProps} props
+ * @returns {JSX.Element}
+ */
 const RecipeSearch = ({ 
   veganIngredients, 
   selectedIngredients, 
@@ -19,6 +50,10 @@ const RecipeSearch = ({
   const [searchQuery, setSearchQuery] = useState('');
   const [localSelectedIngredients, setLocalSelectedIngredients] = useState([]);
   const [error, setError] = useState('');
+  const lastSearchRef = useRef(null);
+  // refs to track timers so we can clear them on unmount or reschedule
+  const errorTimeoutRef = useRef(null);
+  const debounceRef = useRef(null);
 
   /**
    * useEffect is used here to auto-populate the search query whenever selectedIngredients changes.
@@ -77,6 +112,14 @@ const RecipeSearch = ({
       return;
     }
 
+    // Abort any previous in-flight search (controller stored in lastSearchRef.current)
+    if (lastSearchRef.current && typeof lastSearchRef.current.abort === 'function') {
+      try { lastSearchRef.current.abort(); } catch (e) { /* ignore */ }
+    }
+
+    const controller = new AbortController();
+    lastSearchRef.current = controller;
+
     setLoading(true);
     setError('');
 
@@ -86,9 +129,10 @@ const RecipeSearch = ({
         // Use ingredients-based search
         const ingredientNames = allSelected.map(name => name.split(' | ')[0]).filter(name => name.trim() !== '');
         console.log('🔍 Searching with ingredient names:', ingredientNames);
-        results = await recipeService.findRecipesByIngredients(ingredientNames);
+  // Pass the AbortSignal so the service call can be cancelled
+  results = await recipeService.findRecipesByIngredients(ingredientNames, undefined, { signal: controller.signal });
       } else if (searchQuery.trim()) {
-        results = await recipeService.searchVeganRecipes(searchQuery);
+  results = await recipeService.searchVeganRecipes(searchQuery, undefined, undefined, { signal: controller.signal });
       }
       setSearchResults(results || []);
     } catch (err) {
@@ -96,8 +140,25 @@ const RecipeSearch = ({
       console.error('Recipe search error:', err);
     } finally {
       setLoading(false);
+  // Clear last search ref when finished (only if it points to our controller)
+  if (lastSearchRef.current === controller) lastSearchRef.current = null;
     }
   };
+
+  // Cleanup any in-flight request when the component unmounts
+  useEffect(() => {
+    return () => {
+      if (lastSearchRef.current && typeof lastSearchRef.current.abort === 'function') {
+        try { lastSearchRef.current.abort(); } catch (e) { /* ignore */ }
+      }
+      if (errorTimeoutRef.current) {
+        try { clearTimeout(errorTimeoutRef.current); } catch (e) { /* ignore */ }
+      }
+      if (debounceRef.current) {
+        try { clearTimeout(debounceRef.current); } catch (e) { /* ignore */ }
+      }
+    };
+  }, []);
 
   const toggleIngredient = (ingredientName) => {
     // Check if this ingredient is globally selected
@@ -106,7 +167,9 @@ const RecipeSearch = ({
     if (isGloballySelected) {
       // Can't toggle globally selected ingredients - they need to be deselected from main page
       setError('This ingredient was selected from the main page. Go to the Ingredients tab to deselect it.');
-      setTimeout(() => setError(''), 3000); // Clear error after 3 seconds
+      // Clear any previous error timeout and schedule a new one
+      if (errorTimeoutRef.current) clearTimeout(errorTimeoutRef.current);
+      errorTimeoutRef.current = setTimeout(() => setError(''), 3000);
       return;
     }
     
@@ -116,8 +179,9 @@ const RecipeSearch = ({
         ? prev.filter(name => name !== ingredientName)
         : [...prev, ingredientName];
       
-      // Auto-search when ingredients change
-      setTimeout(() => {
+      // Auto-search when ingredients change (debounced)
+      if (debounceRef.current) clearTimeout(debounceRef.current);
+      debounceRef.current = setTimeout(() => {
         if (newSelection.length > 0 || selectedIngredients.length > 0) {
           handleSearch();
         }
@@ -326,7 +390,7 @@ const RecipeSearch = ({
                     </h5>
                     {recipe.summary && (
                       <p className="card-text flex-grow-1" 
-                         style={{ color: 'var(--vegan-dark)', fontSize: '0.9rem' }}
+                         style={{ color: 'var(--vegan-dark', fontSize: '0.9rem' }}
                          dangerouslySetInnerHTML={{ __html: recipe.summary.substring(0, 150) + '...' }}>
                       </p>
                     )}

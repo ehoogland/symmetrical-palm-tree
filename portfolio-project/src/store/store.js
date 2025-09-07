@@ -1,15 +1,16 @@
 /**
- * Redux store implementation.
+ * Redux store implementation
  *
- * This file contains the concrete `configureStore` call. It was split
- * out from `src/store/index.js` to provide a clearer file name when
- * importing the store as `src/store/store.js`.
+ * Configures the Redux store used by the app. This module exports the
+ * configured store as the default export. The `RootState` typedef is
+ * provided in `src/store/index.js` for editor tooling and JSDoc consumers.
  *
- * Exports:
- *   - default: the configured Redux store
- *
- * RootState typedef is provided in `src/store/index.js` which re-exports
- * this module for backwards compatibility.
+ * Reducers included:
+ * - favorites
+ * - ingredients
+ * - search
+ * - ui
+ * - apiData
  */
 import { configureStore } from '@reduxjs/toolkit';
 import favoritesReducer from './slices/favoritesSlice';
