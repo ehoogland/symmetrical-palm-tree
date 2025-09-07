@@ -1,3 +1,29 @@
+/**
+ * Application entrypoint
+ *
+ * This file bootstraps the React app and documents a couple of important
+ * runtime behaviors to keep in mind:
+ *
+ * - In development only, we dynamically start an in-browser mock server that
+ *   intercepts fetch requests for the dev JSON API. This keeps the live
+ *   Spoonacular service available but provides a local persistence layer for
+ *   ingredients/favorites during development. The mock server is only loaded
+ *   when `process.env.NODE_ENV === 'development'` so it is excluded from
+ *   production bundles.
+ *
+ * - The app is wrapped with `react-redux`'s `Provider` and `react-router`'s
+ *   `BrowserRouter` so routes are reflected in the browser URL and the store
+ *   is the single source of truth for ingredients/favorites.
+ *
+ * Deployment note (serving the built app from a json-server public folder):
+ * - You can copy the contents of `build/` into a `public/` folder served by
+ *   json-server to host static assets alongside the API. Keep the mock server
+ *   client out of production by ensuring `NODE_ENV` is `production` when
+ *   building — the dynamic import is already gated by the `development` env.
+ * - Run json-server to serve API endpoints (e.g., favorites/ingredients) and
+ *   the static files from `public/`. Do not enable the in-browser mock server
+ *   in that environment; instead let json-server act as the persistent dev API.
+ */
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import "bootstrap/dist/css/bootstrap.min.css";

@@ -1,18 +1,17 @@
 /**
  * Shared JSDoc typedefs for the project (pure JS, no TypeScript `.d.ts`).
  *
- * Put lightweight shared shapes here so editors (VS Code) and the TypeScript
- * language server can surface completions and simple checks for plain
- * JavaScript files that use JSDoc.
- *
- * Example usage (in another JS file):
- *   // See the top of this file for typedef names to import via JSDoc `import()`.
+ * Put lightweight shared shapes here so editors (VS Code) can surface completions and simple checks 
+ * for JavaScript files that use JSDoc. A shared shape means a common object structure
+ * used in multiple places, such as API responses or Redux state slices. Being able to surface completions
+ * just means your editor (VS Code/IntelliSense) shows autocomplete suggestions and quick info while you
+ * type — e.g., property names, method signatures, parameter hints, and the JSDoc summary for a function or type.
+ * Typedefs and shared types help the editor “know” the shape of data so those useful suggestions and hover docs appear.
+ * Data types used in typed languages like TypeScript should go in `.d.ts` files. To avoid scope creep I do not use
+ * TypeScript in this project. I am using JSDoc typedefs in JS files mainly to enhance auto-completion. It can also help
+ * with lightweight type checking.
  */
 
-// Example usage (outside JSDoc):
-// /** @typedef {import('../types').Ingredient} Ingredient */
-// /** @param {Ingredient[]} list */
-// function foo(list) { }
 
 /**
  * @typedef {Object} Ingredient
@@ -48,9 +47,13 @@
  */
 
 /**
- * RootState (approximate shape for editor tooling). Keep in sync with reducers.
+ * RootState (approximate shape for editor tooling like VS Code IntelliSense).
+ * Approximate shape refers to the overall structure and types of the Redux state.
+ * Keep in sync with reducers, which are defined as functions that take the current
+ * state and an actionand return a new state based on the action type and payload.
  * Use `/** @typedef {import('../types').RootState} RootState *\/` in files that
- * want to reference the global state shape.
+ * want to reference the global state shape. The global state shape is the overall structure
+ * of the Redux store, which includes all the slices of state managed by different reducers.
  *
  * NOTE: This is an editor-time aid only (JSDoc). It doesn't affect runtime.
  */

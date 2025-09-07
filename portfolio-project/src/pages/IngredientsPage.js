@@ -9,13 +9,41 @@ import { toggleSelectedIngredient, clearSelected, fetchIngredients, addIngredien
 /**
  * IngredientsPage
  *
- * Page that lists vegan ingredients. Reads ingredient list from the Redux store
- * and provides add/delete/select interactions via dispatched thunks and actions.
+ * Renders the vegan ingredients list, fetches the list on mount, and exposes
+ * add / delete / select interactions backed by Redux thunks and actions.
  *
- * - fetchIngredients is dispatched on mount to populate the store
- * - addIngredient dispatches a POST to the dev server
- * - deleteIngredient dispatches a DELETE for user-added ingredients
+ * Notes:
+ * - `fetchIngredients()` is dispatched on mount to populate the store.
+ * - `addIngredient()` and `deleteIngredient()` call the dev API to persist
+ *   user-added items.
+ * - `seededIds` (declared below) is a memoized Set<number> of built-in
+ *   ingredient IDs; used to hide/disable the remove action for seeded items.
+ *
+ * Memoization note:
+ * - Memoization caches the result of a computation so it can be reused on
+ *   subsequent renders without recomputing. Here we use `React.useMemo` to
+ *   compute `seededIds` once (the set of built-in IDs) because the seeded
+ *   dataset is static. This avoids creating a new Set on every render which
+ *   would cause unnecessary work and could break referential equality checks.
+ *
+ * About thunks:
+ * - A "thunk" in Redux is a function that encapsulates side effects and
+ *   async logic so it can be dispatched like an action. In Redux Toolkit an
+ *   async thunk (created with `createAsyncThunk`) returns a promise-like
+ *   object when dispatched; that object exposes an `abort()` method wired to
+ *   the thunk's internal `AbortController`. We dispatch `fetchIngredients()`
+ *   here to load data and call `promise.abort()` in the cleanup to cancel the
+ *   request if the component unmounts early.
+ *
+ * About `useEffect`:
+ * - `useEffect` is the React hook for running side effects (data fetching,
+ *   subscriptions, timers) after render. The dependencies array controls when
+ *   the effect re-runs; an empty array `[]` runs the effect once on mount.
+ *   Effects may return a cleanup function that runs before the effect
+ *   re-executes or when the component unmounts — we use this to abort the
+ *   in-flight thunk and avoid state updates on an unmounted component.
  */
+
 export default function IngredientsPage() {
   const [newName, setNewName] = useState('');
   const [newCategory, setNewCategory] = useState('');
@@ -26,7 +54,6 @@ export default function IngredientsPage() {
   const error = useSelector(state => state.ingredients.error);
   const dispatch = useDispatch();
 
-  // Precompute seeded IDs so we don't show remove buttons for built-in items
   const seededIds = React.useMemo(() => new Set((seededIngredients || []).map(i => i.id)), []);
 
   useEffect(() => {

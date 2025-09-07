@@ -26,10 +26,16 @@ import { Link } from 'react-router-dom';
  *
  * Search UI for finding vegan recipes using the Spoonacular-backed `recipeService`.
  * Implementation notes:
- * - Uses an AbortController per search and stores the controller in `lastSearchRef` so
- *   in-flight requests are cancelled when a new search starts or when the component unmounts.
- * - Uses `debounceRef` to debounce auto-searches when toggling ingredient selection.
- * - Uses `errorTimeoutRef` to clear transient error messages; both timers are cleared on unmount.
+ * - Uses an AbortController for every search request/action/operation and stores the controller in `lastSearchRef` so
+ *   in-flight requests are cancelled when a new search starts or when a component unmounts.
+ * - Uses `debounceRef` to debounce auto-searches when toggling ingredient selection. Debounce delays calling a function 
+ *   until a specified quiet period has passed, ensuring rapid repeated events trigger the function only once after activity stops.
+ * - Uses `errorTimeoutRef` to clear transient error messages; both timers are cleared on unmount. Transient error messages
+ *   are short-lived, non-critical errors you show to the user briefly (e.g., “Network error, retrying…”).
+ *   They indicate temporary problems that will likely resolve or that the app will recover from automatically.
+ * @useState  <error:string>  - for managing transient error messages
+ * @useRef    <lastSearchRef>  - tracks the last search's AbortController for cancellation. AbortControllers are
+ *   a web API that allows you to abort one or more DOM requests as and when desired. This is useful for cancelling fetch requests.
  *
  * @param {RecipeSearchProps} props
  * @returns {JSX.Element}
@@ -59,7 +65,7 @@ const RecipeSearch = ({
    * useEffect is used here to auto-populate the search query whenever selectedIngredients changes.
    * This ensures the search bar always reflects the user's current ingredient selection from the parent (App).
    * It's reactive, so if the user adds/removes ingredients, the search input updates automatically.
-   * This pattern is preferred over manual syncing because it keeps UI and state consistent and reduces bugs.
+   * This pattern is preferred over manual syncing [with useState] because it keeps UI and state consistent and reduces bugs.
    * This is the idiomatic React way to synchronize derived state with props.
    * Derived state means a piece of state in your component that is calculated or generated from props or other state,
    * rather than being set directly by user actions. In this case, the search query is derived from selectedIngredients.
