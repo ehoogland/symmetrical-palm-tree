@@ -26,6 +26,8 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
+  "copy-build-to-json-server": "mkdir -p ../json-server/public && rsync -a --delete build/ ../json-server/public/",
+  "serve-with-json-server": "npm run build && npm run copy-build-to-json-server && (cd ../json-server && json-server --watch db.json --public public)",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },

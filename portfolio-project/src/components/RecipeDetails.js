@@ -11,7 +11,31 @@ import { recipeService } from '../services';
  * Behavior:
  * - Reads the recipe `id` from the route params via `useParams()`.
  * @useParams
- * - Uses an AbortController to cancel in-flight fetches when the component unmounts.
+ * - Uses an AbortController (implementation details follow) to cancel in-flight fetches when the
+ *   component unmounts. This prevents setting state on an unmounted component, which can lead to
+ *   memory leaks and warnings.
+ *   @useRef
+ * - useRef returns a stable, mutable object with a .current property that persists across renders
+ *   and can hold a DOM node or any mutable value without causing re-renders. This is ideal for
+ *   storing the AbortController instance. A DOM (Document Object Model) node refers to any object
+ *   in the HTML document structure, such as elements, attributes, and text. A mutable value is
+ *   any value that can be changed after it is created, such as objects or arrays.
+ *
+ * Implementation notes:
+ * - Uses `recipeService.getRecipeDetails(id, { signal })` to fetch recipe details. signal is
+ *   the AbortSignal from the AbortController. This allows the fetch to be cancelled if needed.
+ *  - The service method throws on HTTP errors or network failures. A service method is a function
+ *   that performs a specific operation related to a service, such as fetching data from an API.
+ *   Service methods are typically defined in a separate module or file and can be reused across
+ *   different components or parts of the application. If aborted, fetch rejects with AbortError.
+ *  - Handles loading and error states with local state variables. 
+ * - Tracks the last search's AbortController for cancellation. AbortControllers are
+ *   a web API that allows you to abort one or more DOM requests as and when desired. 
+ *   This is useful for cancelling fetch requests. A DOM (Document Object Model) request refers to
+ *   operations that interact with the structure of a web page, such as fetching data from a server
+ *
+ * @useState
+ * - Manages local state for the recipe details, loading status, and error messages.
  * - Fetches recipe details from the service and handles loading and error states.
  * - Renders loading, error, or "no recipe" states as appropriate.
  * @useEffect
