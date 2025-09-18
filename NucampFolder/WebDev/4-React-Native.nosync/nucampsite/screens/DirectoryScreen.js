@@ -15,7 +15,7 @@ const DirectoryScreen = ({ navigation }) => {
 /**
  * Render a single campsite item
  * Destructure a prop value of navigation in the parameter list of DirectoryScreen function,
- * which replaces the previous value of props.
+ * replacingthe previous value of props.
  * @param {Object} param0 - Props for the component
  * @param {Object} param0.navigation - Navigation prop for navigating between screens
  * @returns JSX element representing a single campsite item
@@ -32,7 +32,7 @@ const DirectoryScreen = ({ navigation }) => {
  */
     const renderDirectoryItem = ({ item: campsite }) => {
         return (
-            <ListItem onPress={() => navigation.navigate('CampsiteInfo', { campsite } )}>
+            <ListItem key={campsite.id} onPress={() => navigation.navigate('CampsiteInfo', { campsite } )}>
                 <Avatar source={campsite.image} rounded />
                 <ListItem.Content>
                     <ListItem.Title>{campsite.name}</ListItem.Title>
