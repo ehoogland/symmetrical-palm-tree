@@ -1,5 +1,5 @@
-import { Text, View } from 'react-native';
-import { Card } from 'react-native-elements';
+import { Text, View, StyleSheet } from 'react-native';
+import { Card, Icon } from 'react-native-elements';
 /**
  * @function RenderCampsite
  * @description This function component renders a campsite item using the Card component
@@ -12,10 +12,11 @@ import { Card } from 'react-native-elements';
  * @returns {JSX.Element} The rendered campsite item, or an empty View if no campsite is provided.
  * View is used as a container for layout purposes, like a div in web development.
  */
-const RenderCampsite = ({ campsite }) => {
+const RenderCampsite = (props) => {
+    const { campsite } = props;
     if (campsite) {
         return (
-            <Card containerStyle={{ padding: 0 }}>
+            <Card containerStyle={styles.cardContainer}>
                 <Card.Image source={campsite.image}>
                     <View style={{ justifyContent: 'center', flex: 1 }}>
                         <Text
@@ -30,10 +31,29 @@ const RenderCampsite = ({ campsite }) => {
                     </View>
                 </Card.Image>
                 <Text style={{ margin: 20 }}>{campsite.description}</Text>
+                <Icon
+                    name={props.isFavorite ? 'heart' : 'heart-o'}
+                    type='font-awesome'
+                    color='#f50'
+                    raised
+                    reverse
+                    onPress={() =>
+                        props.isFavorite
+                            ? console.log('Already set as a favorite')
+                            : props.markFavorite()
+                    }
+                />
             </Card>
         );
     }
     return <View />;
 };
+const styles = StyleSheet.create({
+    cardContainer: {
+        padding: 0,
+        margin: 0,
+        marginBottom: 20
+    }
+});
 
 export default RenderCampsite;
