@@ -3,12 +3,13 @@ import { campsitesReducer } from '../features/campsites/campsitesSlice';
 import { commentsReducer } from '../features/comments/commentsSlice';
 import { partnersReducer } from '../features/partners/partnersSlice';
 import { promotionsReducer } from '../features/promotions/promotionsSlice';
+import { favoritesReducer } from '../features/favorites/favoritesSlice';
 
 /**
  * @description The Redux store is configured using Redux Toolkit's configureStore function.
  * It combines multiple reducers into a single root reducer, which manages different slices 
  * of the application state. Each slice corresponds to a specific feature of the application, 
- * such as campsites, comments, partners, and promotions.
+ * such as campsites, comments, partners, promotions, and favorites.
  * @export @const [The] store is then exported for use throughout the application, allowing 
  * components to access and interact with the global state.
  * @component configureStore - A function from Redux Toolkit that simplifies the store setup 
@@ -25,7 +26,7 @@ import { promotionsReducer } from '../features/promotions/promotionsSlice';
  * @see https://redux-toolkit.js.org/api/configureStore
  * @see https://react-redux.js.org/api/hooks#useselector
  * 
- * Note that campsites is the key in the reducer object, and it corresponds to the
+ * Note that campsites is the key in the above example's reducer object, and it corresponds to the
  * state.campsites that you would access in your components. This is because configureStore
  * automatically sets up the root reducer to use the keys of the reducer object as the top-level
  * keys in the state object.
@@ -35,7 +36,8 @@ export const store = configureStore({
         campsites: campsitesReducer,
         comments: commentsReducer,
         partners: partnersReducer,
-        promotions: promotionsReducer
+        promotions: promotionsReducer,
+        favorites: favoritesReducer
     }
 });
 

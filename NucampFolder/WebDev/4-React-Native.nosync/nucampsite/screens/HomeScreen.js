@@ -1,3 +1,4 @@
+import Loading from '../components/LoadingComponent'; // Loading indicator component.
 import { Card } from 'react-native-elements'; // UI library for React Native providing pre-styled components.
 import { ScrollView, Text, View } from 'react-native'; // Core components for layout and text rendering.
 import { useSelector } from 'react-redux'; // Hook to access the Redux store's state.
@@ -23,13 +24,28 @@ import { baseUrl } from '../shared/baseUrl'; // Base URL for loading images and 
  * - description: A brief description of the item.
  * The outer parentheses around the parameter allow for direct destructuring of the props object.
  * The inner curly braces are used to destructure the item property from the props object.
- * @prop {Object} item - The immutable JavaScript featured item to be displayed.
+ * @const {Object} FeaturedItem - The functional component that renders the featured item.
+ * @param {props} param0 - The props object passed to the FeaturedItem component. param0 means
+ * that we are destructuring the props object directly in the function parameter list.
+ * @param {Object} param0.item - The featured item to be displayed, destructured from props.
  * @prop {string} item.image - The image source of the item.
  * @prop {string} item.name - The name of the item.
  * @prop {string} item.description - A brief description of the item.
  * @returns {JSX.Element} The rendered card component displaying the featured item.
 */
-const FeaturedItem = ({ item }) => {
+const FeaturedItem = (props) => {
+    const { item } = props;
+
+    if (props.isLoading) {
+        return <Loading />;
+    }
+    if (props.errMess) {
+        return (
+            <Card>
+                <Text>{props.errMess}</Text>
+            </Card>
+        );
+    }
     if (item) {
         return (
             <Card containerStyle={{ padding: 0 }}>
@@ -62,11 +78,26 @@ const HomeScreen = () => {
     const featPromotion = promotions.promotionsArray.find((item) => item.featured);
     const featPartner = partners.partnersArray.find((item) => item.featured);
 
+    const isLoading = campsites.isLoading || promotions.isLoading || partners.isLoading;
+    const errMess = campsites.errMess || promotions.errMess || partners.errMess;
+
     return (
         <ScrollView>
-            <FeaturedItem item={featCampsite} />
-            <FeaturedItem item={featPromotion} />
-            <FeaturedItem item={featPartner} />
+            <FeaturedItem
+                item={featCampsite}
+                isLoading={campsites.isLoading}
+                errMess={campsites.errMess}
+            />
+            <FeaturedItem
+                item={featPromotion}
+                isLoading={promotions.isLoading}
+                errMess={promotions.errMess}
+            />
+            <FeaturedItem
+                item={featPartner}
+                isLoading={partners.isLoading}
+                errMess={partners.errMess}
+            />
         </ScrollView>
     );
 };

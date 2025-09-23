@@ -1,10 +1,10 @@
 import { ScrollView, Text } from 'react-native';
-import { Card, ListItem, Avatar } from 'react-native-elements';
+import { Avatar, Card, ListItem } from 'react-native-elements';
 /* Added the following lines as they are needed with Redux integration */
 import { useSelector } from 'react-redux';
-import { selectAllPartners } from '../features/partners/partnersSlice';
-/* Added for fetching images from server simulatorjson-server */
+/* Added for fetching images from server simulator json-server */
 import { baseUrl } from '../shared/baseUrl';
+import Loading from '../components/LoadingComponent';
 
 /*
 Removed the following lines as they are no longer needed with Redux integration
@@ -31,6 +31,32 @@ const AboutScreen = () => {
     const partners = useSelector(selectAllPartners); --- IGNORE ---
     */
     const partners = useSelector((state) => state.partners);
+    if (partners.isLoading) {
+        return (
+            <ScrollView>
+                <Mission />
+                <Card>
+                    <Card.Title>Community Partners</Card.Title>
+                    <Card.Divider />
+                    <Loading />
+                </Card>
+            </ScrollView>
+        );
+    }
+    if (partners.errMess) {
+        return (
+            <ScrollView>
+                <Mission />
+                <Card>
+                    <Card.Title>Community Partners</Card.Title>
+                    <Card.Divider />
+                    <Text>{partners.errMess}</Text>
+                </Card>
+            </ScrollView>
+        );
+    }
+    /* Using map to iterate over the partners array and render a ListItem for each partner;
+    changed the value that is being mapped from partners to partners.partnersArray for Redux integration */
 
     return (
     <ScrollView>
@@ -38,10 +64,8 @@ const AboutScreen = () => {
       <Card>
         <Card.Title>Community Partners</Card.Title>
         <Card.Divider />
-        {/* Using map to iterate over the partners array and render a ListItem for each partner;
-        changed the value that is being mapped from partners to partners.partnersArray for Redux integration */
 
-        partners.partnersArray.map((partner) => (
+        {partners.partnersArray.map((partner) => (
           <ListItem key={partner.id.toString()}>
             {/* <Avatar rounded source={partner.image} changed for json-server rendering */ }
             <Avatar rounded source={{ uri: baseUrl + partner.image }} />
@@ -50,7 +74,7 @@ const AboutScreen = () => {
                 <ListItem.Subtitle>{partner.description}</ListItem.Subtitle>
               </ListItem.Content>
             </ListItem>
-          ))}
+        ))}
         </Card>
     </ScrollView>
     );

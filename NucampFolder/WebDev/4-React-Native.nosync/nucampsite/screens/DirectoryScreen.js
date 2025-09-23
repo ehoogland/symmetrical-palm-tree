@@ -1,4 +1,5 @@
-import { FlatList } from 'react-native';
+import Loading from '../components/LoadingComponent';
+import { FlatList, Text, View } from 'react-native';
 import { Tile } from 'react-native-elements';
 import { baseUrl } from '../shared/baseUrl';
 import { useSelector } from 'react-redux';
@@ -8,6 +9,16 @@ import { useSelector } from 'react-redux';
 const DirectoryScreen = ({ navigation }) => {
     /* const [campsites, setCampsites] = useState(CAMPSITES); --IGNORE-- */
     const campsites = useSelector((state) => state.campsites);
+    if (campsites.isLoading) {
+        return <Loading />;
+    }
+    if (campsites.errMess) {
+        return (
+            <View>
+                <Text>{campsites.errMess}</Text>
+            </View>
+        );
+    }
     /**
      * @description The navigate function is destructured from the navigation prop that is
      * automatically provided by React Navigation to all components that are used as screens.
