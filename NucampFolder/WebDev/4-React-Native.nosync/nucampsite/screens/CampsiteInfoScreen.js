@@ -1,14 +1,16 @@
 import { useState }from 'react';
+import { useSelector } from 'react-redux';
 import { FlatList, StyleSheet, Text, View } from 'react-native';
 import RenderCampsite from '../features/campsites/RenderCampsite';
-import { COMMENTS } from '../shared/comments';
+/* import { COMMENTS } from '../shared/comments'; --IGNORE-- */
 
+{/* Remove from CampsiteInfoScreen body: const [comments, setComments] = useState(COMMENTS); --- IGNORE ---*/}
 
 const CampsiteInfoScreen = ({ route }) => {
     const { campsite } = route.params;
-
-    const [comments, setComments] = useState(COMMENTS);
+    const comments = useSelector((state) => state.comments);
     const [favorite, setFavorite] = useState(false);
+   
 
     const renderCommentItem = ({ item }) => {
         return (
@@ -22,15 +24,23 @@ const CampsiteInfoScreen = ({ route }) => {
         );
     };
 
-    /* FlatList needs to be at the top level of the return statement
-     in order to regulate the scroll height of the entire screen and to
-     make the whole screen scrollable
-
-     To add material above or below the Flatlist, use a 
-     ListHeaderComponent or ListFooterComponent prop */
+    /**
+     * FlatList needs to be at the top level of the return statement
+     * in order to regulate the scroll height of the entire screen and to
+     * make the whole screen scrollable.
+     *
+     * The data prop is set to the comments array filtered by the campsiteId because
+     * it is a common pattern to only show comments relevant to the currently displayed item.
+     * 
+     * keyExtractor is used to extract a unique key for each item in the list.
+     * Here, it converts the id of each comment to a string to ensure it is unique and
+     * to ensure it avoids the error message regarding missing keys in lists.
+     *
+     * To add material above or below the Flatlist, use a
+     ListHeaderComponent or ListFooterComponent prop (in this case, ListHeaderComponent) */
     return (
         <FlatList
-            data={comments.filter(
+            data={comments.commentsArray.filter(
                 (comment) => comment.campsiteId === campsite.id
             )}
             renderItem={renderCommentItem}

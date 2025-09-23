@@ -7,6 +7,12 @@ import { createDrawerNavigator } from "@react-navigation/drawer";
 import HomeScreen from "./HomeScreen";
 import AboutScreen from "./AboutScreen";    
 import ContactScreen from "./ContactScreen";
+import { useDispatch } from 'react-redux';
+import { useEffect } from "react";
+import { fetchCampsites } from "../features/campsites/campsitesSlice";
+import { fetchPartners } from "../features/partners/partnersSlice";
+import { fetchPromotions } from "../features/promotions/promotionsSlice";
+import { fetchComments } from "../features/comments/commentsSlice";
 
 const Drawer = createDrawerNavigator();
 
@@ -71,8 +77,47 @@ const ContactNavigator = () => {
     </Stack.Navigator>
   );
 };
-
+/** 
+ * The Main component
+ * @const Main is a functional component that serves as the main entry point for the app's navigation structure.
+ * It sets up a Drawer Navigator that contains multiple Stack Navigators for different sections of the app,
+ * including Home, Directory, About, and Contact screens. Its value is an anonymous arrow function that will
+ * @return a JSX.Element representing the navigation structure of the app.
+ * @const dispatch is bound to the value of the call to the
+ * @hook useDispatch() hook, giving it a reference to the dispatch function from the Redux store. 
+ * This allows the component to dispatch actions to the store.
+ *
+ * @hook The useEffect hook is used to hook into the component lifecycle and perform side effects,
+ * such as fetching data using our thunk action creators when the component mounts.
+ * The useEffect hook is used to dispatch actions to fetch data when the component mounts.
+ * Action creators are functions that when called return an action [object].
+ * mounts. Dispatch is included in the dependency array to avoid ESLint warnings.
+ * In this case, dispatch is stable and won't change, so in terms of its effect, this is
+ * identical to having an empty dependency array for the purpose of ensuring that the effect
+ * runs only once when the component mounts. Even though fetchCampsites is a thunk action
+ * creator we can still use it like this when dispatching it because Redux Thunk middleware
+ * allows us to dispatch functions in addition to action objects. Notice that in the body
+ * we are making a call to dispatch and passing in the thunk action creator fetchCampsites.
+ * This will cause the thunk action creator to be executed, which in turn will perform the
+ * asynchronous operation of fetching the campsites data and then dispatching the appropriate
+ * actions based on the result of that operation. It will be executed because () is used
+ * after fetchCampsites(). The same applies to fetchPromotions(), fetchPartners(), and fetchComments().
+ *
+ * When the application starts up and the Main component is rendered for the first time,
+ * the useEffect hook will run and all of our data will be fetched and loaded into the Redux store
+ * making it available for all of our components to access and make changes to
+ * data needed for the app to function properly, provided that the components are connected
+ * to the Redux store.
+ */
 const Main = () => {
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(fetchCampsites());
+    dispatch(fetchPromotions());
+    dispatch(fetchPartners());
+    dispatch(fetchComments());
+  }, [dispatch]);
   return (
     <View
     style={{

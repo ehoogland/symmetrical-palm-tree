@@ -1,7 +1,16 @@
+import { ScrollView, Text } from 'react-native';
+import { Card, ListItem, Avatar } from 'react-native-elements';
+/* Added the following lines as they are needed with Redux integration */
+import { useSelector } from 'react-redux';
+import { selectAllPartners } from '../features/partners/partnersSlice';
+/* Added for fetching images from server simulatorjson-server */
+import { baseUrl } from '../shared/baseUrl';
+
+/*
+Removed the following lines as they are no longer needed with Redux integration
 import React, { useState } from 'react';
-import { ScrollView } from 'react-native';
-import { Card, Text, ListItem, Avatar } from 'react-native-elements';
-import { PARTNERS } from '../shared/partners';
+import { PARTNERS } from '../shared/partners'; 
+*/
 
 const Mission = () => {
     return (
@@ -16,19 +25,28 @@ const Mission = () => {
 };
 
 const AboutScreen = () => {
-    const [partners] = useState(PARTNERS);
-    
+    /* Using useSelector to access partners data from Redux store. Replaces the former useState hook as well as
+    any useSelector hook using the selectAllPartners parameter.
+    const partners = useState(PARTNERS); --- IGNORE ---
+    const partners = useSelector(selectAllPartners); --- IGNORE ---
+    */
+    const partners = useSelector((state) => state.partners);
+
     return (
     <ScrollView>
       <Mission />
       <Card>
         <Card.Title>Community Partners</Card.Title>
         <Card.Divider />
-        {partners.map((partner) => (
-            <ListItem key={partner.id.toString()}>
-              <Avatar rounded source={partner.image} />
-              <ListItem.Content>
-                <ListItem.Title style={{ fontWeight: 'bold' }}>{partner.name}</ListItem.Title>
+        {/* Using map to iterate over the partners array and render a ListItem for each partner;
+        changed the value that is being mapped from partners to partners.partnersArray for Redux integration */
+
+        partners.partnersArray.map((partner) => (
+          <ListItem key={partner.id.toString()}>
+            {/* <Avatar rounded source={partner.image} changed for json-server rendering */ }
+            <Avatar rounded source={{ uri: baseUrl + partner.image }} />
+            <ListItem.Content>
+              <ListItem.Title style={{ fontWeight: 'bold' }}>{partner.name}</ListItem.Title>
                 <ListItem.Subtitle>{partner.description}</ListItem.Subtitle>
               </ListItem.Content>
             </ListItem>

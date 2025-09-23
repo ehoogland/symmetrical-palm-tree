@@ -1,5 +1,6 @@
 import { Text, View, StyleSheet } from 'react-native';
 import { Card, Icon } from 'react-native-elements';
+import { baseUrl } from '../../shared/baseUrl';
 /**
  * @function RenderCampsite
  * @description This function component renders a campsite item using the Card component
@@ -11,13 +12,19 @@ import { Card, Icon } from 'react-native-elements';
  * @property {string} campsite.description - The description of the campsite.
  * @returns {JSX.Element} The rendered campsite item, or an empty View if no campsite is provided.
  * View is used as a container for layout purposes, like a div in web development.
+ * <Card.Image source={campsite.image}> updated to <Card.Image source={{ 
+ * uri: baseUrl + campsite.image }}> to load images from server. The extra curly braces
+ * are necessary because the image source prop expects an object with a uri property.
+ * The outer curly braces {} indicate that we are embedding a JavaScript expression within JSX.
+ * The inner curly braces {} define a JavaScript object containing the uri property with the
+ * value of baseUrl + campsite.image.
  */
 const RenderCampsite = (props) => {
     const { campsite } = props;
     if (campsite) {
         return (
             <Card containerStyle={styles.cardContainer}>
-                <Card.Image source={campsite.image}>
+                <Card.Image source={{ uri: baseUrl + campsite.image }}>
                     <View style={{ justifyContent: 'center', flex: 1 }}>
                         <Text
                             style={{

@@ -1,41 +1,46 @@
-import { useState } from 'react';
 import { FlatList } from 'react-native';
-import { Avatar, ListItem } from 'react-native-elements';
-import { CAMPSITES } from '../shared/campsites';
+import { Tile } from 'react-native-elements';
+import { baseUrl } from '../shared/baseUrl';
+import { useSelector } from 'react-redux';
+/* import { CAMPSITES } from '../shared/campsites'; --IGNORE-- */
+/* import { useState } from 'react'; --IGNORE-- */
 
 const DirectoryScreen = ({ navigation }) => {
-    const [campsites, setCampsites] = useState(CAMPSITES);
+    /* const [campsites, setCampsites] = useState(CAMPSITES); --IGNORE-- */
+    const campsites = useSelector((state) => state.campsites);
     /**
      * @description The navigate function is destructured from the navigation prop that is
      * automatically provided by React Navigation to all components that are used as screens.
      * @param {Object} navigation - The navigation prop provided by React Navigation.
      * @variable {function} navigate - Function to navigate to different screens.
      * @callback renderDirectoryItem
-     * @param {Object} item - The campsite item to be rendered.
-     * @prop {boolean} rounded - Whether the avatar should be rounded.
+     * @prop {Object} item - The campsite item to be rendered, destructured to extract the campsite property.
+     * @param {Object} campsite - The campsite object
+     * @property {string} campsite.name - The name of the campsite.
+     * @property {string} campsite.image - The image source of the campsite.
+     * @property {string} campsite.description - The description of the campsite.
+     * @property {boolean} campsite.featured - Whether the campsite is featured.
+     * @function onPress - arrow function [declaration] to handle press events on the Tile component.
+     * @prop {Object} navigation - The navigation prop provided by React Navigation.
+     * @function navigate - React Navigation function to navigate to different screens.
      * @returns {JSX.Element} The rendered directory item.
      */
     const renderDirectoryItem = ({ item: campsite }) => {
         return (
-            <ListItem
-                onPress={() =>
-                    navigation.navigate('CampsiteInfo', { campsite })
-                }
-                leftAvatar={{ source: campsite.image, rounded: true }}
-                bottomDivider
-            >
-                <ListItem.Content>
-                    <ListItem.Title>{campsite.name}</ListItem.Title>
-                    <ListItem.Subtitle>
-                        {campsite.description}
-                    </ListItem.Subtitle>
-                </ListItem.Content>
-            </ListItem>
+            <Tile
+                title={campsite.name}
+                caption={campsite.description}
+                featured
+                onPress={() => {
+                    navigation.navigate('CampsiteInfo', { campsite });
+                }}
+                imageSrc={{ uri: baseUrl + campsite.image }}
+            />
         );
     };
     return (
         <FlatList
-            data={campsites}
+            data={campsites.campsitesArray}
             renderItem={renderDirectoryItem}
             keyExtractor={(item) => item.id.toString()}
         />
