@@ -1,4 +1,5 @@
-import { Platform, View } from "react-native";
+import { Image, Platform, StyleSheet, Text, View } from "react-native";
+import { Icon } from 'react-native-elements';
 import Constants from "expo-constants";
 import CampsiteInfoScreen from "./CampsiteInfoScreen";
 import DirectoryScreen from "./DirectoryScreen";
@@ -7,6 +8,7 @@ import { createDrawerNavigator } from "@react-navigation/drawer";
 import HomeScreen from "./HomeScreen";
 import AboutScreen from "./AboutScreen";    
 import ContactScreen from "./ContactScreen";
+import ReservationScreen from './ReservationScreen';
 import { useDispatch } from 'react-redux';
 import { useEffect } from "react";
 import { fetchCampsites } from "../features/campsites/campsitesSlice";
@@ -77,6 +79,30 @@ const ContactNavigator = () => {
     </Stack.Navigator>
   );
 };
+
+const ReservationNavigator = () => {
+  const Stack = createStackNavigator();
+  return (
+    <Stack.Navigator screenOptions={screenOptions}>
+      <Stack.Screen
+        name="Reservation"
+        component={ReservationScreen}
+        options={({navigation}) => ({
+          title: 'Reservation Search',
+          headerLeft: () => (
+            <Icon
+              name='tree'
+              type='font-awesome'
+              iconStyle={styles.stackIcon}
+              onPress={() => navigation.toggleDrawer()}
+            />
+          )
+        })}
+      />
+    </Stack.Navigator>
+  );
+};
+
 /** 
  * The Main component
  * @const Main is a functional component that serves as the main entry point for the app's navigation structure.
@@ -147,21 +173,62 @@ const Main = () => {
             title: "Campsite Directory",
             headerShown: false,
           }}
-          />
+        />
+        <Drawer.Screen
+          name="ReserveCampsite"
+          component={ReservationNavigator}
+          options={{ 
+            title: "Reserve Campsite",
+            drawerIcon: ({ color }) => (
+              <Icon
+                name="tree"
+                type="font-awesome"
+                size={24}
+                iconStyle={{ width: 24 }}
+                color={color}
+              />
+            ),
+          }}
+        />
         <Drawer.Screen
           name="AboutNav"
           component={AboutNavigator}
           options={{ title: "About Us", headerShown: false }}
-          />
+        />
         <Drawer.Screen
           name="ContactNav"
           component={ContactNavigator}
           options={{ title: "Contact Us", headerShown: false }}
-          />
+        />
       </Drawer.Navigator>
     </View>
   );
 };
+const styles = StyleSheet.create({
+  drawerHeader: {
+    backgroundColor: "#5637DD",
+    height: 140,
+    alignItems: "center",
+    justifyContent: "center",
+    flex: 1,
+    flexDirection: "row",
+  },
+  drawerHeaderText: {
+    color: "#fff",
+    fontSize: 24,
+    fontWeight: "bold",
+  },
+  drawerImage: {
+    margin: 10,
+    height: 60,
+    width: 60,
+  },
+  stackIcon: {
+    marginLeft: 10,
+    color: "#fff",
+    fontSize: 24,
+  },
+});
 
 export default Main;
 
@@ -181,6 +248,8 @@ export default Main;
  * @function function components HomeNavigator and DirectoryNavigator
  * @returns {JSX.Element} The Home screen wrapped in a Stack Navigator.
  * @returns {JSX.Element} The Directory screen
+ * wrapped in a Stack Navigator.
+ * 
  * @returns {JSX.Element} The Campsite Info screen
  * @returns {JSX.Element} The Contact screen wrapped in a Stack Navigator.
  * @returns {JSX.Element} The About screen
