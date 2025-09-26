@@ -1,10 +1,10 @@
-import { FlatList, StyleSheet, Text, View } from 'react-native';
+import { useState }from 'react';
+import { FlatList, StyleSheet, Text, View, Button, Modal } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import RenderCampsite from '../features/campsites/RenderCampsite';
 import { toggleFavorite } from '../features/favorites/favoritesSlice';
 
 /* import { COMMENTS } from '../shared/comments'; --IGNORE-- */
-/* import { useState }from 'react'; --IGNORE-- */
 
 {/* Remove from CampsiteInfoScreen body: const [comments, setComments] = useState(COMMENTS); --- IGNORE ---*/}
 
@@ -14,7 +14,9 @@ const CampsiteInfoScreen = ({ route }) => {
     /* const [favorite, setFavorite] = useState(false); --IGNORE-- */
     const favorites = useSelector((state) => state.favorites);
     const dispatch = useDispatch();
+    const [showModal, setShowModal] = useState(false);
 
+    
     const renderCommentItem = ({ item }) => {
         return (
             <View style={styles.commentItem}    >
@@ -40,31 +42,56 @@ const CampsiteInfoScreen = ({ route }) => {
      * to ensure it avoids the error message regarding missing keys in lists.
      *
      * To add material above or below the Flatlist, use a
-     ListHeaderComponent or ListFooterComponent prop (in this case, ListHeaderComponent) */
+     * ListHeaderComponent or ListFooterComponent prop (in this case, ListHeaderComponent)
+     * The ListHeaderComponent prop is used to render content at the top of the FlatList.
+     * In this case, it is used to render the RenderCampsite component and a title for the comments section.
+     * ListFooterComponent can be used similarly to add content at the bottom of the list.
+     * 
+    
+     */
     return (
-        <FlatList
-            data={comments.commentsArray.filter(
-                (comment) => comment.campsiteId === campsite.id
-            )}
-            renderItem={renderCommentItem}
-            keyExtractor={(item) => item.id.toString()}
-            contentContainerStyle={{
-                marginHorizontal: 20,
-                paddingVertical: 20
-            }}
-            ListHeaderComponent={
-                <>
-                    <RenderCampsite campsite={campsite} 
-                        campsiteId={campsite.id}  
-                        // isFavorite={favorite} --IGNORE--
-                        isFavorite={favorites.includes(campsite.id)} 
-                        // markFavorite={() => setFavorite(true)} --IGNORE--
-                        markFavorite={() => dispatch(toggleFavorite(campsite.id))} 
+        <>
+            <FlatList
+                data={comments.commentsArray.filter(
+                    (comment) => comment.campsiteId === campsite.id
+                )}
+                renderItem={renderCommentItem}
+                keyExtractor={(item) => item.id.toString()}
+                contentContainerStyle={{
+                    marginHorizontal: 20,
+                    paddingVertical: 20
+                }}
+                ListHeaderComponent={
+                    <>
+                        <RenderCampsite campsite={campsite} 
+                            campsiteId={campsite.id}  
+                            // isFavorite={favorite} --IGNORE--
+                            isFavorite={favorites.includes(campsite.id)} 
+                            // markFavorite={() => setFavorite(true)} --IGNORE--
+                            markFavorite={() => dispatch(toggleFavorite(campsite.id))} 
+                            onShowModal={() => setShowModal(!showModal)}
                         />
-                        <Text style={styles.commentsTitle}>Comments</Text>
-                </>
-            }
-        />
+                            <Text style={styles.commentsTitle}>Comments</Text>
+                    </>
+                }
+            />
+            <Modal
+                animationType={'slide'}
+                transparent={false}
+                visible={showModal}
+                onRequestClose={() => setShowModal(!showModal)}
+            >
+                <View style={styles.modal}>
+                    <View style={{ margin: 10 }}>
+                        <Button
+                            onPress={() => setShowModal(!showModal)}
+                            color='#808080'
+                            title='Cancel'
+                        />
+                    </View>
+                </View>
+            </Modal>
+        </>
     );
 };
 
@@ -82,6 +109,10 @@ const styles = StyleSheet.create({
         paddingVertical: 10,
         paddingHorizontal: 20,
         backgroundColor: '#fff',
+    },
+    modal: { 
+        justifyContent: 'center', 
+        margin: 20
     }
 });
 

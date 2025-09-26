@@ -11,13 +11,28 @@ import { baseUrl } from '../../shared/baseUrl';
  * @property {string} campsite.image - The image source of the campsite.
  * @property {string} campsite.description - The description of the campsite.
  * @returns {JSX.Element} The rendered campsite item, or an empty View if no campsite is provided.
- * View is used as a container for layout purposes, like a div in web development.
- * <Card.Image source={campsite.image}> updated to <Card.Image source={{ 
+ * @View is used as a container for layout purposes, like a div in web development.
+ * @Card <Card.Image source={campsite.image}> updated to <Card.Image source={{ 
  * uri: baseUrl + campsite.image }}> to load images from server. The extra curly braces
  * are necessary because the image source prop expects an object with a uri property.
  * The outer curly braces {} indicate that we are embedding a JavaScript expression within JSX.
  * The inner curly braces {} define a JavaScript object containing the uri property with the
  * value of baseUrl + campsite.image.
+ * @component Icon - A react-native-elements component used to display icons.
+ * @prop {string} name - The name of the icon to display. 'heart' for filled heart, 'heart-o' for 
+ * outlined heart.
+ * @prop {string} type - The icon library to use. 'font-awesome' specifies the FontAwesome icon set.
+ * @prop {string} color - The color of the icon. '#f50' is a shade of red.
+ * @prop {boolean} raised - If true, the icon will have a raised appearance with a shadow.
+ * @prop {boolean} reverse - If true, the icon will have a circular background with the specified color.
+ * @prop {function} onPress - A callback function that is called when the icon is pressed.
+ * In this case, it calls the markFavorite function passed via props to handle marking the campsite 
+ * as favorite.
+ * The second Icon component is added to render a pencil icon for editing purposes.
+ * It uses similar props as the heart icon but has a different name and color.
+ * @modal The modal is not defined in this component but is assumed to be handled in the parent component.
+ * The onPress prop for the pencil icon calls the onShowModal function passed via props to handle
+ * showing a modal for editing.
  */
 const RenderCampsite = (props) => {
     const { campsite } = props;
@@ -27,25 +42,31 @@ const RenderCampsite = (props) => {
                 <Card.Image source={{ uri: baseUrl + campsite.image }}>
                     <View style={{ justifyContent: 'center', flex: 1 }}>
                         <Text
-                            style={{
-                                color: 'white',
-                                textAlign: 'center',
-                                fontSize: 20
-                            }}
+                            style={styles.cardText}
                         >
                             {campsite.name}
                         </Text>
                     </View>
                 </Card.Image>
                 <Text style={{ margin: 20 }}>{campsite.description}</Text>
-                <Icon
-                    name={props.isFavorite ? 'heart' : 'heart-o'}
-                    type='font-awesome'
-                    color='#f50'
-                    raised
-                    reverse
-                    onPress={() => props.markFavorite()}
-                />
+                <View style={styles.cardRow}>
+                    <Icon
+                        name={props.isFavorite ? 'heart' : 'heart-o'}
+                        type='font-awesome'
+                        color='#f50'
+                        raised
+                        reverse
+                        onPress={() => props.markFavorite()}
+                    />
+                    <Icon
+                        name={ 'pencil' }
+                        type='font-awesome'
+                        color='#5637DD'
+                        raised
+                        reverse
+                        onPress={() => props.onShowModal()}  
+                    />
+                </View>
             </Card>
         );
     }
@@ -56,6 +77,21 @@ const styles = StyleSheet.create({
         padding: 0,
         margin: 0,
         marginBottom: 20
+    },
+    cardRow: {
+        alignItems: 'center',
+        justifyContent: 'center',
+    flex: 1,
+    flexDirection: 'row',
+    margin: 20
+    },
+    cardText: {
+        textShadowColor: 'rgba(0,0,0,1)',
+        textShadowOffset: { width: -1, height: 1 },
+        textShadowRadius: 20,
+        textAlign: 'center',
+        color: 'white',
+        fontSize: 20
     }
 });
 
