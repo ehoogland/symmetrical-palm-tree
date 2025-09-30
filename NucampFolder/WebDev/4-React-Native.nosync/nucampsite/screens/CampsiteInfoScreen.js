@@ -84,7 +84,7 @@ const CampsiteInfoScreen = ({ route }) => {
                                 startingValue={rating}
                                 imageSize={40}
                                 onFinishRating={(r) => setRating(r)}
-                                style={{ paddingVertical: 10 .}}
+                                style={{ paddingVertical: 10 }}
                             />
                             <Input
                                 placeholder='Author'
