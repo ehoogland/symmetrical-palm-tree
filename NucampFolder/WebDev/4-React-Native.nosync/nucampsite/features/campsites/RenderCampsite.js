@@ -5,8 +5,10 @@ import { baseUrl } from '../../shared/baseUrl';
  * @function RenderCampsite
  * @description This function component renders a campsite item using the Card component
  * @component Card - A react-native-elements component used to display content in a card layout.
- * @param ({ campsite }) - The props object. It is destructured to extract the campsite property.
- * @param {Object} param0.campsite - The campsite item to render
+ * @param {props} props - The props object passed to the component. Originally was:
+ * @param ({ campsite }) - The props object, destructured to extract just the campsite property. Now
+ * we are using props directly because we need to access multiple props (isFavorite, markFavorite, onShowModal).
+ * @param {Object} props.campsite - The campsite item to render
  * @property {string} campsite.name - The name of the campsite.
  * @property {string} campsite.image - The image source of the campsite.
  * @property {string} campsite.description - The description of the campsite.
