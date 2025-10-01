@@ -14,6 +14,7 @@ import HomeScreen from "./HomeScreen";
 import AboutScreen from "./AboutScreen";    
 import ContactScreen from "./ContactScreen";
 import ReservationScreen from './ReservationScreen';
+import FavoritesScreen from './FavoritesScreen';
 import { useDispatch } from 'react-redux';
 import { useEffect } from "react";
 import { fetchCampsites } from "../features/campsites/campsitesSlice";
@@ -121,6 +122,29 @@ const ReservationNavigator = () => {
   );
 };
 
+const FavoritesNavigator = () => {
+  const Stack = createStackNavigator();
+  return (
+    <Stack.Navigator screenOptions={screenOptions}>
+      <Stack.Screen
+        name="Favorites"
+        component={FavoritesScreen}
+        options={({ navigation }) => ({
+          title: "Favorite Campsites",
+          headerLeft: () => (
+            <Icon
+              name="heart"
+              type="font-awesome"
+              iconStyle={styles.stackIcon}
+              onPress={() => navigation.toggleDrawer()}
+            />
+          )
+        })}
+      />
+    </Stack.Navigator>
+  );
+};
+
 const DirectoryNavigator = () => {
   const Stack = createStackNavigator();
   return (
@@ -146,7 +170,7 @@ const DirectoryNavigator = () => {
         options={({ route }) => ({
           title: route.params.campsite.name,
         })}
-        />
+      />
     </Stack.Navigator>
   );
 };
@@ -258,6 +282,23 @@ const Main = () => {
           component={ReservationNavigator}
           options={{
             title: "Reserve Campsite",
+            headerShown: false,
+            drawerIcon: ({ color }) => (
+              <Icon
+                name="tree"
+                type="font-awesome"
+                size={24}
+                iconStyle={{ width: 24 }}
+                color={color}
+              />
+            ),
+          }}
+        />
+        <Drawer.Screen
+          name="FavoritesNav"
+          component={FavoritesNavigator}
+          options={{
+            title: "My Favorites",
             headerShown: false,
             drawerIcon: ({ color }) => (
               <Icon

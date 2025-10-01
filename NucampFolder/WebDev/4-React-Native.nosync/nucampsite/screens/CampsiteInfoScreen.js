@@ -42,7 +42,8 @@ const CampsiteInfoScreen = ({ route }) => {
             <Text style={{ fontSize: 12 }}>{`-- ${item.author}, ${item.date}`}</Text>
         </View>
     );
-    /** Flatlist has to be at top to make whole screen scrollable
+    /** 
+     * @component Flatlist has to be at top to make whole screen scrollable
      * @note originally was data={comments.filter((comment) => comment.campsiteId === campsite.id)}
      * now using data={comments.commentsArray.filter((comment) => comment.campsiteId === campsite.id)}
      * because comments itself is now an object with isLoading, errMess, commentsArray and not just an array
@@ -50,6 +51,15 @@ const CampsiteInfoScreen = ({ route }) => {
      *  const CampsiteInfoScreen = ({ route }) => {...}. The outer parentheses () around {route} indicates
      *  that we are destructuring the route object to get the campsite.id. The inner curly braces {} indicate
      *  that we are extracting the route property from the props object.
+     * @modal The modal component is used to display a form for submitting comments.
+     * @prop {boolean} visible - A prop that controls the visibility of the modal. It is set to the
+     * value of the showModal state variable. When showModal is true, the modal is visible; when false,
+     * it is hidden.
+     * @prop {function} onRequestClose - A prop that defines a callback function to be called when
+     * the user attempts to close the modal. This is typically used on Android devices where the
+     * back button can be used to close modals. In this case, it sets showModal to false, hiding
+     * the modal.
+     * @returns {JSX.Element} The CampsiteInfoScreen component rendering campsite details and comments.
      */
     return (
         <>
