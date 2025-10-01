@@ -1,6 +1,7 @@
+import { useEffect, useRef } from 'react'; // React hooks for side effects and mutable refs.
 import Loading from '../components/LoadingComponent'; // Loading indicator component.
 import { Card } from 'react-native-elements'; // UI library for React Native providing pre-styled components.
-import { ScrollView, Text, View } from 'react-native'; // Core components for layout and text rendering.
+import { Animated, Text, View } from 'react-native'; // Core components for layout and text rendering.
 import { useSelector } from 'react-redux'; // Hook to access the Redux store's state.
 import { baseUrl } from '../shared/baseUrl'; // Base URL for loading images and other resources from a server.
 
@@ -70,9 +71,35 @@ const FeaturedItem = (props) => {
 };
 
 const HomeScreen = () => {
+    // Local state variables are no longer necessary since the
+    // data is now managed via Redux. We instead want to add variables from Redux
+    // for campsites, promotions, and partners.
     const campsites = useSelector((state) => state.campsites);
     const promotions = useSelector((state) => state.promotions);
     const partners = useSelector((state) => state.partners);
+    /**
+     * @description useRef is a React hook that creates a mutable ref object.
+     * The ref object persists for the lifetime of the component and can be used
+     * to store a value that does not trigger re-renders when it changes.
+     * In this case, we are using useRef to create a ref for the scale animation.
+     */ 
+    const scaleValue = useRef(new Animated.Value(0)).current;
+    /**
+     * @description Animated.timing is a method from the Animated API in React Native
+     * that allows you to create a timing animation. It takes in a value, a configuration
+     * object, and returns an animation object. The configuration object specifies the
+     * animation's duration, easing function, and other parameters. In this case, we are
+     * animating the scale of the component. The animation will scale the component from 
+     * 0 to 1 over a duration of 1500 milliseconds. Then the animation library will
+     * handle the interpolation of values over time to create a smooth scaling effect.
+     * The useNativeDriver: true option enables the use of the native animation driver 
+     * for better performance.
+     */
+    const scaleAnimation = Animated.timing(scaleValue, {
+    toValue: 1,
+    duration: 1500,
+    useNativeDriver: true
+});
 
     const featCampsite = campsites.campsitesArray.find((item) => item.featured);
     const featPromotion = promotions.promotionsArray.find((item) => item.featured);
@@ -80,9 +107,32 @@ const HomeScreen = () => {
 
     const isLoading = campsites.isLoading || promotions.isLoading || partners.isLoading;
     const errMess = campsites.errMess || promotions.errMess || partners.errMess;
+    
+    /**
+     * @description The useEffect hook is used to perform side effects in functional 
+     * components. 
+     * @note The scaleAnimation.start() method is called to initiate the animation.
+     * The empty dependency array [] means that this effect will only run once
+     * when the component mounts.
+     */
+    useEffect(() => {
+        scaleAnimation.start();
+    }, [])
+    /**
+     * @description The HomeScreen component renders the featured items (campsite, 
+     * promotion, partner) using the FeaturedItem component. 
+     * @Animation.ScrollView is a core React Native component that provides a scrollable
+     * container for the featured items. The style prop is used to apply the scale
+     * animation to the ScrollView. 
+     * @scaleValue is the animated value that controls the scale of the component.
+     * The transform style property is used to apply the scale transformation.
+     * The scaleValue is interpolated to create a smooth scaling effect.
+     * @returns {JSX.Element} The HomeScreen component rendered in a ScrollView.
+     */ 
 
     return (
-        <ScrollView>
+        <Animated.ScrollView style={{ transform: [{ scale: scaleValue }] }}>
+
             <FeaturedItem
                 item={featCampsite}
                 isLoading={campsites.isLoading}
@@ -98,7 +148,7 @@ const HomeScreen = () => {
                 isLoading={partners.isLoading}
                 errMess={partners.errMess}
             />
-        </ScrollView>
+        </Animated.ScrollView>
     );
 };
 

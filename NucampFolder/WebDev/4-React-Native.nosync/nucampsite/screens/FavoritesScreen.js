@@ -6,8 +6,98 @@ import Loading from '../components/LoadingComponent';
 import { baseUrl } from '../shared/baseUrl';
 import { SwipeRow } from 'react-native-swipe-list-view';
 import { toggleFavorite } from '../features/favorites/favoritesSlice';
+import * as Animatable from 'react-native-animatable'
+
+const FavoritesScreen = ({ navigation }) => {
+    const { campsitesArray, isLoading, errorMessage } = useSelector((state) => state.campsites);
+    const favorites = useSelector((state) => state.favorites);
+    const dispatch = useDispatch();
+
+    const confirmDelete = (campsite) => {
+        Alert.alert(
+            'Delete Favorite?',
+            `Are you sure you wish to delete the favorite campsite ${campsite.name}?`,
+            [
+                { text: 'Cancel', onPress: () => console.log(campsite.name + ' Not Deleted'), style: 'cancel' },
+                { text: 'OK', onPress: () => dispatch(toggleFavorite(campsite.id)) }
+            ],
+            { cancelable: false }
+        );
+    };
+    // disabled disableRightSwipe to allow right swipe to close the row
+    // implicit return used with arrow function
+    const renderFavoriteItem = ({ item: campsite }) => (
+        <SwipeRow rightOpenValue={-100} >
+            <View style={styles.deleteView}>
+                <TouchableOpacity style={styles.deleteTouchable} onPress={() => confirmDelete(campsite)}>
+                    <Text style={styles.deleteText}>Delete</Text>
+                </TouchableOpacity>
+            </View>
+
+            <View>
+                <ListItem
+                    onPress={() =>
+                        navigation.navigate('DirectoryNav', {
+                            screen: 'CampsiteInfoScreen',
+                            params: { campsite }
+                        })
+                    }
+                >
+                    <Avatar rounded source={{ uri: baseUrl + campsite.image }} />
+                    <ListItem.Content>
+                        <ListItem.Title>{campsite.name}</ListItem.Title>
+                        <ListItem.Subtitle>{campsite.description}</ListItem.Subtitle>
+                    </ListItem.Content>
+                </ListItem>
+            </View>
+        </SwipeRow>
+    );
+
+    if (isLoading) return <Loading />;
+
+    if (errorMessage) return (
+        <View>
+            <Text>{errorMessage}</Text>
+        </View>
+    );
+
+    return (
+        <Animatable.View animation="fadeInRightBig" duration={2000}>
+            <FlatList
+                data={campsitesArray.filter((campsite) => favorites.includes(campsite.id))}
+                renderItem={renderFavoriteItem}
+                keyExtractor={(item) => item.id.toString()}
+            />
+        </Animatable.View>
+    );
+};
+
+const styles = StyleSheet.create({
+    deleteView: {
+        flexDirection: 'row',
+        justifyContent: 'flex-end',
+        alignItems: 'center',
+        flex: 1
+    },
+    deleteTouchable: {
+        backgroundColor: 'red',
+        height: '100%',
+        justifyContent: 'center',
+        paddingHorizontal: 20
+    },
+    deleteText: {
+        color: 'white',
+        fontWeight: '700',
+        textAlign: 'center',
+        fontSize: 16,
+        width: 100
+    }
+});
+
+export default FavoritesScreen;
+
 /**
- * 
+ * FavoritesScreen Notes
  * @description The FavoritesScreen component displays a list of favorite campsites.
  * It retrieves the list of campsites and favorites from the Redux store using the useSelector hook.
  * If the campsites are still loading, it displays a loading indicator.
@@ -51,104 +141,33 @@ import { toggleFavorite } from '../features/favorites/favoritesSlice';
  * @note The FavoritesScreen component assumes that it is part of a navigation stack
  * and that the navigation prop is passed to it. This is typically done when the component
  * is used as a screen in a navigator provided by React Navigation.
- * 
+ * @function confirmDelete - A helper function to confirm the deletion of a favorite campsite.
+ * It displays an alert dialog with options to cancel or confirm the deletion.
+ * If confirmed, it dispatches the toggleFavorite action to remove the campsite from favorites.
+ * @param {Object} campsite - The campsite object to be deleted from favorites.
+ * @component SwipeRow - A component from react-native-swipe-list-view that allows
+ * users to swipe a list item to reveal additional options, such as deleting the item.
+ * @prop {number} rightOpenValue - The distance (in pixels) to which the row will open when swiped to the left.
+ * A negative value indicates a left swipe. In this case, -100 means the row will open 100 pixels to the left.
+ * @prop {boolean} disableRightSwipe - If true, it disables swiping to the right. This is useful when
+ * you only want to allow left swipes for actions like deleting an item.
+ * @component Alert - A React Native component used to display an alert dialog with a title,
+ * message, and buttons. In this case, it is used to confirm the deletion of a favorite campsite.
+ * @function Alert.alert - A method that creates and displays an alert dialog.
+ * @param {string} title - The title of the alert dialog. In this case, it is 'Delete Favorite?'.
+ * @param {string} message - The message displayed in the alert dialog. It includes the name of the campsite
+ * to be deleted.
+ * @param {Array} buttons - An array of button configurations for the alert dialog. Each button is an object
+ * with properties such as text, onPress (callback function), and style.
+ * In this case, there are two buttons: 'Cancel' and 'OK'. The 'Cancel' button logs a message and has a
+ * 'cancel' style, while the 'OK' button dispatches the toggleFavorite action to remove the campsite from favorites.
+ * @param {Object} options - An optional configuration object for the alert dialog.
+ * In this case, it includes the cancelable property set to false, which means the alert cannot be dismissed
+ * by tapping outside of it or pressing the back button on Android.
+ * @component View - A core React Native component used as a container for layout purposes. It is similar to a div in web development.
+ * @component Text - A core React Native component used to display text.
+ * @component StyleSheet - A React Native utility for creating stylesheets for styling components.
+ * @constant styles - An object containing styles for the FavoritesScreen component, created using StyleSheet.create.
+ * It includes styles for the delete view, delete touchable area, and delete text.  
  */
-const FavoritesScreen = ({ navigation }) => {
-    const dispatch = useDispatch();
-    const favorites = useSelector((state) => state.favorites);
-    const { campsitesArray, isLoading, errorMessage } = useSelector((state) => state.campsites);
-
-    const confirmDelete = (campsite) => {
-        Alert.alert(
-            'Delete Favorite?',
-            `Are you sure you wish to delete the favorite campsite ${campsite.name}?`,
-            [
-                { text: 'Cancel', onPress: () => console.log(campsite.name + ' Not Deleted'), style: 'cancel' },
-                { text: 'OK', onPress: () => dispatch(toggleFavorite(campsite.id)) }
-            ],
-            { cancelable: false }
-        );
-    };
-
-    const renderFavoriteItem = ({ item: campsite }) => (
-        <View>
-            <SwipeRow rightOpenValue={-100} disableRightSwipe>
-                <View style={styles.deleteView}>
-                    <TouchableOpacity style={styles.deleteTouchable} onPress={() => confirmDelete(campsite)}>
-                        <Text style={styles.deleteText}>Delete</Text>
-                    </TouchableOpacity>
-                </View>
-
-                <View>
-                    <ListItem
-                        onPress={() =>
-                            navigation.navigate('DirectoryNav', {
-                                screen: 'CampsiteInfoScreen',
-                                params: { campsite }
-                            })
-                        }
-                    >
-                        <Avatar rounded source={{ uri: baseUrl + campsite.image }} />
-                        <ListItem.Content>
-                            <ListItem.Title>{campsite.name}</ListItem.Title>
-                            <ListItem.Subtitle>{campsite.description}</ListItem.Subtitle>
-                        </ListItem.Content>
-                    </ListItem>
-                </View>
-            </SwipeRow>
-        </View>
-    );
-
-    if (isLoading) return <Loading />;
-
-    if (errorMessage) return (
-        <View>
-            <Text>{errorMessage}</Text>
-        </View>
-    );
-
-    return (
-        <FlatList
-            data={campsitesArray.filter((campsite) => favorites.includes(campsite.id))}
-            renderItem={renderFavoriteItem}
-            keyExtractor={(item) => item.id.toString()}
-        />
-    );
-};
-
-const styles = StyleSheet.create({
-    deleteView: {
-        flexDirection: 'row',
-        justifyContent: 'flex-end',
-        alignItems: 'center',
-        flex: 1
-    },
-    deleteTouchable: {
-        backgroundColor: 'red',
-        height: '100%',
-        justifyContent: 'center',
-        paddingHorizontal: 20
-    },
-    deleteText: {
-        color: 'white',
-        fontWeight: '700',
-        textAlign: 'center',
-        fontSize: 16,
-        width: 100
-    }
-});
-
-
-
-
-
-
-
-
-
-
-
-
-
-export default FavoritesScreen;
 

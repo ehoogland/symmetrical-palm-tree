@@ -2,6 +2,8 @@ import { ScrollView, Text } from 'react-native';
 import { Avatar, Card, ListItem } from 'react-native-elements';
 /* Added the following lines as they are needed with Redux integration */
 import { useSelector } from 'react-redux';
+/* Added for third-party animation */
+import * as Animatable from 'react-native-animatable'
 /* Added for fetching images from server simulator json-server */
 import { baseUrl } from '../shared/baseUrl';
 import Loading from '../components/LoadingComponent';
@@ -46,43 +48,68 @@ const AboutScreen = () => {
     if (partners.errMess) {
         return (
             <ScrollView>
+              <Animatable.View
+                  animation='fadeInDown'
+                  duration={2000}
+                  delay={1000}
+              >
                 <Mission />
                 <Card>
                     <Card.Title>Community Partners</Card.Title>
                     <Card.Divider />
-                    <Text>{partners.errMess}</Text>
+                    <Loading />
                 </Card>
+              </Animatable.View>
             </ScrollView>
         );
     }
+
     /* Using map to iterate over the partners array and render a ListItem for each partner;
     changed the value that is being mapped from partners to partners.partnersArray for Redux integration */
 
     return (
-    <ScrollView>
-      <Mission />
-      <Card>
-        <Card.Title>Community Partners</Card.Title>
-        <Card.Divider />
-        <Text>We are proud to partner with these amazing organizations:</Text>
-    {partners.partnersArray.map((partner) => (
-        <ListItem key={partner.id.toString()}>
-            <Avatar rounded source={{ uri: baseUrl + partner.image }} />
-            <ListItem.Content>
-                <ListItem.Title style={{ fontWeight: 'bold' }}>{partner.name}</ListItem.Title>
-                <ListItem.Subtitle>{partner.description}</ListItem.Subtitle>
-            </ListItem.Content>
-        </ListItem>
-          ))}
-      </Card>
-    </ScrollView>
+      <Animatable.View
+          animation='fadeInDown'
+          duration={2000}
+          delay={1000}
+      >
+        <ScrollView>
+          <Mission />
+          <Card>
+            <Card.Title>Community Partners</Card.Title>
+            <Card.Divider />
+            <Text>We are proud to partner with these amazing organizations:</Text>
+        {partners.partnersArray.map((partner) => (
+            <ListItem key={partner.id.toString()}>
+                <Avatar rounded source={{ uri: baseUrl + partner.image }} />
+                <ListItem.Content>
+                    <ListItem.Title style={{ fontWeight: 'bold' }}>{partner.name}</ListItem.Title>
+                    <ListItem.Subtitle>{partner.description}</ListItem.Subtitle>
+                </ListItem.Content>
+            </ListItem>
+              ))}
+          </Card>
+        </ScrollView>
+    </Animatable.View>
     );
   };
   
   export default AboutScreen;
   /**
-   * AboutScreen, Mission, and Community Partners Notes
-   * 
+   * AboutScreen, Animatable, Mission, and Community Partners Notes
+   * Animatable imported from react-native-animatable for animation effects.
+   * @description Animatable.View is a component that provides animation capabilities to its children.
+   * In this case, it is used to wrap the Mission component and the Community Partners Card,
+   * applying a fadeInDown animation when the component mounts. The animation lasts for 2000 milliseconds
+   * and starts after a delay of 1000 milliseconds.
+   * @component Animatable.View - A component from react-native-animatable that provides animation capabilities.
+   * It allows you to apply various animations to its children, such as fade, slide, bounce, etc.
+   * In this case, it is used to create a fade-in effect for the Mission component and the Community Partners Card.
+   * @prop {string} animation - The type of animation to be applied. In this case, 'fadeInDown' specifies
+   * a fade-in effect that starts from the top and moves downwards.
+   * @prop {number} duration - The duration of the animation in milliseconds. Here, it is set to 2000 milliseconds (2 seconds).
+   * @prop {number} delay - The delay before the animation starts in milliseconds. Here, it is set to 1000 milliseconds (1 second).
+   * This means that the animation will begin 1 second after the component mounts.
    * Mission Component
    * @function Mission functional component
    * @description The Mission component displays the mission statement of the app using a Card component
