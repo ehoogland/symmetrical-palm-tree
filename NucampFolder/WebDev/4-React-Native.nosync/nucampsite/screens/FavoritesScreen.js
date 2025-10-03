@@ -80,17 +80,17 @@ const styles = StyleSheet.create({
         flex: 1
     },
     deleteTouchable: {
-        backgroundColor: 'red',
-        height: '100%',
-        justifyContent: 'center',
-        paddingHorizontal: 20
+    backgroundColor: 'red',
+    height: '100%',
+    justifyContent: 'center',
+    paddingHorizontal: 20
     },
     deleteText: {
-        color: 'white',
-        fontWeight: '700',
-        textAlign: 'center',
-        fontSize: 16,
-        width: 100
+    color: 'white',
+    fontWeight: '700',
+    textAlign: 'center',
+    fontSize: 16,
+    width: 100
     }
 });
 
