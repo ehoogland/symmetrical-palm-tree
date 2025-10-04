@@ -1,13 +1,22 @@
+import { useRef } from 'react';
 import { Text, View, StyleSheet, Alert, PanResponder } from 'react-native';
 import { Card, Icon } from 'react-native-elements';
 import * as Animatable from 'react-native-animatable';
 import { baseUrl } from '../../shared/baseUrl';
 const RenderCampsite = (props) => {
     const { campsite } = props;
+    // useRef hook to create a reference to the view component
+    const view = useRef(null); 
+    // function to determine if the swipe gesture is a left swipe
     
     const isLeftSwipe = ({ dx }) => dx < -200 ? true : false;       
     const panResponder = PanResponder.create({
         onStartShouldSetPanResponder: () => true,
+        onPanResponderGrant: () => {
+            view.current
+            .rubberBand(1000)
+            .then(endState => console.log(endState.finished ? 'finished' : 'canceled'));
+        },
         onPanResponderEnd: (e, gestureState) => { 
             console.log('pan responder end', gestureState);
             if (isLeftSwipe(gestureState)) {
@@ -42,6 +51,7 @@ const RenderCampsite = (props) => {
             animation='fadeInUp' 
             duration={2000} 
             delay={1000}
+            ref={view}
             {...panResponder.panHandlers}
             >
                 <Card containerStyle={styles.cardContainer}>
