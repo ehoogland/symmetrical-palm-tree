@@ -180,4 +180,11 @@ export default RenderCampsite;
  * while moving upwards.
  * @prop {number} duration - The duration of the animation in milliseconds. Here, it is set to 2000ms (2 seconds).
  * @prop {number} delay - The delay before the animation starts in milliseconds. Here, it is set to 1000ms (1 second).
+ * @prop {ref} ref - A reference to the Animatable.View component created using the useRef hook. 
+ * This allows direct access to the component's methods. The ref is used in the onPanResponderGrant callback
+ * to trigger a rubberBand animation when the user starts a touch gesture. The rubberBand animation makes the
+ * component stretch and then return to its original size, providing visual feedback to the user.
+ * The animation is triggered by calling view.current.rubberBand(1000), 1000 ms being the duration of the animation.
+ * A promise is returned, and once the animation completes, it logs whether the animation finished or was canceled.
+ * This enhances the user experience by providing immediate visual feedback when they interact with the campsite card.
  */

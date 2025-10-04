@@ -4,8 +4,53 @@ import { commentsReducer } from '../features/comments/commentsSlice';
 import { partnersReducer } from '../features/partners/partnersSlice';
 import { promotionsReducer } from '../features/promotions/promotionsSlice';
 import { favoritesReducer } from '../features/favorites/favoritesSlice';
+import { persistStore, persistCombineReducers,
+    FLUSH,
+    REHYDRATE,
+    PAUSE,
+    PERSIST,
+    PURGE,
+    REGISTER
+} from 'redux-persist';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
-/**
+const config = {
+    key: 'root',
+    storage: AsyncStorage,
+    debug: true //to get useful logging
+};
+
+export const store = configureStore({
+    reducer: persistCombineReducers(config, {
+        campsites: campsitesReducer,
+        comments: commentsReducer,
+        partners: partnersReducer,
+        promotions: promotionsReducer,
+        favorites: favoritesReducer
+}),
+    /** middleware needed to avoid non-serializable value error. A non‑serializable value is any object
+      * that cannot be reliably converted to/from a plain JSON representation (lossless string form).
+      * JSON.stringify either fails, returns something lossy, or loses behavior/identity. 
+      */
+    middleware: (getDefaultMiddleware) =>
+        getDefaultMiddleware({
+            serializableCheck: {
+                ignoredActions: [
+                    FLUSH, 
+                    REHYDRATE, 
+                    PAUSE, 
+                    PERSIST, 
+                    PURGE, 
+                    REGISTER
+                ]
+            }
+        })
+});
+export const persistor = persistStore(store);
+
+/** In Redux, a reducer is a pure function that takes the current state and an action as arguments
+ * and returns a new state based on the action type. Just as the .reduce method accumulates values,
+ * a Redux reducer accumulates changes to the state over time in response to dispatched actions.
  * @description The Redux store is configured using Redux Toolkit's configureStore function.
  * It combines multiple reducers into a single root reducer, which manages different slices 
  * of the application state. Each slice corresponds to a specific feature of the application, 
@@ -25,29 +70,34 @@ import { favoritesReducer } from '../features/favorites/favoritesSlice';
  * };
  * @see https://redux-toolkit.js.org/api/configureStore
  * @see https://react-redux.js.org/api/hooks#useselector
+ * @const reducer - An object that maps slice names to their respective reducer functions.
+ * @example
+ * const store = configureStore({
+ *     reducer: {
+ *         campsites: campsitesReducer,
+ *         comments: commentsReducer,
+ *         partners: partnersReducer,
+ *         promotions: promotionsReducer,
+ *         favorites: favoritesReducer
+ *     }
+ * });          
  * 
- * Note that campsites is the key in the above example's reducer object, and it corresponds to the
- * state.campsites that you would access in your components. This is because configureStore
- * automatically sets up the root reducer to use the keys of the reducer object as the top-level
- * keys in the state object.
+ * @const persistor - The persistor is an object that is used to manage the persistence of the Redux store.
+ * It is created using the persistStore function from redux-persist and is responsible for rehydrating
+ * the store with persisted state when the application starts.
+ * @example
+ * import { PersistGate } from 'redux-persist/integration/react';
+ * const App = () => {
+ *     return (
+ *         <PersistGate loading={null} persistor={persistor}>
+ *             <MyApp />
+ *         </PersistGate>
+ *     );
+ * };
+ * @see https://redux-persist.js.org/
+ * @see https://react-redux.js.org/api/hooks#useselector
  */
-export const store = configureStore({
-    reducer: {
-        campsites: campsitesReducer,
-        comments: commentsReducer,
-        partners: partnersReducer,
-        promotions: promotionsReducer,
-        favorites: favoritesReducer
-    }
-});
 
-/*
-Note on reducers:
-Compare the .reduce() method in JavaScript, which gets passed an iterator function that contains
-two arguments. The first is an accumulator (state) and the second is what you want to add to the
-accumulator (action). An iterator function is just a function that takes two arguments: the current
-accumulator value and the current element being processed. 
 
-In Redux, a reducer is a pure function that takes the current state and an action as arguments 
-and returns a new state based on the action type. Just as the .reduce method accumulates values, 
-a Redux reducer accumulates changes to the state over time in response to dispatched actions. */
+    
+  
