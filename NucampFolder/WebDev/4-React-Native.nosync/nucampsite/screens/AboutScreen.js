@@ -3,7 +3,7 @@ import { Avatar, Card, ListItem } from 'react-native-elements';
 /* Added the following lines as they are needed with Redux integration */
 import { useSelector } from 'react-redux';
 /* Added for third-party animation */
-import * as Animatable from 'react-native-animatable'
+import * as Animatable from 'react-native-animatable' /* namespace import. To use it, prepend namespace Animatable.View */
 /* Added for fetching images from server simulator json-server */
 import { baseUrl } from '../shared/baseUrl';
 import Loading from '../components/LoadingComponent';

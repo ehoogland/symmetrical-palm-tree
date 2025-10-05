@@ -3,13 +3,13 @@ import { Text, View, StyleSheet, Alert, PanResponder } from 'react-native';
 import { Card, Icon } from 'react-native-elements';
 import * as Animatable from 'react-native-animatable';
 import { baseUrl } from '../../shared/baseUrl';
+
 const RenderCampsite = (props) => {
     const { campsite } = props;
-    // useRef hook to create a reference to the view component
     const view = useRef(null); 
-    // function to determine if the swipe gesture is a left swipe
     
-    const isLeftSwipe = ({ dx }) => dx < -200 ? true : false;       
+    const isLeftSwipe = ({ dx }) => dx < -200 ? true : false; 
+    const isRightSwipe = ({ dx }) => dx > 200 ? true : false; 
     const panResponder = PanResponder.create({
         onStartShouldSetPanResponder: () => true,
         onPanResponderGrant: () => {
@@ -42,6 +42,11 @@ const RenderCampsite = (props) => {
                     { cancelable: false }
                 );
             }
+            else if (isRightSwipe(gestureState)) {
+                props.onShowModal();
+            }
+            // Return true to indicate that the gesture has been handled
+            return true;
         }
     });
     
@@ -116,15 +121,43 @@ export default RenderCampsite;
 
 /**
  * @note @function functional component RenderCampsite
- * @description This component renders a campsite item using the Card component
- * @component Card - A react-native-elements component used to display content in a card layout.
- * @param {props} props - The props object passed to the component. Originally was:
- * @param ({ campsite }) - The props object, destructured to extract just the campsite property. Now
- * we are using props directly because we need to access multiple props (isFavorite, markFavorite, onShowModal).
+ * @hook useRef hook that creates a reference to the view component which is used for animations
+ * @param {props} props - The props object passed to the component. Originally it was destructured to extract
+ * just the campsite property. Now we are using props directly because we need to access multiple
+ * props (isFavorite, markFavorite, onShowModal).
  * @param {Object} props.campsite - The campsite item to render
  * @property {string} campsite.name - The name of the campsite.
  * @property {string} campsite.image - The image source of the campsite.
  * @property {string} campsite.description - The description of the campsite.
+ * @param {boolean} props.isFavorite - A boolean indicating if the campsite is marked as favorite.
+ * @param {function} props.markFavorite - A function to mark the campsite as favorite.
+ * @param {function} props.onShowModal - A function to handle showing a modal for editing.
+ * @param {Object} view - A reference to the Animatable.View component created using the useRef hook.
+ * It is used to trigger animations on the view component.
+ * @const {Object} panResponder - A PanResponder instance to handle touch gestures.
+ * It is created using PanResponder.create and defines various callbacks to manage the gesture lifecycle.
+ * @function isLeftSwipe - A function to determine if the swipe gesture is a left swipe.
+ * It checks if the horizontal distance (dx) of the swipe is less than -200. If so, it returns true, indicating a left swipe.
+ * @function isRightSwipe - A function to determine if the swipe gesture is a right swipe.
+ * It checks if the horizontal distance (dx) of the swipe is greater than 200. If so, it returns true, indicating a right swipe.
+ * @prop {Object} gestureState - An object containing information about the gesture state.
+ * It includes properties like dx (horizontal distance), dy (vertical distance), moveX, moveY, etc.
+ * @prop {function} onStartShouldSetPanResponder - A callback that is called when a touch gesture starts.
+ * It returns true to indicate that this component wants to become the responder for the gesture.
+ * @prop {function} onPanResponderGrant - A callback that is called when the user starts to swipe.
+ * It triggers a rubberBand animation on the view component using the Animatable API.
+ * @prop {function} onPanResponderEnd - A callback that is called when the touch gesture ends.
+ * It receives the gesture state as an arguument and its parameter is destructured to extract the dx property.
+ * It logs the gesture state to the console for debugging purposes.
+ * It then calls the isLeftSwipe function with the gestureState to check if the gesture was a left swipe.
+ * If it was a left swipe, it displays an alert dialog to confirm adding the campsite to favorites.
+ * The alert has two buttons: 'Cancel' and 'OK'. The 'Cancel' button logs a message to the console,
+ * while the 'OK' button checks if the campsite is already marked as favorite using props.isFavorite.
+ * If it is not already a favorite, it calls the props.markFavorite function to mark it as favorite.
+ * If the gesture was a right swipe, it calls the props.onShowModal function to handle showing a modal for editing.
+ * This provides an intuitive way for users to quickly access the editing functionality for a campsite using a simple gesture.
+ * The second Icon component is added to render a pencil icon for editing purposes.
+ * It uses similar props as the heart icon but has a different name and color.
  * @returns {JSX.Element} The rendered campsite item, or an empty View if no campsite is provided.
  * @View is used as a container for layout purposes, like a div in web development.
  * @Card <Card.Image source={campsite.image}> updated to <Card.Image source={{ 
@@ -132,7 +165,7 @@ export default RenderCampsite;
  * are necessary because the image source prop expects an object with a uri property.
  * The outer curly braces {} indicate that we are embedding a JavaScript expression within JSX.
  * The inner curly braces {} define a JavaScript object containing the uri property with the
- * value of baseUrl + campsite.image.
+ * value of baseUrl + campsite.image.   
  * @component Icon - A react-native-elements component used to display icons.
  * @prop {string} name - The name of the icon to display. 'heart' for filled heart, 'heart-o' for 
  * outlined heart.
@@ -145,22 +178,13 @@ export default RenderCampsite;
  * as favorite.
  * The second Icon component is added to render a pencil icon for editing purposes.
  * It uses similar props as the heart icon but has a different name and color.
- * @modal The modal is not defined in this component but is assumed to be handled in the parent component.
- * The onPress prop for the pencil icon calls the onShowModal function passed via props to handle
- * showing a modal for editing.
- * @const @function isLeftSwipe - A function to determine if the swipe gesture is a left swipe.
- * It checks if the horizontal distance (dx) of the swipe is less than -200. If so, it returns true, indicating a left swipe.
- * Keep in mind that this is a negative value because swiping left decreases the x-coordinate, and that a smaller
- * (more negative) value indicates a more significant left swipe. You can think of it as delta x or the distance of a gesture
- * across the x-axis. A right swipe would have a positive dx value, while a left swipe has a negative dx value.
- * Here, we are using -200 as the threshold to determine if the swipe is significant enough to be considered a left swipe.
- * This threshold can be adjusted based on the desired sensitivity for detecting left swipes.
- * 
  * @const @function panResponder - A PanResponder instance to handle touch gestures.
  * It is created using PanResponder.create and defines various callbacks to manage the gesture lifecycle.
- * 
+ * @prop onStartShouldSetPanResponder
  * @prop {function} onStartShouldSetPanResponder - A callback that is called when a touch gesture starts.
  * It returns true to indicate that this component wants to become the responder for the gesture.
+ * @prop {function} onPanResponderGrant - A callback that is called when the user starts to swipe.
+ * It triggers a rubberBand animation on the view component using the Animatable API.
  * @prop {function} onPanResponderEnd - A callback that is called when the touch gesture ends.
  * It receives the gesture state as an arguument and its parameter is destructured to extract the dx property.
  * It logs the gesture state to the console for debugging purposes.
@@ -169,11 +193,9 @@ export default RenderCampsite;
  * The alert has two buttons: 'Cancel' and 'OK'. The 'Cancel' button logs a message to the console,
  * while the 'OK' button checks if the campsite is already marked as favorite using props.isFavorite.
  * If it is not already a favorite, it calls the props.markFavorite function to mark it as favorite.
- * 
  * @prop {...panResponder.panHandlers} - This syntax spreads the panHandlers from the panResponder instance
  * onto the Animatable.View component. This allows the Animatable.View to respond to touch gestures
  * defined in the panResponder, enabling swipe functionality for the campsite card.
- * 
  * @component Animatable.View - A component from react-native-animatable that provides animation capabilities.
  * It is used here to wrap the Card component and apply a fadeInUp animation when the component mounts.
  * @prop {string} animation - The name of the animation to apply. 'fadeInUp' makes the component fade in
@@ -181,10 +203,27 @@ export default RenderCampsite;
  * @prop {number} duration - The duration of the animation in milliseconds. Here, it is set to 2000ms (2 seconds).
  * @prop {number} delay - The delay before the animation starts in milliseconds. Here, it is set to 1000ms (1 second).
  * @prop {ref} ref - A reference to the Animatable.View component created using the useRef hook. 
- * This allows direct access to the component's methods. The ref is used in the onPanResponderGrant callback
- * to trigger a rubberBand animation when the user starts a touch gesture. The rubberBand animation makes the
- * component stretch and then return to its original size, providing visual feedback to the user.
- * The animation is triggered by calling view.current.rubberBand(1000), 1000 ms being the duration of the animation.
- * A promise is returned, and once the animation completes, it logs whether the animation finished or was canceled.
- * This enhances the user experience by providing immediate visual feedback when they interact with the campsite card.
- */
+ * It is used to trigger animations on the view component.
+ * @function isLeftSwipe - A function to determine if the swipe gesture is a left swipe. Left swipes
+ * are detected when the user swipes their finger to the left across the screen.
+ * It checks if the horizontal distance (dx) of the swipe is less than -200. This can be considered a significant
+ * left swipe because it is of a magnitude that indicates a deliberate gesture rather than a minor movement.
+ * Keep in mind that this is a negative value because swiping left decreases the x-coordinate, and that a smaller
+ * (more negative) value indicates a more significant left swipe.
+ * @function isRightSwipe - A function to determine if the swipe gesture is a right swipe. Right swipes
+ * are detected when the user swipes their finger to the right across the screen.
+ * In this implementation, a right swipe is determined by checking if the horizontal distance (dx) of the swipe
+ * is greater than 200. If the dx value is greater than 200, it indicates a significant right swipe gesture.
+ * When a right swipe is detected, it calls @function props.onShowModal function to handle showing a modal for editing.
+ * This provides an intuitive way for users to quickly access the editing functionality for comments relating to a
+ * campsite using a simple gesture.
+ * @prop onShowModal - A function passed via props to handle showing a modal for editing.
+ * It is called when a right swipe gesture is detected.
+ * @function props.onShowModal() The modal for editing is not defined in this component but is
+ * handled in the parent component CampsiteInfoScreen where RenderCampsite is used.
+ * Here, given a rightSwipe gesture of magnitude 200 we call the function passed via props
+ * to handle showing the modal for editing.
+ * @function onPress() For users preferring the touch interface, the onPress prop for the pencil icon in
+ * the return calls the onShowModal() function passed via props to handle showing a modal for editing. 
+ * @returns {Promise} - A promise that resolves when the animation completes.
+*/

@@ -109,6 +109,7 @@ const HomeScreen = () => {
     const errMess = campsites.errMess || promotions.errMess || partners.errMess;
     
     /**
+     * The animations needs to be told to start.
      * @description The useEffect hook is used to perform side effects in functional 
      * components. 
      * @note The scaleAnimation.start() method is called to initiate the animation.

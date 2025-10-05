@@ -13,7 +13,19 @@ import { persistStore, persistCombineReducers,
     REGISTER
 } from 'redux-persist';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-
+/**
+ * @description The redux store is configured using redux-persist to enable state persistence across app sessions.
+ * The persistCombineReducers function is used to combine multiple reducers into a single root reducer,
+ * while also applying persistence configuration. The configuration specifies the storage mechanism (AsyncStorage)
+ * and includes a debug flag for logging purposes. The store is created using configureStore from Redux Toolkit,
+ * which simplifies the setup process by automatically combining reducers, adding middleware, and enabling Redux DevTools.
+ * Middleware is customized to ignore certain redux-persist actions in the serializable state check, preventing errors
+ * related to non-serializable values. Finally, the persistor object is created using persistStore, which manages the 
+ * persistence of the Redux store.
+ * @see https://redux-toolkit.js.org/api/configureStore
+ * @see https://redux-persist.js.org/
+ * @see https://react-redux.js.org/api/hooks#useselector
+ */
 const config = {
     key: 'root',
     storage: AsyncStorage,
