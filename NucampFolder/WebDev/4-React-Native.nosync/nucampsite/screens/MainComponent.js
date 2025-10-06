@@ -234,13 +234,11 @@ const CustomDrawerContent = (props) => (
  * data needed for the app to function properly, provided that the components are connected
  * to the Redux store.
  *
- * @note Received a nested-name warning in console by renaming the Drawer.Screen route name from "Login" 
- * to "LoginNav"
  * 
- */
+*/
 const Main = () => {
   const dispatch = useDispatch();
-
+  
   useEffect(() => {
     dispatch(fetchCampsites());
     dispatch(fetchPromotions());
@@ -269,15 +267,15 @@ const Main = () => {
             headerShown: false,
             drawerIcon: ({ color }) => (
               <Icon
-                name="sign-in"
-                type="font-awesome"
-                size={24}
-                iconStyle={{ width: 24 }}
-                color={color}
+              name="sign-in"
+              type="font-awesome"
+              size={24}
+              iconStyle={{ width: 24 }}
+              color={color}
               />
             ),
           }}
-        />
+          />
         <Drawer.Screen
           name="HomeNav"
           component={HomeNavigator}
@@ -286,15 +284,15 @@ const Main = () => {
             headerShown: false,
             drawerIcon: ({ color }) => (
               <Icon
-                name="home"
-                type="font-awesome"
-                size={24}
-                iconStyle={{ width: 24 }}
-                color={color}
+              name="home"
+              type="font-awesome"
+              size={24}
+              iconStyle={{ width: 24 }}
+              color={color}
               />
-              ),
-            }}
-        />
+            ),
+          }}
+          />
         <Drawer.Screen
           name="DirectoryNav"
           component={DirectoryNavigator}
@@ -303,15 +301,15 @@ const Main = () => {
             headerShown: false,
             drawerIcon: ({ color }) => (
               <Icon
-                name="list"
-                type="font-awesome"
-                size={24}
-                iconStyle={{ width: 24 }}
-                color={color}
+              name="list"
+              type="font-awesome"
+              size={24}
+              iconStyle={{ width: 24 }}
+              color={color}
               />
             ),
           }}
-        />
+          />
         <Drawer.Screen
           name="ReserveCampsite"
           component={ReservationNavigator}
@@ -320,15 +318,15 @@ const Main = () => {
             headerShown: false,
             drawerIcon: ({ color }) => (
               <Icon
-                name="tree"
-                type="font-awesome"
-                size={24}
-                iconStyle={{ width: 24 }}
-                color={color}
+              name="tree"
+              type="font-awesome"
+              size={24}
+              iconStyle={{ width: 24 }}
+              color={color}
               />
             ),
           }}
-        />
+          />
         <Drawer.Screen
           name="FavoritesNav"
           component={FavoritesNavigator}
@@ -337,15 +335,15 @@ const Main = () => {
             headerShown: false,
             drawerIcon: ({ color }) => (
               <Icon
-                name="heart"
-                type="font-awesome"
-                size={24}
-                iconStyle={{ width: 24 }}
-                color={color}
+              name="heart"
+              type="font-awesome"
+              size={24}
+              iconStyle={{ width: 24 }}
+              color={color}
               />
             ),
           }}
-        />
+          />
         <Drawer.Screen
           name="AboutNav"
           component={AboutNavigator}
@@ -354,15 +352,15 @@ const Main = () => {
             headerShown: false,
             drawerIcon: ({ color }) => (
               <Icon
-                name="info-circle"
-                type="font-awesome"
-                size={24}
-                iconStyle={{ width: 24 }}
-                color={color}
+              name="info-circle"
+              type="font-awesome"
+              size={24}
+              iconStyle={{ width: 24 }}
+              color={color}
               />
             ),
           }}
-        />
+          />
         <Drawer.Screen
           name="ContactNav"
           component={ContactNavigator}
@@ -371,15 +369,15 @@ const Main = () => {
             headerShown: false,
             drawerIcon: ({ color }) => (
               <Icon
-                name="address-card"
-                type="font-awesome"
-                size={24}
-                iconStyle={{ width: 24 }}
-                color={color}
+              name="address-card"
+              type="font-awesome"
+              size={24}
+              iconStyle={{ width: 24 }}
+              color={color}
               />
             ),
           }}
-        />
+          />
       </Drawer.Navigator>
     </View>
   );
@@ -439,4 +437,6 @@ export default Main;
  * the screens within its stack, and if you use the provided back arrow or a hardware
  * back button, pops the current screen off the stack and returns you to the previous one.
  * @Stack.Screen - A component that represents a single screen in the stack navigator.
- */
+  * @note Received a nested-name warning in console by renaming the Drawer.Screen route
+  * name from "Login" to "Log In". The Stack.Screen drawer name remains "Login".
+*/

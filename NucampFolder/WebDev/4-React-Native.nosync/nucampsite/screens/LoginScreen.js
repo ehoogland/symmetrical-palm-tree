@@ -134,3 +134,9 @@ const styles = StyleSheet.create({
     }
 });
 export default LoginScreen;
+
+/**
+ * Dev Notes
+ * In testing, the app freezes if you do not the dismiss the IDE's dev modal before pressing the home icon.
+ *
+ */
