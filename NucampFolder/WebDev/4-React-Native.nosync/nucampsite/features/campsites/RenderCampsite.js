@@ -1,11 +1,19 @@
 import { useRef } from 'react';
-import { Text, View, StyleSheet, Alert, PanResponder } from 'react-native';
+import { 
+    Text, 
+    View, 
+    StyleSheet, 
+    Alert, 
+    PanResponder,
+    Share } from 'react-native';
+
 import { Card, Icon } from 'react-native-elements';
 import * as Animatable from 'react-native-animatable';
 import { baseUrl } from '../../shared/baseUrl';
 
 const RenderCampsite = (props) => {
     const { campsite } = props;
+    // Create a reference to the view component which is used for animations
     const view = useRef(null); 
     
     const isLeftSwipe = ({ dx }) => dx < -200 ? true : false; 
@@ -49,7 +57,26 @@ const RenderCampsite = (props) => {
             return true;
         }
     });
-    
+    // Share API to share content from the app using the device's native sharing capabilities
+    // such as sharing via social media, messaging apps, email, etc.
+    // It provides a consistent way to share content across different platforms and apps.
+    // Must have a message in Android, and either a message or url in iOS
+    // The separate, optional object that controls configuration variables such as dialogTitle
+    // is the title of the share dialog that appears when the share action is triggered
+    // (This option is for Android only and will set a title for the share dialog that pops up when 
+    // you opt to share something from your app)
+    const shareCampsite = (title, message, url) => {
+        Share.share(
+            {
+                title,
+                message: `${title}: ${message} ${url}`,
+                url
+            },
+            {
+                dialogTitle: 'Share ' + title
+            }
+        );
+    };
     if (campsite) {
         return (
             <Animatable.View 
@@ -87,6 +114,18 @@ const RenderCampsite = (props) => {
                             reverse
                             onPress={() => props.onShowModal()}  
                             />
+                        <Icon
+                            name={ 'share' }
+                            type='font-awesome'
+                            color='#5637DD'
+                            raised
+                            reverse
+                            onPress={() => shareCampsite(
+                                campsite.name,
+                                campsite.description,
+                                baseUrl + campsite.image
+                            )}
+                        />
                     </View>
                 </Card>
             </Animatable.View>
