@@ -4,7 +4,7 @@ import { Button, Icon, CheckBox, Input } from 'react-native-elements';
 import * as SecureStore from 'expo-secure-store'; /* For secure storage of user info */
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
-const LoginTab = ({ navigation}) => {
+const LoginTab = ({ navigation }) => {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [remember, setRemember] = useState(false);
@@ -85,10 +85,10 @@ const LoginTab = ({ navigation}) => {
                     type='clear'
                     icon={
                         <Icon
-                        name='user-plus'
-                        type='font-awesome'
-                        color='blue'
-                        iconStyle={{ marginRight: 10 }}
+                            name='user-plus'
+                            type='font-awesome'
+                            color='blue'
+                            iconStyle={{ marginRight: 10 }}
                         />
                     }
                     titleStyle={{ color: 'blue' }}
@@ -98,15 +98,16 @@ const LoginTab = ({ navigation}) => {
     );
 };
 
-const RegisterTab = ({ navigation}) => {
+const RegisterTab = ({ navigation }) => {
     return <ScrollView></ScrollView>;
 }
 
 const Tab = createBottomTabNavigator();
+
 const LoginScreen = () => {
     const tabBarOptions = {
         activeBackgroundColor: '#5637DD',
-        inactiveBackgroundColor: '#d1c4e9CEC8FF',
+        inactiveBackgroundColor:'#CEC8FF',
         activeTintColor: '#ffffff',
         inactiveTintColor: '#808080',
         labelStyle: { fontSize: 16 }
@@ -120,9 +121,9 @@ const LoginScreen = () => {
                     tabBarIcon: (props) => {
                         return (
                             <Icon
-                            name='sign-in'
-                            type='font-awesome'
-                            color={props.color}
+                                name='sign-in'
+                                type='font-awesome'
+                                color={props.color}
                             />
                         );
                     }
@@ -135,9 +136,9 @@ const LoginScreen = () => {
                     tabBarIcon: (props) => {
                         return (
                             <Icon
-                            name='user-plus'
-                            type='font-awesome'
-                            color={props.color}
+                                name='user-plus'
+                                type='font-awesome'
+                                color={props.color}
                             />
                         );
                     }

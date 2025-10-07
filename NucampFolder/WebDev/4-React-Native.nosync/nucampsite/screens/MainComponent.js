@@ -71,7 +71,6 @@ const AboutNavigator = () => {
           ),
         })}
       />
-
     </Stack.Navigator>
   );
 };
