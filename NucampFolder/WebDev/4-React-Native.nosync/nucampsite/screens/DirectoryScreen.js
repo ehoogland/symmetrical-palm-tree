@@ -4,11 +4,9 @@ import * as Animatable from 'react-native-animatable'
 import { Tile } from 'react-native-elements';
 import { baseUrl } from '../shared/baseUrl';
 import { useSelector } from 'react-redux';
-/* import { CAMPSITES } from '../shared/campsites'; --IGNORE-- */
-/* import { useState } from 'react'; --IGNORE-- */
 
-const DirectoryScreen = ({ navigation }) => {
-    /* const [campsites, setCampsites] = useState(CAMPSITES); --IGNORE-- */
+const DirectoryScreen = () => {
+    
     const campsites = useSelector((state) => state.campsites);
     if (campsites.isLoading) {
         return <Loading />;
@@ -48,7 +46,7 @@ const DirectoryScreen = ({ navigation }) => {
                     caption={campsite.description}
                     featured
                     onPress={() => {
-                        navigation.navigate('CampsiteInfo', { campsite });
+                        navigation.navigate('CampsiteInfoScreen', { campsite });
                     }}
                     imageSrc={{ uri: baseUrl + campsite.image }}
                 />

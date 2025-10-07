@@ -36,12 +36,12 @@ const FavoritesScreen = ({ navigation }) => {
 
             <View>
                 <ListItem
-                    onPress={() =>
-                        navigation.navigate('DirectoryNav', {
+                    onPress={() => {
+                            navigation.navigate('DirectoryNav', {
                             screen: 'CampsiteInfoScreen',
                             params: { campsite }
-                        })
-                    }
+                        });
+                    }}
                 >
                     <Avatar rounded source={{ uri: baseUrl + campsite.image }} />
                     <ListItem.Content>
@@ -130,7 +130,7 @@ export default FavoritesScreen;
  * In this case, it navigates to the CampsiteInfoScreen within the DirectoryNav stack,
  * passing the selected campsite as a parameter.
  * 
- * Lesson code had navigation.popTo(...) function, but that errors as not being a function. 
+ * Lesson code had navigation.popTo(...) function, but that errors as not being a function/undefined. 
  * Changed to navigation.navigate. 
  * "CampsiteInfo" file referred to in code does not exist. I recalled "CampsiteInfoScreen" in screens
  * subdirectory, and it is listed in MainComponent.js as "CampsiteInfoScreen", so I changed to that.
