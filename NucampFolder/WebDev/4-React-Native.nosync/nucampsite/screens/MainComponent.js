@@ -1,29 +1,36 @@
-import { Image, Platform, StyleSheet, Text, View } from "react-native";
+import {
+  Image,
+  Platform,
+  StyleSheet,
+  Text,
+  View,
+  ToastAndroid,
+} from "react-native";
 import Constants from "expo-constants";
 import CampsiteInfoScreen from "./CampsiteInfoScreen";
 import DirectoryScreen from "./DirectoryScreen";
 import { createStackNavigator } from "@react-navigation/stack";
-import { 
+import {
   createDrawerNavigator,
   DrawerContentScrollView,
-  DrawerItemList
+  DrawerItemList,
 } from "@react-navigation/drawer";
 import HomeScreen from "./HomeScreen";
-import AboutScreen from "./AboutScreen";    
+import AboutScreen from "./AboutScreen";
 import ContactScreen from "./ContactScreen";
-import ReservationScreen from './ReservationScreen';
-import { Icon } from 'react-native-elements';
-import logo from '../assets/images/logo.png';
-import { useDispatch } from 'react-redux';
+import ReservationScreen from "./ReservationScreen";
+import { Icon } from "react-native-elements";
+import logo from "../assets/images/logo.png";
+import { useDispatch } from "react-redux";
 import { useEffect } from "react";
-import { fetchCampsites } from "../features/campsites/campsitesSlice";
 import { fetchPartners } from "../features/partners/partnersSlice";
+import { fetchCampsites } from "../features/campsites/campsitesSlice";
 import { fetchPromotions } from "../features/promotions/promotionsSlice";
 import { fetchComments } from "../features/comments/commentsSlice";
-import FavoritesScreen from './FavoritesScreen';
+import FavoritesScreen from "./FavoritesScreen";
 import LoginScreen from "./LoginScreen";
-import { getFocusedRouteNameFromRoute } from "@react-navigation/native";
-
+import { getFocusedRouteNameFromRoute } from "@react-navigation/core";
+import NetInfo from "@react-native-community/netinfo";
 
 const Drawer = createDrawerNavigator();
 
@@ -31,6 +38,7 @@ const screenOptions = {
   headerTintColor: "#fff",
   headerStyle: { backgroundColor: "#5637DD" },
 };
+
 const HomeNavigator = () => {
   const Stack = createStackNavigator();
   return (
@@ -53,10 +61,12 @@ const HomeNavigator = () => {
     </Stack.Navigator>
   );
 };
+
 const AboutNavigator = () => {
   const Stack = createStackNavigator();
+
   return (
-    <Stack.Navigator initialRouteName="About" screenOptions={screenOptions}>
+    <Stack.Navigator screenOptions={screenOptions}>
       <Stack.Screen
         name="About"
         component={AboutScreen}
@@ -74,10 +84,12 @@ const AboutNavigator = () => {
     </Stack.Navigator>
   );
 };
+
 const ContactNavigator = () => {
   const Stack = createStackNavigator();
+
   return (
-    <Stack.Navigator initialRouteName="Contact" screenOptions={screenOptions}>
+    <Stack.Navigator screenOptions={screenOptions}>
       <Stack.Screen
         name="Contact"
         component={ContactScreen}
@@ -96,28 +108,31 @@ const ContactNavigator = () => {
     </Stack.Navigator>
   );
 };
+
 const ReservationNavigator = () => {
   const Stack = createStackNavigator();
+
   return (
     <Stack.Navigator screenOptions={screenOptions}>
       <Stack.Screen
         name="Reservation"
         component={ReservationScreen}
-        options={({navigation}) => ({
-          title: 'Reservation Search',
+        options={({ navigation }) => ({
+          title: "Reservation Search",
           headerLeft: () => (
             <Icon
-              name='tree'
-              type='font-awesome'
+              name="tree"
+              type="font-awesome"
               iconStyle={styles.stackIcon}
               onPress={() => navigation.toggleDrawer()}
             />
-          )
+          ),
         })}
       />
     </Stack.Navigator>
   );
 };
+
 const FavoritesNavigator = () => {
   const Stack = createStackNavigator();
   return (
@@ -134,12 +149,13 @@ const FavoritesNavigator = () => {
               iconStyle={styles.stackIcon}
               onPress={() => navigation.toggleDrawer()}
             />
-          )
+          ),
         })}
       />
     </Stack.Navigator>
   );
 };
+
 const LoginNavigator = () => {
   const Stack = createStackNavigator();
   return (
@@ -152,21 +168,21 @@ const LoginNavigator = () => {
           headerLeft: () => (
             <Icon
               name={
-                getFocusedRouteNameFromRoute(route) ===
-                'Register'
-                ? 'user-plus'
-                : 'sign-in'
+                getFocusedRouteNameFromRoute(route) === "Register"
+                  ? "user-plus"
+                  : "sign-in"
               }
               type="font-awesome"
               iconStyle={styles.stackIcon}
               onPress={() => navigation.toggleDrawer()}
             />
-          )
+          ),
         })}
       />
     </Stack.Navigator>
   );
 };
+
 const DirectoryNavigator = () => {
   const Stack = createStackNavigator();
   return (
@@ -196,6 +212,7 @@ const DirectoryNavigator = () => {
     </Stack.Navigator>
   );
 };
+
 const CustomDrawerContent = (props) => (
   <DrawerContentScrollView {...props}>
     <View style={styles.drawerHeader}>
@@ -209,80 +226,86 @@ const CustomDrawerContent = (props) => (
     <DrawerItemList {...props} labelStyle={{ fontWeight: "bold" }} />
   </DrawerContentScrollView>
 );
-/** 
- * The Main component
- * @const Main is a functional component that serves as the main entry point for the app's navigation structure.
- * It sets up a Drawer Navigator that contains multiple Stack Navigators for different sections of the app,
- * including Home, Directory, About, Contact, Favorites, and Login screens. Its value is an anonymous arrow function that will
- * @return a JSX.Element representing the navigation structure of the app.
- * @const dispatch is bound to the value of the call to the
- * @hook useDispatch() hook, giving it a reference to the dispatch function from the Redux store. 
- * This allows the component to dispatch actions to the store.
- * @hook useEffect hook, used to hook into the component lifecycle and perform side effects,
- * such as fetching data using our thunk action creators when the component mounts.
- * The useEffect hook is used to dispatch actions to fetch data when the component mounts.
- * Action creators are functions that when called return an action [object].
- * mounts. An action object is a plain JavaScript object that has a type property and may have additional properties.
- * Dispatch is included in the dependency array to avoid ESLint warnings. Dispatch is a stable reference
- * and won't change, so in terms of its effect, this is identical to having an empty dependency array for
- * the purpose of ensuring that the effect runs only once when the component mounts. Even though fetchCampsites
- * is a thunk action creator we can still use it like this when dispatching it because Redux Thunk middleware
- * allows us to dispatch functions in addition to action objects. A thunk action creator is a function that returns
- * another function (the thunk) that takes the dispatch function as an argument. Notice that in the body
- * we are making a call to dispatch and passing in the thunk action creator fetchCampsites.
- * This will cause the thunk action creator to be executed, which in turn will perform the
- * asynchronous operation of fetching the campsites data and then dispatching the appropriate
- * actions based on the result of that operation. It will be executed because () is used
- * after fetchCampsites(). The same applies to fetchPromotions(), fetchPartners(), and fetchComments().
- *
- * When the application starts up and the Main component is rendered for the first time,
- * the useEffect hook will run and all of our data will be fetched and loaded into the Redux store
- * making it available for all of our components to access and make changes to
- * data needed for the app to function properly, provided that the components are connected
- * to the Redux store.
- *
- * 
-*/
+
 const Main = () => {
   const dispatch = useDispatch();
-  
+
   useEffect(() => {
     dispatch(fetchCampsites());
     dispatch(fetchPromotions());
     dispatch(fetchPartners());
     dispatch(fetchComments());
   }, [dispatch]);
+
+  useEffect(() => {
+    NetInfo.fetch().then((connectionInfo) => {
+      Platform.OS === "ios"
+        ? Alert.alert("Initial Network Connectivity Type:", connectionInfo.type)
+        : ToastAndroid.show(
+            "Initial Network Connectivity Type: " + connectionInfo.type,
+            ToastAndroid.LONG
+          );
+    });
+
+    const unsubscribeNetInfo = NetInfo.addEventListener((connectionInfo) => {
+      handleConnectivityChange(connectionInfo);
+    });
+
+    return unsubscribeNetInfo;
+  }, []);
+
+  const handleConnectivityChange = (connectionInfo) => {
+    let connectionMsg = "You are now connected to an active network.";
+    switch (connectionInfo.type) {
+      case "none":
+        connectionMsg = "No network connection is active.";
+        break;
+      case "unknown":
+        connectionMsg = "The network connection state is now unknown.";
+        break;
+      case "cellular":
+        connectionMsg = "You are now connected to a cellular network.";
+        break;
+      case "wifi":
+        connectionMsg = "You are now connected to a WiFi network.";
+        break;
+    }
+    Platform.OS === "ios"
+      ? Alert.alert("Connection change:", connectionMsg)
+      : ToastAndroid.show(connectionMsg, ToastAndroid.LONG);
+  };
+
   return (
     <View
-    style={{
-      flex: 1,
-      paddingTop: Platform.OS === "ios" ? 0 : Constants.statusBarHeight,
-    }}
-    >
-    <Drawer.Navigator
-      initialRouteName="HomeNav"
-      drawerContent={CustomDrawerContent}
-      screenOptions={{
-        drawerStyle: { backgroundColor: "#CEC8FF" },
-        headerShown: true,
+      style={{
+        flex: 1,
+        paddingTop: Platform.OS === "ios" ? 0 : Constants.statusBarHeight,
       }}
+    >
+      <Drawer.Navigator
+        initialRouteName="HomeNav"
+        drawerContent={CustomDrawerContent}
+        screenOptions={{
+          drawerStyle: { backgroundColor: "#CEC8FF" },
+          headerShown: true,
+        }}
       >
         <Drawer.Screen
-          name="Log In"
+          name="Login"
           component={LoginNavigator}
           options={{
             headerShown: false,
             drawerIcon: ({ color }) => (
               <Icon
-              name="sign-in"
-              type="font-awesome"
-              size={24}
-              iconStyle={{ width: 24 }}
-              color={color}
+                name="sign-in"
+                type="font-awesome"
+                size={24}
+                iconStyle={{ width: 24 }}
+                color={color}
               />
             ),
           }}
-          />
+        />
         <Drawer.Screen
           name="HomeNav"
           component={HomeNavigator}
@@ -291,15 +314,15 @@ const Main = () => {
             headerShown: false,
             drawerIcon: ({ color }) => (
               <Icon
-              name="home"
-              type="font-awesome"
-              size={24}
-              iconStyle={{ width: 24 }}
-              color={color}
+                name="home"
+                type="font-awesome"
+                size={24}
+                iconStyle={{ width: 24 }}
+                color={color}
               />
             ),
           }}
-          />
+        />
         <Drawer.Screen
           name="DirectoryNav"
           component={DirectoryNavigator}
@@ -308,15 +331,15 @@ const Main = () => {
             headerShown: false,
             drawerIcon: ({ color }) => (
               <Icon
-              name="list"
-              type="font-awesome"
-              size={24}
-              iconStyle={{ width: 24 }}
-              color={color}
+                name="list"
+                type="font-awesome"
+                size={24}
+                iconStyle={{ width: 24 }}
+                color={color}
               />
             ),
           }}
-          />
+        />
         <Drawer.Screen
           name="ReserveCampsite"
           component={ReservationNavigator}
@@ -325,15 +348,15 @@ const Main = () => {
             headerShown: false,
             drawerIcon: ({ color }) => (
               <Icon
-              name="tree"
-              type="font-awesome"
-              size={24}
-              iconStyle={{ width: 24 }}
-              color={color}
+                name="tree"
+                type="font-awesome"
+                size={24}
+                iconStyle={{ width: 24 }}
+                color={color}
               />
             ),
           }}
-          />
+        />
         <Drawer.Screen
           name="FavoritesNav"
           component={FavoritesNavigator}
@@ -342,15 +365,15 @@ const Main = () => {
             headerShown: false,
             drawerIcon: ({ color }) => (
               <Icon
-              name="heart"
-              type="font-awesome"
-              size={24}
-              iconStyle={{ width: 24 }}
-              color={color}
+                name="heart"
+                type="font-awesome"
+                size={24}
+                iconStyle={{ width: 24 }}
+                color={color}
               />
             ),
           }}
-          />
+        />
         <Drawer.Screen
           name="AboutNav"
           component={AboutNavigator}
@@ -359,15 +382,15 @@ const Main = () => {
             headerShown: false,
             drawerIcon: ({ color }) => (
               <Icon
-              name="info-circle"
-              type="font-awesome"
-              size={24}
-              iconStyle={{ width: 24 }}
-              color={color}
+                name="info-circle"
+                type="font-awesome"
+                size={24}
+                iconStyle={{ width: 24 }}
+                color={color}
               />
             ),
           }}
-          />
+        />
         <Drawer.Screen
           name="ContactNav"
           component={ContactNavigator}
@@ -376,19 +399,20 @@ const Main = () => {
             headerShown: false,
             drawerIcon: ({ color }) => (
               <Icon
-              name="address-card"
-              type="font-awesome"
-              size={24}
-              iconStyle={{ width: 24 }}
-              color={color}
+                name="address-card"
+                type="font-awesome"
+                size={24}
+                iconStyle={{ width: 24 }}
+                color={color}
               />
             ),
           }}
-          />
+        />
       </Drawer.Navigator>
     </View>
   );
 };
+
 const styles = StyleSheet.create({
   drawerHeader: {
     backgroundColor: "#5637DD",
@@ -446,4 +470,38 @@ export default Main;
  * @Stack.Screen - A component that represents a single screen in the stack navigator.
   * @note Received a nested-name warning in console by renaming the Drawer.Screen route
   * name from "Login" to "Log In". The Stack.Screen drawer name remains "Login".
+*/
+/** 
+ * The Main component
+ * @const Main is a functional component that serves as the main entry point for the app's navigation structure.
+ * It sets up a Drawer Navigator that contains multiple Stack Navigators for different sections of the app,
+ * including Home, Directory, About, Contact, Favorites, and Login screens. Its value is an anonymous arrow function that will
+ * @return a JSX.Element representing the navigation structure of the app.
+ * @const dispatch is bound to the value of the call to the
+ * @hook useDispatch() hook, giving it a reference to the dispatch function from the Redux store. 
+ * This allows the component to dispatch actions to the store.
+ * @hook useEffect hook, used to hook into the component lifecycle and perform side effects,
+ * such as fetching data using our thunk action creators when the component mounts.
+ * The useEffect hook is used to dispatch actions to fetch data when the component mounts.
+ * Action creators are functions that when called return an action [object].
+ * mounts. An action object is a plain JavaScript object that has a type property and may have additional properties.
+ * Dispatch is included in the dependency array to avoid ESLint warnings. Dispatch is a stable reference
+ * and won't change, so in terms of its effect, this is identical to having an empty dependency array for
+ * the purpose of ensuring that the effect runs only once when the component mounts. Even though fetchCampsites
+ * is a thunk action creator we can still use it like this when dispatching it because Redux Thunk middleware
+ * allows us to dispatch functions in addition to action objects. A thunk action creator is a function that returns
+ * another function (the thunk) that takes the dispatch function as an argument. Notice that in the body
+ * we are making a call to dispatch and passing in the thunk action creator fetchCampsites.
+ * This will cause the thunk action creator to be executed, which in turn will perform the
+ * asynchronous operation of fetching the campsites data and then dispatching the appropriate
+ * actions based on the result of that operation. It will be executed because () is used
+ * after fetchCampsites(). The same applies to fetchPromotions(), fetchPartners(), and fetchComments().
+ *
+ * When the application starts up and the Main component is rendered for the first time,
+ * the useEffect hook will run and all of our data will be fetched and loaded into the Redux store
+ * making it available for all of our components to access and make changes to
+ * data needed for the app to function properly, provided that the components are connected
+ * to the Redux store.
+ *
+ * 
 */
