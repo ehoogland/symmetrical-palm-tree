@@ -235,16 +235,17 @@ const RegisterTab = () => {
 const Tab = createBottomTabNavigator();
 
 const LoginScreen = () => {
-    const tabBarOptions = {
-        activeBackgroundColor: '#5637DD',
-        inactiveBackgroundColor: '#CEC8FF',
-        activeTintColor: '#fff',
-        inactiveTintColor: '#808080',
-        labelStyle: { fontSize: 16 }
+    const screenOptions = {
+        tabBarActiveTintColor: '#fff',
+        tabBarInactiveTintColor: '#808080',
+        tabBarActiveBackgroundColor: '#5637DD',
+        tabBarInactiveBackgroundColor: '#CEC8FF',
+        tabBarLabelStyle: { fontSize: 16 },
+        tabBarStyle: [{ display: 'flex' }, null]
     };
 
     return (
-        <Tab.Navigator tabBarOptions={tabBarOptions}>
+        <Tab.Navigator screenOptions={screenOptions}>
             <Tab.Screen
                 name='Login'
                 component={LoginTab}
