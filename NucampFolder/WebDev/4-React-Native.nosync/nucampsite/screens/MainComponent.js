@@ -237,7 +237,8 @@ const Main = () => {
     dispatch(fetchComments());
   }, [dispatch]);
 
-  useEffect(() => {
+  /** 
+   * useEffect(() => {
     NetInfo.fetch().then((connectionInfo) => {
       Platform.OS === "ios"
         ? Alert.alert("Initial Network Connectivity Type:", connectionInfo.type)
@@ -246,13 +247,27 @@ const Main = () => {
             ToastAndroid.LONG
           );
     });
-
+*/
+  
+  useEffect(() => {
+    showNetInfo();
+    // NOTE: Comment to test "Initial Network Connectivity Type:" alert/toast
+    // Uncomment to test connectivity change alert/toast
     const unsubscribeNetInfo = NetInfo.addEventListener((connectionInfo) => {
-      handleConnectivityChange(connectionInfo);
+    handleConnectivityChange(connectionInfo);
     });
 
-    return unsubscribeNetInfo;
+    //return unsubscribeNetInfo;
   }, []);
+  const showNetInfo = async () => {
+    const connectionInfo = await NetInfo.fetch();
+    Platform.OS === "ios"
+      ? Alert.alert("Initial Network Connectivity Type:", connectionInfo.type)
+      : ToastAndroid.show(
+          "Initial Network Connectivity Type: " + connectionInfo.type,
+          ToastAndroid.LONG
+        );
+  };
 
   const handleConnectivityChange = (connectionInfo) => {
     let connectionMsg = "You are now connected to an active network.";
@@ -443,6 +458,7 @@ export default Main;
 
 /**
  * @function Main functional component
+ * TODO: UPDATE COMMENTS to include NetInfo, image functionality
  *  
  * @description The Main component sets up the overall navigation structure of the app using
  * React Navigation.It includes a Drawer Navigator that contains two Stack Navigators

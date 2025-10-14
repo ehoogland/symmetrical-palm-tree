@@ -3,9 +3,14 @@ import { View, StyleSheet, ScrollView, Image } from 'react-native';
 import { CheckBox, Input, Button, Icon } from 'react-native-elements';
 import * as SecureStore from 'expo-secure-store';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import * as ImagePicker from 'expo-image-picker';
 import { baseUrl } from '../shared/baseUrl';
 import logo from '../assets/images/logo.png';
+// ImagePicker API to access the device camera or photo library
+import * as ImagePicker from 'expo-image-picker';
+// ImageManipulator API to manipulate images (resize, rotate, etc.)
+import * as ImageManipulator from 'expo-image-manipulator';
+// using both ImagePicker and ImageManipulator in RegisterTab component for image capture and processing
+// for learning purposes only
 
 const LoginTab = ({ navigation }) => {
     const [username, setUsername] = useState('');
@@ -136,7 +141,18 @@ const RegisterTab = () => {
             );
         }
     };
-
+    /**
+     * Get an image from the device's camera
+     * @description The getImageFromCamera function requests permission
+     * to access the device's camera.
+     * @const {Object} cameraPermission - The camera permission status.
+     * @method requestCameraPermissionsAsync - Requests permission to access the
+     * camera.
+     * @method launchCameraAsync - Launches the camera for the user to take a picture.
+     * @property {boolean} allowsEditing - Allows the user to edit the image before taking it.
+     * @property {Array} aspect - The aspect ratio to maintain when editing the image.
+     * @returns {Promise<void>}
+     */
     const getImageFromCamera = async () => {
         const cameraPermission =
             await ImagePicker.requestCameraPermissionsAsync();
@@ -148,10 +164,71 @@ const RegisterTab = () => {
             });
             if (capturedImage.assets) {
                 console.log(capturedImage);
-                setImageUrl(capturedImage.assets[0].uri);
+                // setImageUrl(capturedImage.assets[0].uri); -use with image picker only;
+                // call processImage function to resize and convert to PNG
+                processImage(capturedImage.assets[0].uri);
             }
         }
     };
+    /**
+     * Get an image from the device's media library
+     * @description The getImageFromGallery function requests permission 
+     * to access the device's media library.
+     * @const {Object} mediaLibraryPermission - The media library permission status.
+     * @method requestMediaLibraryPermissionsAsync - Requests permission to access the 
+     * media library.
+     * @method launchImageLibraryAsync - Launches the image library for the user to 
+     * select an image.
+     * @property {boolean} allowsEditing - Allows the user to edit the image before selection.
+     * @property {Array} aspect - The aspect ratio to maintain when editing the image.
+     * @returns {Promise<void>}
+     * 
+     */
+    const getImageFromGallery = async () => {
+        const mediaLibraryPermission = await ImagePicker
+            .requestMediaLibraryPermissionsAsync();
+        if (mediaLibraryPermission.status === 'granted') {
+            const capturedImage = await ImagePicker.launchImageLibraryAsync({
+                allowsEditing: true,
+                aspect: [1, 1]
+            });
+            if (capturedImage.assets) {
+                console.log(capturedImage);
+                processImage(capturedImage.assets[0].uri);
+            }
+        }
+    };
+
+    /**
+     * Process the image using ImageManipulator
+     * @param {string} imgUri - The URI of the image to process
+     * @returns {Promise<string>} - The URI of the processed image
+     * @method manipulate - A method from the expo-image-manipulator library used
+     * to perform image manipulations. Normally replaces 
+     * @method manipulateAsync to allow for more options, but for testing purposes
+     * I use the simpler manipulate method despite its limitations and the fact that
+     * it is deprecated.
+     * @note The manipulate method is deprecated and may be removed in future releases.
+     * It is recommended to use manipulateAsync for new projects to ensure compatibility
+     * with future versions of the library.
+     */
+    const processImage = async (imgUri) => {
+        // create a resized PNG image (width 400px, keep aspect ratio)
+        const processedImage = await ImageManipulator.manipulateAsync(
+            imgUri,
+            [{ resize: { width: 400 } }],
+            { format: ImageManipulator.SaveFormat.PNG }
+        );
+
+        // Log full processed image object for debugging
+        console.log('processedImage', processedImage);
+
+        // Update state with new image uri
+        setImageUrl(processedImage.uri);
+
+        return processedImage.uri;
+    };
+    
 
     return (
         <ScrollView>
@@ -163,6 +240,7 @@ const RegisterTab = () => {
                         style={styles.image}
                     />
                     <Button title='Camera' onPress={getImageFromCamera} />
+                    <Button title='Gallery' onPress={getImageFromGallery} type='clear' />
                 </View>
                 <Input
                     placeholder='Username'
