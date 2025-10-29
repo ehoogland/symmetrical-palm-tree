@@ -1,0 +1,30 @@
+
+<!--
+  Sanitized SVG derived from:
+  https://upload.wikimedia.org/wikipedia/commons/1/10/Army-USA-OR-02_(Army_greens).svg
+  Original: Wikimedia Commons (public domain / government work) — kept visible shapes only.
+-->
+<!-- Private E-2 stripe (single white chevron) - simplified -->
+<!--
+  Army private E-2 chevron (reproduction)
+  Source: Wikimedia Commons (public domain US Government work)
+  Original: https://upload.wikimedia.org/wikipedia/commons/1/10/Army-USA-OR-02_(Army_greens).svg
+-->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" role="img" aria-label="Army Private E-2 stripe">
+  <!-- Stylized Army Private (E-2) chevron badge -->
+  <!-- Background hex-like badge with subtle inner border -->
+  <g fill="none" fill-rule="evenodd">
+    <rect x="4" y="4" width="112" height="112" rx="12" fill="#3c3624" stroke="#2b261c" stroke-width="2" />
+    <!-- inner panel (slightly inset) -->
+    <rect x="12" y="12" width="96" height="96" rx="10" fill="#34402b" />
+
+    <!-- single white chevron (E-2) centered -->
+    <g transform="translate(0,6)">
+      <path d="M20 60 L60 24 L100 60 L88 72 L60 44 L32 72 Z" fill="#fff"/>
+    </g>
+
+    <!-- subtle drop shadow under chevron -->
+    <path d="M22 62 L60 28 L98 62 L86 74 L60 48 L34 74 Z" fill="#000" opacity="0.08"/>
+  </g>
+</svg>
+

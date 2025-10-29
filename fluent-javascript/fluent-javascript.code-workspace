@@ -1,0 +1,20 @@
+{
+  "folders": [
+    {
+      "name": "Fluent JavaScript",
+      "path": "/Users/eshoogland/Desktop/fluent-javascript"
+    }
+  ],
+  "settings": {
+    "terminal.integrated.cwd": "/Users/eshoogland/Desktop/fluent-javascript",
+    "python.defaultInterpreterPath": "/opt/homebrew/bin/python3",
+    "terminal.integrated.defaultProfile.osx": "bash"
+  },
+  "extensions": {
+    "recommendations": [
+      "ms-vscode.vscode-json",
+      "bradlc.vscode-tailwindcss",
+      "esbenp.prettier-vscode"
+    ]
+  }
+}
