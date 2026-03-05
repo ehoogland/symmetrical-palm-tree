@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { reactDescriptions } from '../data/reactDescriptions';
 import Editor from '@monaco-editor/react';
-import RankBadgeTooltip from './RankBadgeTooltip';
+import Tech4Tooltip from './Tech4Tooltip';
 import Tech1Tooltip from './Tech1Tooltip';
 import Tech5Tooltip from './Tech5Tooltip';
 
@@ -17,8 +17,6 @@ const ProblemCard = ({ problem }) => {
   const [isRunning, setIsRunning] = useState(false);
   const [showSolution, setShowSolution] = useState(false);
   const [selectedAlt, setSelectedAlt] = useState(null);
-  const [showRankInfoHeader, setShowRankInfoHeader] = useState(false);
-  const [showRankInfoAlt, setShowRankInfoAlt] = useState(false);
   const [testResult, setTestResult] = useState(null);
 
   const outputRef = useRef([]);
@@ -141,16 +139,20 @@ const ProblemCard = ({ problem }) => {
 
   // Render the rank badge based on problem difficulty.
   // - Easy -> tech1 (Private) small/large image with simple tooltip
-  // - Novice -> Tech4 via RankBadgeTooltip (medium-sized)
-  // - Medium -> tech5 image (medium-sized) with tooltip
+  // - Novice -> Tech4 via Tech4Tooltip
+  // - Intermediate -> tech5 image with tooltip
   const renderRankBadge = (p, size = 'md') => {
     const imgClass = size === 'lg' ? 'solution-badge-lg' : (size === 'sm' ? 'solution-badge-sm' : 'solution-badge-md');
-    if (!p || !p.difficulty) {
+  if (!p || !p.difficulty) {
       // map imgClass -> sensible width/height for the SVG
       let w = 44; let h = 44;
       if (imgClass === 'solution-badge-lg') { w = 48; h = 60; }
       if (imgClass === 'solution-badge-sm') { w = 28; h = 34; }
-      return <Tech1Tooltip width={w} height={h} imgClass={imgClass} position="left" />;
+      return (
+        <span className="rank-image-align">
+          <Tech1Tooltip width={w} height={h} imgClass={imgClass} position="left" />
+        </span>
+      );
     }
 
     if (p.difficulty === 'Novice') {
@@ -159,15 +161,23 @@ const ProblemCard = ({ problem }) => {
       let w = 44; let h = 44;
       if (imgClass === 'solution-badge-lg') { w = 48; h = 60; }
       if (imgClass === 'solution-badge-sm') { w = 28; h = 34; }
-      return <RankBadgeTooltip width={w} height={h} imgClass={imgClass} compact={false} position="left" />;
+      return (
+        <span className="rank-image-align">
+          <Tech4Tooltip width={w} height={h} imgClass={imgClass} compact={false} position="left" />
+        </span>
+      );
     }
 
-    if (p.difficulty === 'Medium') {
+    if (p.difficulty === 'Intermediate') {
       // map imgClass -> sensible width/height for the SVG
       let w = 44; let h = 44;
       if (imgClass === 'solution-badge-lg') { w = 48; h = 60; }
       if (imgClass === 'solution-badge-sm') { w = 28; h = 34; }
-      return <Tech5Tooltip width={w} height={h} imgClass={imgClass} position="left" />;
+      return (
+        <span className="rank-image-align">
+          <Tech5Tooltip width={w} height={h} imgClass={imgClass} position="left" />
+        </span>
+      );
     }
 
     // default -> Easy/Private
@@ -175,7 +185,11 @@ const ProblemCard = ({ problem }) => {
     let w = 44; let h = 44;
     if (imgClass === 'solution-badge-lg') { w = 48; h = 60; }
     if (imgClass === 'solution-badge-sm') { w = 28; h = 34; }
-    return <Tech1Tooltip width={w} height={h} imgClass={imgClass} position="left" />;
+    return (
+      <span className="rank-image-align">
+        <Tech1Tooltip width={w} height={h} imgClass={imgClass} position="left" />
+      </span>
+    );
   };
 
   return (
@@ -184,40 +198,24 @@ const ProblemCard = ({ problem }) => {
         <div className="d-flex align-items-baseline">
           <h3 className="card-title mb-0 me-2">{problem.title}</h3>
           {problem.difficulty && (
-            <span className="d-inline-flex align-items-center" style={{ gap: '0.25rem', position: 'relative', top: '-0.15em' }}>
-              {problem.difficulty === 'Medium' && (
-                <button type="button" className="btn btn-link p-0" onClick={() => setShowRankInfoHeader(!showRankInfoHeader)} aria-label="Show rank info" style={{ lineHeight: 1 }}>
-                  <svg width={28} height={28} viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden style={{ display: 'block' }}>
-                    <circle cx="12" cy="12" r="10" fill="#ffc107" />
-                    <path d="M12 6.5 L13.4 10.2 L17.2 10.2 L14 12.6 L15.2 16.3 L12 14 L8.8 16.3 L10 12.6 L6.8 10.2 L10.6 10.2 Z" fill="#fff" opacity="0.95" />
-                  </svg>
-                </button>
-              )}
-              <span className={`badge ${problem.difficulty === 'Easy' ? 'bg-success' 
+            <span className="d-inline-flex" style={{ gap: '0.25rem' }}>
+                <span className={`badge badge-centered ${problem.difficulty === 'Easy' ? 'bg-success' 
               : problem.difficulty === 'Novice' ? 'bg-novice'
-              : problem.difficulty === 'Medium' ? 'bg-warning' 
+              : problem.difficulty === 'Intermediate' ? 'bg-warning' 
               : problem.difficulty === 'Moderately High' ? 'bg-warning'
               : 'bg-danger'}`}>{problem.difficulty}</span>
             </span>
           )}
         </div>
-            <div className="d-flex align-items-center" style={{ gap: '0.5rem' }}>
-          {/* Rank badge inset a little from the right edge so it visually centers under the previous card controls */}
-          {/* Right-side rank artwork. If a problem requests Tech5 horizontally, render tech1 left and tech5 right aligned with lozenges */}
-            <div className="header-rank d-flex flex-column align-items-end">
-              <div style={{ position: 'relative' }}>
-                {renderRankBadge(problem, 'lg')}
-              </div>
+        {/* Always show right-side rank (primary rank based on difficulty) */}
+        <div className="d-flex align-items-center" style={{ gap: '0.5rem' }}>
+          {/* Right-side rank artwork */}
+          <div className="header-rank d-flex flex-column align-items-end">
+            <div className="rank-image-align" style={{ position: 'relative' }}>
+              {renderRankBadge(problem, 'lg')}
             </div>
-        </div>
-
-        {showRankInfoHeader && (
-          <div className="mt-2 p-2 small bg-light border rounded" style={{ display: 'inline-block' }} role="region" aria-label="Rank information">
-            {problem.difficulty === 'Easy' && (<div><strong>Tech Private</strong><div>Easy challenge — introductory level.</div></div>)}
-            {problem.difficulty === 'Medium' && (<div><strong>Yellow Challenge</strong><div>Intermediate-style challenge — extra considerations.</div></div>)}
-            {problem.difficulty !== 'Easy' && problem.difficulty !== 'Medium' && (<div><strong>{problem.difficulty}</strong></div>)}
           </div>
-        )}
+        </div>
       </div>
 
       <div className="card-body" ref={cardBodyRef}>
@@ -290,7 +288,9 @@ const ProblemCard = ({ problem }) => {
                     scrollbar: {
                       vertical: 'auto',
                       horizontal: 'auto'
-                    }
+                    },
+                    domReadOnly: false,
+                    readOnly: false
                   }} 
                   onMount={(ed) => { 
                     editorRef.current = ed; 
@@ -366,13 +366,6 @@ const ProblemCard = ({ problem }) => {
                           {renderRankBadge(problem, 'md')}
                         </span>
                         <strong className="me-2 alt-strong">Alternative ({pretty}):</strong>
-                        <button type="button" className="btn btn-link p-0 ms-2" onClick={() => setShowRankInfoAlt(!showRankInfoAlt)} aria-label="Show alternative rank info" style={{ lineHeight: 1 }}>
-                          <svg width={20} height={20} viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden style={{ display: 'block' }}>
-                            <circle cx="12" cy="12" r="10" fill="#ffc107" />
-                            <path d="M12 7.5 L13.1 10.1 L15.8 10.1 L13.7 11.9 L14.6 14.6 L12 13 L9.4 14.6 L10.3 11.9 L8.2 10.1 L10.9 10.1 Z" fill="#fff" opacity="0.95" />
-                          </svg>
-                        </button>
-                        {showRankInfoAlt && (<div className="ms-2 p-2 small bg-light border rounded" style={{ display: 'inline-block' }} role="region" aria-label="Alternative rank information"><div><strong>Yellow Challenge</strong></div><div>Advanced alternative: shows different looping patterns (for..in / for..of).</div></div>)}
                       </div>
                     </div>
                     <pre className="p-2 bg-light rounded" style={{ whiteSpace: 'pre-wrap', fontFamily: 'Monaco, Consolas, "Courier New", monospace' }}>{src}</pre>
@@ -384,25 +377,6 @@ const ProblemCard = ({ problem }) => {
                         <div className="mt-2">
                           <label className="form-label"><strong className="alt-strong">Alternative Output:</strong></label>
                           <pre className="bg-dark text-light p-3 rounded" style={{ fontSize: '0.9rem', whiteSpace: 'pre-wrap' }}>{out.startsWith('__ERROR__:') ? `Error: ${out.replace('__ERROR__:', '')}` : out}</pre>
-
-                          {/* JSDoc-style explanation of the Array.from usage shown below */}
-                          <pre className="mt-2 p-2 bg-light rounded" style={{ whiteSpace: 'pre-wrap', fontFamily: 'Monaco, Consolas, "Courier New", monospace' }}>{`/**
- * Create an array [10, 9, ..., 1] using Array.from and iterate it.
- *
- * @example
- * // build an array of length 10, mapping each index to 10 - i
- * const arr = Array.from({ length: 10 }, (_, i) => 10 - i);
- * // arr => [10, 9, 8, 7, 6, 5, 4, 3, 2, 1]
- * for (const num of arr) {
- *   console.log(num);
- * }
- *
- * Notes:
- * - Array.from accepts an array-like/iterable first arg; here we pass { length: 10 }.
- * - The second arg is a map function (currentValue, index). currentValue is unused (_).
- * - Use for...of to iterate values; for...in iterates indices (as strings).
- * - Equivalent patterns: [...Array(10)].map((_, i) => 10 - i) or a simple for-loop that pushes values.
- */`}</pre>
                         </div>
                       );
                     })()}
@@ -446,7 +420,7 @@ const ProblemCard = ({ problem }) => {
             <button className="btn btn-link solution-btn" onClick={() => setShowSolution(!showSolution)} style={{ color: '#6f42c1', textDecoration: 'none', fontSize: '0.9rem', padding: '0.25rem 0.5rem' }}>
               {showSolution ? (
                 <>
-                  <svg className="solution-icon me-1" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden>
+                  <svg className="solution-icon me-1 badge-align-center" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden>
                     <path fill="#6f42c1" d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7S1 12 1 12z" />
                     <path fill="#fff" d="M12 9a3 3 0 100 6 3 3 0 000-6z" />
                   </svg>
@@ -454,7 +428,7 @@ const ProblemCard = ({ problem }) => {
                 </>
               ) : (
                 <>
-                  <svg className="solution-icon me-1" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden>
+                  <svg className="solution-icon me-1 badge-align-center" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden>
                     <path fill="#6f42c1" d="M9 18a3 3 0 006 0h-6zm3-16a5 5 0 00-5 5c0 3 2 4 2 6v1h6v-1c0-2 2-3 2-6a5 5 0 00-5-5z" />
                   </svg>
                   Show Solution

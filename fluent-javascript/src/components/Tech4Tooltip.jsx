@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import Tech4Url from '../assets/images/tech4.svg';
 
 // Small accessible badge + tooltip component used in problem descriptions
-export default function RankBadgeTooltip({ alt = 'Tech4', width = 48, height = 60, imgClass = 'solution-badge-md', compact = false, compactTop, compactTranslateY, position = 'right' }) {
+export default function Tech4Tooltip({ alt = 'Tech4', width = 48, height = 60, imgClass = 'solution-badge-md', compact = false, compactTop, compactTranslateY, position = 'right' }) {
   const [open, setOpen] = useState(false);
 
   const handleMouseEnter = () => {
@@ -41,7 +41,7 @@ export default function RankBadgeTooltip({ alt = 'Tech4', width = 48, height = 6
           display: 'block'
         }}
       >
-        <img src={Tech4Url} width={width} height={height} className={imgClass} alt={alt} aria-hidden style={{ verticalAlign: '-0.5em', marginRight: 12, display: 'block', borderRadius: 6 }} />
+  <img src={Tech4Url} width={width} height={height} className={imgClass} alt={alt} aria-hidden style={{ marginRight: 12, display: 'inline-block', borderRadius: 6 }} />
       </button>
 
       <span

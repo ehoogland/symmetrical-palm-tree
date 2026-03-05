@@ -113,7 +113,7 @@ details[open] summary {
 
 /* Badge styling */
 .badge {
-  font-size: 0.75em;
+  font-size: 0.65em;
   font-weight: 600;
 }
 
@@ -173,7 +173,8 @@ details[open] summary {
   border-radius: 6px;
   width: 36px;
   height: 36px;
-  vertical-align: text-bottom;
+  /* use baseline so wrapper translateY controls visual centering against the title text */
+  vertical-align: baseline;
   transition: transform 160ms cubic-bezier(.2,.9,.3,1), box-shadow 160ms ease;
 }
 .rank-badge-tooltip:hover img {
@@ -196,7 +197,8 @@ details[open] summary {
 .rank-badge-header {
   width: 44px !important;
   height: 44px !important;
-  vertical-align: text-bottom;
+  /* align with baseline so transforms are consistent across badges and svgs */
+  vertical-align: baseline;
   transition: transform 180ms cubic-bezier(.2,.9,.3,1), box-shadow 180ms ease;
 }
 .rank-badge-header:hover {
@@ -339,7 +341,21 @@ details[open] summary {
 .solution-icon {
   width: 18px;
   height: 18px;
-  vertical-align: -0.125em;
+  /* keep icons on the text baseline so our translateY adjustments work predictably */
+  vertical-align: baseline;
   display: inline-block;
+}
+
+/* Helper class to consistently center lozenges, stars and badge artwork */
+/* Position all badges between baseline and x-height of title text */
+.badge-centered {
+  transform: translateY(-0.3em) !important;
+  display: inline-block !important;
+  padding: 0.25rem 0.4rem !important;
+}
+
+/* Text color for Intermediate badges on yellow background */
+.badge.bg-warning {
+  color: #000 !important;
 }
 

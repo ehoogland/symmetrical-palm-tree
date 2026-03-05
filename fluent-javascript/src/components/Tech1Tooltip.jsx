@@ -40,7 +40,7 @@ export default function Tech1Tooltip({ alt = 'Tech1', width = 48, height = 60, i
           display: 'block'
         }}
       >
-        <img src={Tech1Url} width={width} height={height} className={imgClass} alt={alt} aria-hidden style={{ verticalAlign: '-0.5em', marginRight: 12, display: 'block', borderRadius: 6 }} />
+  <img src={Tech1Url} width={width} height={height} className={imgClass} alt={alt} aria-hidden style={{ marginRight: 12, display: 'inline-block', borderRadius: 6 }} />
       </button>
 
       <span
