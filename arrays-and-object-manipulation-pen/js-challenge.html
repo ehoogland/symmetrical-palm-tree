@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Code Challenge</title>
+  <link rel="stylesheet" href="js-challenge.css">
+</head>
+<body>
+<h1>Code Challenge</h1>
+<p>Be sure to turn on the Console panel to view your results.</p>
+<ul>
+  <li><strong>Challenge 1</strong>
+    <ul>
+      <li>Note: The code for Part 3 has already been completed for you, and starter code for Part 1 has been started for you to finish (<strong>uncomment lines 28-34</strong>).</li>
+      <li><strong>Part 1:</strong> Write a function "<strong>sortItems</strong>" that takes an array of objects and returns it sorted alphabetically by the value of the '<strong>name</strong>' property of each object. 
+        <ul><li>Use the example at <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/sort" target="_blank">this MDN page</a> to help you. On that page, look for the code under where it says "Objects can be sorted given the value of one of their properties" and inside that code, look under the comment "// sort by name".</li><li>However, make this important change: Let's say we do not want to mutate the original array being passed in. sort() is a mutator method, so we need to <strong>create a copy of the array</strong>. To do this, first use the <strong>spread syntax</strong> on the array that you are sorting, rather than sorting the passed-in array directly.</li><li>Then, create a new array from the old by using the <strong>[ ]</strong> array literal syntax around the spread array, and use sort on that new array.</li><li>Bonus: Change the callback function inside sort() to an arrow function.</li></ul>
+      </li>
+      <li><strong>Part 2:</strong> In your sorting code, instead of if/else as given in the MDN example, use the <strong>ternary operator syntax ? :</strong> for your return values. Since there are 3 potential return values (1, 0, -1), you will need to chain/nest ternary operators. Conduct your own research on chaining ternary operators. 
+      <li><strong>Part 3:</strong> Immediately following this code, call the <strong>sortItems</strong> function that you created and <strong>console.log()</strong> it. Beneath that, <strong>console.log()</strong> the <strong>instruments</strong> array. Confirm that the instruments array has not been mutated (is in its original form) and the sorted array is in alphabetical order by name. (This has already been done for you in lines 33 and 34, so all you need to do is uncomment the console.log code and run it.)</li></ul>
+</li>
+  <li><strong>Challenge 2:</strong>
+    <ul>
+          <li>Note: The code for Part 2 has been completed for you, and the code for Part 1 is partially finished (uncomment the last couple of lines starting with const getType...).</li>
+      <li><strong>Part 1:</strong> Write a function named "<strong>getType</strong>" that takes an array of objects and an integer containing the type to filter by. Use the <strong>.filter()</strong> method to filter out and return a new array that contains only the objects that match the given type. Recall that filter is not a mutator method, so you do not need to do anything special to create a new array. You should be able to complete this task in a single line of code.</li>
+       <li><strong>Part 2:</strong> Immediately following the function, write a line that logs to the console the results of calling the <strong>getType</strong> function with the <strong>instruments</strong> array and the type <strong>INSTRUMENT_TYPE_STRING</strong>.</li></ul>
+  <li><strong>Challenge 3:</strong> </li>
+      <ul>
+        <li><strong>Part 1:</strong> Write a function "<strong>getNames</strong>" that takes an array of objects and uses the <strong>map()</strong> method to return a new array that contains only the values of the <strong>name</strong> property of each object (as strings, comma-separated) - i.e. [ 'guitar', 'xylophone', 'bagpipes', 'zither']. This should be possible to do in a single line of code.</li>
+        <li><strong>Part 2:</strong> Beneath the function, console.log() the result of invoking the <strong>getNames</strong> function.</li>
+  </ul>
+  <li><strong>Challenge 4:</strong> Use the functions you have written to console.log() just the names of all stringed instruments as an array of strings - i.e. [ 'guitar', 'zither'].
+  </li>  
+</ul>
+
+
+
+
+<!-- original pen by https://codepen.io/minae/ -->
+
+<script src="js-challenge.js"></script>
+</body>
+</html>

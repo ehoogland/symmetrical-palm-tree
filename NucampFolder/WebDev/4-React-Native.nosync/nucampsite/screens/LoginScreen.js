@@ -142,7 +142,7 @@ const RegisterTab = () => {
         }
     };
     /**
-     * Get an image from the device's camera
+     * Get an image from the device's camera using ImagePicker
      * @description The getImageFromCamera function requests permission
      * to access the device's camera.
      * @const {Object} cameraPermission - The camera permission status.
@@ -171,7 +171,11 @@ const RegisterTab = () => {
         }
     };
     /**
-     * Get an image from the device's media library
+     * Get an image from the device's media library using ImagePicker
+     * @param {string} imgUri - The URI of the image to process
+     * @returns {Promise<void>} - An asynch function that does not return a value resolves to undefined.
+     * It resolves when the image is selected and processed, but does not return or await its
+     * result
      * @description The getImageFromGallery function requests permission 
      * to access the device's media library.
      * @const {Object} mediaLibraryPermission - The media library permission status.
@@ -181,7 +185,6 @@ const RegisterTab = () => {
      * select an image.
      * @property {boolean} allowsEditing - Allows the user to edit the image before selection.
      * @property {Array} aspect - The aspect ratio to maintain when editing the image.
-     * @returns {Promise<void>}
      * 
      */
     const getImageFromGallery = async () => {
@@ -226,7 +229,9 @@ const RegisterTab = () => {
         // Update state with new image uri
         setImageUrl(processedImage.uri);
 
-        return processedImage.uri;
+        // return processedImage.uri; -no need to return anything; Its purpose is to process
+        // the image and update the state with the new URI
+        // return processedImage.uri; --- IGNORE ---
     };
     
 
