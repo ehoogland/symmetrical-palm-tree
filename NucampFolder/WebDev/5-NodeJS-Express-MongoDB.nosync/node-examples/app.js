@@ -1,8 +1,12 @@
-const rect = {
+
+/* (Note: first exported from rectangle.js in the previous section, then imported into app.js in this section)
+Update app.js as follows, replacing the entire declaration of rect you added previously with the line below: */
+const rect = require('./rectangle');
+/* Replaced: const rect = {
 perimeter: (x, y) => 2 * (x + y),
 area: (x, y) => x * y
 };
-
+*/
 function solveRect(l, w) {
 console.log(`Solving for rectangle with dimensions: ${l}, ${w}`);
 
