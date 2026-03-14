@@ -19,20 +19,19 @@
 const express = require('express');
 // require morgan after getting express up
 const morgan = require('morgan');
-
+// require the express router after getting express up
+const campsiteRouter = require('./routes/campsiteRouter');
 const hostname = 'localhost';
 const port = 3000;
 
 const app = express();
 // add morgan
 app.use(morgan('dev'));
-// add express router
+// use express router
+app.use(express.json());
 
-
-
-
-// end express routerapp.use(express.json());
-
+// all of the remaining express router language gets moved to campsiteRouter.js
+/*
 app.all('/campsites', (req, res, next) => {
     res.statusCode = 200;
     res.setHeader('Content-Type', 'text/plain');
@@ -69,13 +68,14 @@ app.put('/campsites/:campsiteId', (req, res) => {
     res.write(`Updating the campsite: ${req.params.campsiteId}\n`);
     res.end(`Will update the campsite: ${req.body.name}
         with description: ${req.body.description}`);
-});
-
-app.delete('/campsites/:campsiteId', (req, res) => {
-    res.end(`Deleting campsite: ${req.params.campsiteId}`);
-});
-// end added express router language
-
+    });
+    
+    app.delete('/campsites/:campsiteId', (req, res) => {
+        res.end(`Deleting campsite: ${req.params.campsiteId}`);
+    });
+    // end added express router language
+ */
+app.use('/campsites', campsiteRouter);
  
 app.use(express.static(__dirname + '/public'));
 
