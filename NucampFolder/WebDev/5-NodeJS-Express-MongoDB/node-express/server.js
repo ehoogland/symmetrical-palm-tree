@@ -12,13 +12,22 @@
 // you do it manually
 
 // Create this server.js file and start the server using npm start
+// npm install morgan, require it, and add app.use(morgan('dev')) language
+// Ctrl+C to quit server, start server, and observe behavior in browser and Postman
+// Do a git commit 
 
 const express = require('express');
+// require morgan after getting express up
+const morgan = require('morgan');
 
 const hostname = 'localhost';
 const port = 3000;
 
 const app = express();
+// add morgan
+app.use(morgan('dev'));
+
+app.use(express.static(__dirname + '/public'));
 
 app.use((req, res) => {
     console.log(req.headers);
