@@ -1,0 +1,799 @@
+/* Vegan-themed custom styles */
+/* Inspired by Pantone color palettes for natural, plant-based ingredients */
+/* Pantone-inspired color palette for vegan ingredients */
+:root {
+  --vegan-primary: #4a7c59; /* Forest green */
+  --vegan-secondary: #7fb069; /* Fresh green */
+  --vegan-accent: #a8dadc; /* Light sage */
+  --vegan-earth: #8b5a3c; /* Earth brown */
+  --vegan-light: #f4f6f4; /* Off-white green tint */
+  --vegan-dark: #2d5016; /* Deep forest */
+  
+  /* Pantone-inspired category colors */
+  --pantone-legumes: #8FBC8F; /* Pantone 5545 C - Sage Green */
+  --pantone-grains: #E4B429; /* Pantone 7548 C - Golden Yellow */
+  --pantone-vegetables: #2E8B57; /* Pantone 348 C - Forest Green */
+  --pantone-fruits: #FF6B35; /* Pantone 17-1462 TPX - Living Coral */
+  --pantone-seeds: #8B4513; /* Pantone 4695 C - Saddle Brown */
+  --pantone-spices: #D2691E; /* Pantone 159 C - Chocolate Orange */
+  --pantone-herbs: #9ACD32; /* Pantone 375 C - Yellow Green */
+  --pantone-dairy-alt: #6495ED; /* Pantone 279 C - Cornflower Blue */
+  --pantone-spreads: #DDA0DD; /* Pantone 2563 C - Plum */
+  --pantone-condiments: #CD853F; /* Pantone 4695 C - Peru */
+  --pantone-sweeteners: #FF69B4; /* Pantone 226 C - Hot Pink */
+  --pantone-breads: #DEB887; /* Pantone 4535 C - Burlywood */
+  --pantone-pasta: #FFD700; /* Pantone 116 C - Gold */
+  --pantone-flours: #F5DEB3; /* Pantone 468 C - Wheat */
+  --pantone-baking: #D2B48C; /* Pantone 4525 C - Tan */
+  --pantone-vinegars: #800080; /* Pantone 267 C - Purple */
+  --pantone-soy: #98FB98; /* Pantone 358 C - Pale Green */
+  --pantone-sea-vegetables: #20B2AA; /* Pantone 3262 C - Light Sea Green */
+  --pantone-plant-based: #32CD32; /* Pantone 361 C - Lime Green */
+  --pantone-meat-alternatives: #B22222; /* Pantone 18-1664 TPX - Firebrick */
+  --pantone-dietary-supplements: #4169E1; /* Pantone 286 C - Royal Blue */
+  --pantone-snacks: #FF4500; /* Pantone 17-1463 TPX - Orange Red */
+  --pantone-desserts: #DA70D6; /* Pantone 2573 C - Orchid */
+  --pantone-beverages: #00CED1; /* Pantone 3125 C - Dark Turquoise */
+  --pantone-default: #696969; /* Pantone Cool Gray 8 C */
+}
+
+/* Main background with sophisticated Pantone-inspired gradient pattern */
+body {
+  background: 
+    radial-gradient(circle at 20% 80%, rgba(143, 188, 143, 0.1) 0%, transparent 50%),
+    radial-gradient(circle at 80% 20%, rgba(228, 180, 41, 0.08) 0%, transparent 50%),
+    radial-gradient(circle at 40% 40%, rgba(46, 139, 87, 0.06) 0%, transparent 50%),
+    linear-gradient(135deg, 
+      #f8faf8 0%, 
+      #f2f6f2 25%, 
+      #f0f4f0 50%, 
+      #eef2ee 75%, 
+      #ecf0ec 100%
+    );
+  background-attachment: fixed;
+  background-size: 100% 100%, 100% 100%, 100% 100%, 100% 100%;
+  color: var(--vegan-dark);
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  min-height: 100vh;
+}
+
+/* Header styling with plant theme */
+.vegan-header {
+  /* Intermediate gradient between the original primary and the footer dark color
+    to improve contrast but retain the brand greens. */
+  background: linear-gradient(135deg, var(--vegan-primary) 30%, var(--vegan-dark) 100%);
+  color: var(--vegan-light);
+  padding: 2rem 0;
+  margin-bottom: 2rem;
+  border-radius: 0 0 20px 20px;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.25);
+  /* subtle inner glow and bottom divider to separate header from content */
+  border-bottom: 1px solid rgba(255,255,255,0.05);
+  box-shadow: 0 6px 20px rgba(0,0,0,0.25), inset 0 -8px 18px rgba(0,0,0,0.06);
+}
+
+.vegan-header h1 {
+  font-size: 2.5rem;
+  font-weight: 300;
+  margin-bottom: 0.5rem;
+  text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.vegan-header .subtitle {
+  font-size: 1.1rem;
+  opacity: 1;
+  font-weight: 400;
+  color: var(--vegan-light);
+  text-shadow: 0 1px 0 rgba(0,0,0,0.15);
+}
+
+/* Enhanced ingredient cards with Pantone-inspired styling */
+.ingredient-card {
+  background: linear-gradient(135deg, #ffffff 0%, #f8fffe 100%);
+  border: 2px solid var(--vegan-accent);
+  border-radius: 18px;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 4px 20px rgba(74, 124, 89, 0.08);
+  position: relative;
+  overflow: hidden;
+  margin: 0.75rem;
+  padding: 1.5rem;
+  min-height: 200px;
+  max-height: 220px;
+  backdrop-filter: blur(5px);
+}
+
+.ingredient-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 5px;
+  background: linear-gradient(90deg, var(--vegan-secondary), var(--vegan-primary));
+  opacity: 0.8;
+}
+
+.ingredient-card:hover {
+  transform: translateY(-8px) scale(1.02);
+  box-shadow: 0 12px 40px rgba(74, 124, 89, 0.15);
+  border-color: var(--vegan-secondary);
+  background: linear-gradient(135deg, #ffffff 0%, #f0f8f0 100%);
+}
+
+.ingredient-card:hover .category-badge {
+  transform: scale(1.05);
+  box-shadow: 0 4px 15px rgba(0,0,0,0.25);
+}
+
+.ingredient-card:hover .plant-icon {
+  transform: rotate(15deg) scale(1.1);
+}
+
+/* Selected ingredient card styles */
+.ingredient-card.selected {
+  border-color: var(--vegan-secondary);
+  background: linear-gradient(135deg, #e8f5e8 0%, #f0f8f0 100%);
+  box-shadow: 0 8px 25px rgba(127, 176, 105, 0.3);
+}
+
+.ingredient-card.selected::before {
+  background: linear-gradient(90deg, var(--pantone-legumes), var(--pantone-vegetables));
+  height: 6px;
+}
+
+.ingredient-card.selected:hover {
+  transform: translateY(-6px) scale(1.01);
+  box-shadow: 0 10px 30px rgba(127, 176, 105, 0.4);
+}
+
+/* Selected ingredients section */
+.selected-ingredients-section {
+  background: rgba(255, 255, 255, 0.8);
+  border-radius: 15px;
+  padding: 1.5rem;
+  border: 1px solid var(--vegan-accent);
+  backdrop-filter: blur(10px);
+}
+
+.selected-ingredients-list .badge {
+  background: var(--vegan-secondary) !important;
+  border: 1px solid var(--vegan-primary);
+  transition: all 0.3s ease;
+}
+
+.selected-ingredients-list .badge:hover {
+  background: var(--vegan-primary) !important;
+  transform: translateY(-1px);
+}
+
+/* Navigation tabs styling */
+.nav-tabs-container .btn-group {
+  box-shadow: 0 4px 15px rgba(74, 124, 89, 0.12);
+  border-radius: 25px;
+  overflow: hidden;
+}
+
+.nav-tabs-container .btn {
+  background: #f7f7f7 !important; /* very light gray tabs */
+  color: var(--vegan-primary) !important;
+  border-radius: 20px 20px 0 0;
+  padding: 0.75rem 1.25rem;
+  box-shadow: none;
+  border: none !important;
+  font-weight: 500;
+  transition: all 0.2s ease;
+  position: relative;
+}
+
+.nav-tabs-container .btn:first-child {
+  border-radius: 25px 0 0 25px !important;
+}
+
+.nav-tabs-container .btn:last-child {
+  border-radius: 0 25px 25px 0 !important;
+}
+
+.nav-tabs-container .btn:hover {
+  transform: translateY(-2px);
+}
+
+/* Stronger rule to ensure nav tab buttons are very light gray even if other rules use !important */
+.nav-tabs-container .btn.btn-vegan-outline,
+.nav-tabs-container .btn.btn-vegan-outline:not([aria-current]) {
+  background: #f7f7f7 !important;
+  color: var(--vegan-primary) !important;
+  border-color: transparent !important;
+}
+
+.nav-tabs-container .btn.btn-vegan-outline[aria-current="page"],
+.nav-tabs-container .btn.btn-vegan-outline.active {
+  /* keep the selected state visually distinct */
+  background: linear-gradient(135deg, var(--vegan-primary), var(--vegan-secondary)) !important;
+  color: white !important;
+}
+
+/* Enhanced selected tab styling */
+.nav-tabs-container .btn-vegan {
+  background: linear-gradient(135deg, var(--vegan-primary), var(--vegan-secondary)) !important;
+  color: white !important;
+  box-shadow: inset 0 2px 10px rgba(0,0,0,0.2);
+  transform: translateY(-1px);
+}
+
+/* Center tab (recipes): use primary color for contrast on light background */
+.nav-tabs-container .btn-group .btn-recipes {
+  /* inactive center tab: light background with primary text for contrast */
+  background: #f7f7f7 !important;
+  color: var(--vegan-primary) !important;
+  text-shadow: none;
+}
+
+.nav-tabs-container .btn-group .btn-recipes[aria-current="page"],
+.nav-tabs-container .btn-group .btn-recipes.active {
+  /* active/selected center tab: figure-ground reversal to vegan gradient */
+  background: linear-gradient(135deg, var(--vegan-primary), var(--vegan-secondary)) !important;
+  color: white !important;
+  border-color: transparent !important;
+}
+
+/* simple separator between tabs */
+/* Insert a green pipe between adjacent nav buttons without splitting their background */
+.nav-tabs-container .btn-group {
+  position: relative; /* allow absolute positioning inside buttons if needed */
+}
+
+/* pipe separator inserted on the second and later buttons, centered vertically and bold */
+.nav-tabs-container .btn-group .btn + .btn {
+  position: relative; /* anchor for the ::before absolute element */
+}
+.nav-tabs-container .btn-group .btn + .btn::before {
+  content: '|';
+  color: var(--vegan-accent, #2f9a6b);
+  position: absolute;
+  left: -0.5rem; /* place between the buttons */
+  top: 50%;
+  transform: translateY(-50%);
+  font-weight: 700;
+  font-size: 1.05em;
+  line-height: 1;
+}
+
+/* Responsive: for small and extra-small viewports, center the nav block under the header
+   but left-align the button-group inside that centered container. Allow buttons to wrap. */
+@media (max-width: 768px) {
+  .vegan-header .container.text-center {
+    text-align: center;
+  }
+
+  .nav-tabs-container {
+    display: block;
+    width: 100%;
+    margin-top: 0.75rem;
+    padding: 0 1rem;
+  }
+
+  /* Center the btn-group block under the header and display two buttons per row
+     On narrow screens we remove the pipe separators and visually connect the buttons
+     into a rounded 2x2 block (outer corners rounded). */
+  .nav-tabs-container .btn-group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0; /* touch edges so buttons connect */
+    width: min(540px, 100%);
+    margin: 0.25rem auto;
+    justify-content: center;
+    border-radius: 18px; /* rounded outer container */
+    overflow: hidden; /* clip inner buttons so outer radii show */
+  }
+
+  /* Each button becomes half width to form two columns. Remove internal radii so
+     only outer corners remain from the container; corners are applied via role classes. */
+  .nav-tabs-container .btn {
+    padding: 0.6rem 0.9rem;
+    font-size: 0.95rem;
+    flex: 0 0 50%;
+    max-width: 50%;
+    text-align: center;
+    border-radius: 0; /* remove individual rounding so edges join cleanly */
+    margin: 0;
+    box-shadow: none; /* keep flat so joins look seamless */
+  }
+
+  /* Remove the pipe separators on narrow viewports */
+  .nav-tabs-container .btn + .btn::before {
+    display: none;
+    content: none;
+  }
+
+  /* Outer corner rounding for the 2x2 layout using role classes */
+  .nav-tabs-container .btn-group .btn-ingredients {
+    border-top-left-radius: 18px;
+    border-bottom-left-radius: 0 !important; /* internal bottom-left square by request */
+  }
+  .nav-tabs-container .btn-group .btn-recipes {
+    border-top-right-radius: 18px;
+  }
+  .nav-tabs-container .btn-group .btn-favorites {
+    border-bottom-left-radius: 18px;
+  }
+  .nav-tabs-container .btn-group .btn-subscribe {
+    border-bottom-right-radius: 18px;
+    border-top-right-radius: 0 !important; /* internal top-right square by request */
+  }
+
+  /* Mobile override: ensure subscribe looks active when toggled and its top-right corner is square */
+  .nav-tabs-container .btn-subscribe.active {
+    background: linear-gradient(135deg, var(--vegan-primary), var(--vegan-secondary)) !important;
+    color: white !important;
+  }
+
+  /* Force top-right square on narrow screens in case earlier rules re-add rounding */
+  .nav-tabs-container .btn-subscribe {
+    border-top-right-radius: 0 !important;
+  }
+
+  /* When subscribe is open, dim/disable active styling for other nav buttons so only
+     the Subscribe button appears highlighted */
+  .nav-tabs-container .btn-group.subscribe-open .btn:not(.btn-subscribe) {
+    background: #f7f7f7 !important;
+    color: var(--vegan-primary) !important;
+    box-shadow: none !important;
+  }
+
+  .nav-tabs-container .btn-group.subscribe-open .btn:not(.btn-subscribe).active,
+  .nav-tabs-container .btn-group.subscribe-open .btn:not(.btn-subscribe)[aria-current="page"] {
+    /* override any .active/aria-current visual state while subscribe modal is open */
+    background: #f7f7f7 !important;
+    color: var(--vegan-primary) !important;
+  }
+}
+
+/* Force all vegan-themed buttons to have white text */
+.btn, .btn-vegan, .btn-vegan-outline {
+  color: var(--vegan-dark) !important;
+  text-shadow: none;
+}
+
+.nav-tabs-container .btn-vegan::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 80%;
+  height: 3px;
+  background: linear-gradient(90deg, transparent, white, transparent);
+  border-radius: 2px;
+}
+
+.nav-tabs-container .btn-vegan-outline {
+  background: rgba(255,255,255,0.1) !important;
+  color: var(--vegan-primary) !important;
+  border: 2px solid var(--vegan-secondary) !important;
+}
+
+/* Favorites section styling */
+.favorites-section .card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 25px rgba(74, 124, 89, 0.15);
+}
+
+.favorites-section .btn-danger {
+  transition: all 0.3s ease;
+}
+
+.favorites-section .btn-danger:hover {
+  transform: scale(1.1);
+}
+
+/* Category badges with Pantone-inspired colors */
+.category-badge {
+  display: inline-block;
+  padding: 0.35rem 0.85rem;
+  border-radius: 25px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  color: white;
+  text-shadow: 0 1px 2px rgba(0,0,0,0.2);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+  border: 2px solid rgba(255,255,255,0.2);
+}
+
+/* Pantone-inspired category colors */
+.category-legumes { background: linear-gradient(135deg, var(--pantone-legumes), #7A9A7A); }
+.category-grains { background: linear-gradient(135deg, var(--pantone-grains), #C4941F); }
+.category-grain { background: linear-gradient(135deg, var(--pantone-grains), #C4941F); }
+.category-vegetables { background: linear-gradient(135deg, var(--pantone-vegetables), #256B47); }
+.category-fruits { background: linear-gradient(135deg, var(--pantone-fruits), #E55525); }
+.category-seeds { background: linear-gradient(135deg, var(--pantone-seeds), #7B3F13); }
+.category-spices { background: linear-gradient(135deg, var(--pantone-spices), #B8591E); }
+.category-herbs { background: linear-gradient(135deg, var(--pantone-herbs), #8AB72C); }
+.category-dairy-alternatives { background: linear-gradient(135deg, var(--pantone-dairy-alt), #5485DD); }
+.category-spreads { background: linear-gradient(135deg, var(--pantone-spreads), #CD90CD); }
+.category-condiments { background: linear-gradient(135deg, var(--pantone-condiments), #BD783F); }
+.category-sweeteners { background: linear-gradient(135deg, var(--pantone-sweeteners), #E559A4); }
+.category-breads { background: linear-gradient(135deg, var(--pantone-breads), #CEA877); }
+.category-pasta { background: linear-gradient(135deg, var(--pantone-pasta), #E5C700); }
+.category-flours { background: linear-gradient(135deg, var(--pantone-flours), #E5CEA3); }
+.category-baking { background: linear-gradient(135deg, var(--pantone-baking), #C2A47C); }
+.category-vinegars { background: linear-gradient(135deg, var(--pantone-vinegars), #700070); }
+.category-soy { background: linear-gradient(135deg, var(--pantone-soy), #88EB88); }
+.category-sea-vegetables { background: linear-gradient(135deg, var(--pantone-sea-vegetables), #1CA29A); }
+.category-plant-based-dairy { background: linear-gradient(135deg, var(--pantone-plant-based), #2CBD2C); }
+.category-plant-based-condiments { background: linear-gradient(135deg, var(--pantone-condiments), #BD783F); }
+.category-plant-based-dietary-supplements { background: linear-gradient(135deg, var(--pantone-dietary-supplements), #3159D1); }
+.category-meat-alternatives { background: linear-gradient(135deg, var(--pantone-meat-alternatives), #A21E1E); }
+.category-dietary-supplements { background: linear-gradient(135deg, var(--pantone-dietary-supplements), #3159D1); }
+.category-plant-based-snacks { background: linear-gradient(135deg, var(--pantone-snacks), #E53F00); }
+.category-plant-based-desserts { background: linear-gradient(135deg, var(--pantone-desserts), #CA60C6); }
+.category-plant-based-beverages { background: linear-gradient(135deg, var(--pantone-beverages), #00BEC1); }
+.category-processed-foods { background: linear-gradient(135deg, var(--pantone-default), #595959); }
+.category-default { background: linear-gradient(135deg, var(--pantone-default), #595959); }
+
+/* Processed indicator with earth tones */
+.processed-indicator {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  font-size: 0.85rem;
+}
+
+.processed-yes {
+  color: var(--vegan-earth);
+}
+
+.processed-no {
+  color: var(--vegan-secondary);
+  font-weight: 500;
+}
+
+/* Recipe search section with elegant background pattern */
+.recipe-search {
+  background: 
+    radial-gradient(circle at 30% 70%, rgba(164, 218, 220, 0.12) 0%, transparent 40%),
+    radial-gradient(circle at 70% 30%, rgba(127, 176, 105, 0.08) 0%, transparent 40%),
+    linear-gradient(145deg, 
+      rgba(255, 255, 255, 0.95) 0%, 
+      rgba(248, 255, 248, 0.98) 50%, 
+      rgba(245, 250, 245, 0.95) 100%
+    );
+  border-radius: 24px;
+  padding: 2.5rem;
+  margin-bottom: 3rem;
+  box-shadow: 
+    0 8px 32px rgba(74, 124, 89, 0.08),
+    0 2px 8px rgba(74, 124, 89, 0.05);
+  border: 1px solid rgba(164, 218, 220, 0.3);
+  backdrop-filter: blur(10px);
+  position: relative;
+  overflow: hidden;
+}
+
+.recipe-search::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, 
+    var(--pantone-legumes) 0%, 
+    var(--pantone-vegetables) 25%, 
+    var(--pantone-fruits) 50%, 
+    var(--pantone-herbs) 75%, 
+    var(--pantone-grains) 100%
+  );
+  opacity: 0.7;
+}
+
+.recipe-search h3 {
+  color: var(--vegan-primary);
+  margin-bottom: 1.5rem;
+}
+
+/* Custom buttons with vegan theme */
+.btn-vegan {
+  color: white !important;
+  text-shadow: 0 1px 3px rgba(0,0,0,0.3);
+  color: white !important;
+  color: white !important;
+  color: white !important;
+  background: linear-gradient(135deg, 
+    #7BA428 0%,    /* Pantone 370 C - Fresh yellow-green */
+    #9ACD32 50%,   /* Yellow-green */
+    #6B8E23 100%   /* Olive drab for depth */
+  );
+  border: none;
+  color: white;
+  border-radius: 25px;
+  padding: 0.75rem 1.5rem;
+  font-weight: 500;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 10px rgba(123, 164, 40, 0.3);
+  text-align: center;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  white-space: nowrap;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+}
+
+/* Better emoji visibility in buttons */
+.btn-vegan {
+  background: linear-gradient(135deg, var(--vegan-primary), var(--vegan-secondary));
+  position: relative;
+}
+
+.emoji-highlight {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 50%;
+  margin-right: 8px;
+  backdrop-filter: blur(4px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.btn-vegan:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(123, 164, 40, 0.4);
+  background: linear-gradient(135deg, 
+    #9ACD32 0%,    /* Brighter yellow-green on hover */
+    #7BA428 50%,   
+    #556B2F 100%   /* Darker olive for contrast */
+  );
+  color: white;
+}
+
+/* Vegan-themed outline button with white text */
+/* Vegan-themed outline button: dark text by default, white on hover/active */
+.btn-vegan-outline {
+  background: transparent;
+  border: 2px solid var(--vegan-secondary);
+  color: var(--vegan-primary);
+  border-radius: 25px;
+  padding: 0.75rem 1.5rem;
+  font-weight: 500;
+  transition: all 0.3s ease;
+  text-align: center;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  white-space: nowrap;
+  text-shadow: none;
+  color: #6b6b6b; /* Slightly darker gray for outline buttons */
+}
+
+.btn-vegan-outline:hover,
+.btn-vegan-outline.active,
+.btn-vegan-outline[aria-current="page"] {
+  background: var(--vegan-secondary);
+  color: white !important;
+  text-shadow: 0 1px 3px rgba(0,0,0,0.3);
+  transform: translateY(-2px);
+}
+
+/* Form inputs with organic styling */
+.form-control-vegan {
+  border: 2px solid var(--vegan-accent);
+  border-radius: 15px;
+  padding: 0.75rem 1rem;
+  transition: all 0.3s ease;
+}
+
+.form-control-vegan:focus {
+  border-color: var(--vegan-secondary);
+  box-shadow: 0 0 0 0.2rem rgba(127, 176, 105, 0.25);
+  background-color: var(--vegan-light);
+}
+
+/* Add plant icons and emojis with enhanced styling */
+.plant-icon {
+  color: var(--vegan-secondary);
+  font-size: 1.3rem;
+  margin-right: 0.6rem;
+  display: inline-block;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  filter: drop-shadow(0 2px 4px rgba(74, 124, 89, 0.2));
+}
+
+/* Ingredient grid with sophisticated background pattern */
+.ingredients-grid {
+  background: 
+    radial-gradient(circle at 15% 85%, rgba(139, 69, 19, 0.06) 0%, transparent 45%),
+    radial-gradient(circle at 85% 15%, rgba(154, 205, 50, 0.08) 0%, transparent 45%),
+    radial-gradient(circle at 50% 50%, rgba(100, 149, 237, 0.04) 0%, transparent 50%),
+    linear-gradient(160deg, 
+      rgba(255, 255, 255, 0.9) 0%, 
+      rgba(250, 255, 250, 0.95) 30%, 
+      rgba(248, 253, 248, 0.92) 70%, 
+      rgba(245, 250, 245, 0.9) 100%
+    );
+  border-radius: 24px;
+  padding: 2.5rem;
+  backdrop-filter: blur(8px);
+  box-shadow: 
+    0 10px 40px rgba(74, 124, 89, 0.06),
+    0 4px 12px rgba(74, 124, 89, 0.04);
+  border: 1px solid rgba(164, 218, 220, 0.25);
+  position: relative;
+  overflow: hidden;
+}
+
+.ingredients-grid::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, 
+    var(--pantone-vegetables) 0%, 
+    var(--pantone-fruits) 20%, 
+    var(--pantone-grains) 40%, 
+    var(--pantone-legumes) 60%, 
+    var(--pantone-herbs) 80%, 
+    var(--pantone-seeds) 100%
+  );
+  opacity: 0.6;
+}
+
+/* Ensure consistent card width and spacing */
+.ingredients-grid .row {
+  margin-left: -0.75rem;
+  margin-right: -0.75rem;
+}
+
+.ingredients-grid .col-md-6,
+.ingredients-grid .col-lg-4,
+.ingredients-grid .col-xl-3 {
+  padding-left: 0.75rem;
+  padding-right: 0.75rem;
+  margin-bottom: 1.5rem;
+}
+
+/* Ensure all cards have the same width within their columns */
+.ingredient-card {
+  width: 100%;
+  max-width: 280px; /* Prevent cards from getting too wide on large screens */
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* Footer with sustainability message */
+.vegan-footer {
+  background: var(--vegan-dark);
+  color: var(--vegan-light);
+  text-align: center;
+  padding: 2rem 0;
+  margin-top: 4rem;
+  border-radius: 20px 20px 0 0;
+}
+
+.vegan-footer .sustainability-message {
+  font-style: italic;
+  opacity: 0.8;
+  margin-bottom: 0;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .vegan-header h1 {
+    font-size: 2rem;
+  }
+  
+  .ingredient-card {
+    margin-bottom: 1rem;
+  }
+}
+
+/* Animation for ingredient cards */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.ingredient-card {
+  animation: fadeInUp 0.6s ease-out;
+}
+
+/* Custom heart button styling */
+.heart-button-default {
+  background: linear-gradient(135deg, 
+    #a8d8a8 0%,    /* Pale sage green */
+    #c8e6c9 50%,   /* Light mint green */
+    #90c695 100%   /* Soft green for depth */
+  );
+  color: #2d5016;  /* Dark green text */
+  border: none;
+}
+
+.heart-button-default:hover {
+  background: linear-gradient(135deg, 
+    #ffb3ba 0%,    /* Light pink-red */
+    #ff9999 50%,   /* Medium pink-red */
+    #ff7f7f 100%   /* Deeper pink-red */
+  );
+  color: #330000;  /* Very dark red - much darker than background */
+  transform: translateY(-2px) scale(1.05);
+  box-shadow: 0 4px 15px rgba(255, 153, 153, 0.4);
+}
+
+.heart-button-selected {
+  background: linear-gradient(135deg, 
+    #a8d8a8 0%,    /* Pale sage green - same as default */
+    #c8e6c9 50%,   /* Light mint green - same as default */
+    #90c695 100%   /* Soft green for depth - same as default */
+  );
+  color: #dc3545;  /* Red heart on green background */
+  border: none;
+}
+
+.heart-button-selected:hover {
+  background: linear-gradient(135deg, 
+    #ffb3ba 0%,    /* Light pink-red - same as default hover */
+    #ff9999 50%,   /* Medium pink-red - same as default hover */
+    #ff7f7f 100%   /* Deeper pink-red - same as default hover */
+  );
+  color: #800000;  /* Darker red heart on hover */
+  transform: translateY(-2px) scale(1.05);
+  box-shadow: 0 4px 15px rgba(255, 153, 153, 0.4);
+}
+
+/* Remove old heart button styles */
+.heart-button:hover {
+  background: linear-gradient(135deg, #dc3545, #c82333) !important;
+  border-color: #dc3545 !important;
+  color: white !important;
+  transform: translateY(-2px) scale(1.05);
+  box-shadow: 0 4px 15px rgba(220, 53, 69, 0.4) !important;
+}
+
+.heart-button:hover.btn-vegan-outline {
+  border-color: #dc3545 !important;
+  color: white !important;
+}
+
+/* Paler green button for View Recipe */
+.btn-vegan-pale {
+  background: linear-gradient(135deg, 
+    #a8d8a8 0%,    /* Pale sage green */
+    #c8e6c9 50%,   /* Light mint green */
+    #90c695 100%   /* Soft green for depth */
+  );
+  border: none;
+  color: #2d5016;  /* Dark green text for contrast */
+  border-radius: 25px;
+  padding: 0.75rem 1.5rem;
+  font-weight: 500;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 10px rgba(168, 216, 168, 0.3);
+  text-align: center;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  white-space: nowrap;
+}
+
+.btn-vegan-pale:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(168, 216, 168, 0.4);
+  background: linear-gradient(135deg, 
+    #c8e6c9 0%,    /* Brighter pale green on hover */
+    #a8d8a8 50%,   
+    #81c784 100%   /* Slightly deeper green for contrast */
+  );
+  color: #1b5e20;
+}
