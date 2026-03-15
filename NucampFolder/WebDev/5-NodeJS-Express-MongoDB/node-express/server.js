@@ -17,10 +17,24 @@
 // Do a git commit 
 
 const express = require('express');
+
 // require morgan after getting express up
 const morgan = require('morgan');
+
 // require the express router after getting express up
 const campsiteRouter = require('./routes/campsiteRouter');
+
+// Task 2 part 2: Mounted the Express router on the /promotions path in server.js so that it can 
+// handle requests to both /promotions and /promotions/:promotionId.
+const promotionRouter = require('./routes/promotionRouter');
+
+// Task 3 part 2: mounted the Express router on the /partners path in server.js so that it can 
+// handle requests to both /partners and /partners/:partnerId.
+const partnerRouter = require('./routes/partnerRouter');
+
+
+
+    
 const hostname = 'localhost';
 const port = 3000;
 
@@ -76,6 +90,8 @@ app.put('/campsites/:campsiteId', (req, res) => {
     // end added express router language
  */
 app.use('/campsites', campsiteRouter);
+app.use('/promotions', promotionRouter);
+app.use('/partners', partnerRouter);
  
 app.use(express.static(__dirname + '/public'));
 
