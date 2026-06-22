@@ -36,3 +36,15 @@ module.exports = (x, y, callback) => {
 // instead of as a method of the export, as in the code above.
 // exports.perimeter = (x, y) => 2 * (x + y);
 // exports.area = (x, y) => x * y;
+
+/**
+ * Comparison Summary           
+ * Use Case                             exports shorthand                   module.exports
+ * Exporting named properties           Allowed (exports.foo = bar)         Allowed (module.exports.foo = bar)
+ * Exporting a single function/class    ❌ Broken (exports = foo)            Allowed (module.exports = foo)
+ * Exporting an object literal          ❌ Broken (exports = {foo})         Allowed (module.exports = {foo})
+ * 
+ * If you ever want to avoid this confusion completely, many developers prefer to strictly use 
+ * module.exports for everything, or transition modern projects to ECMAScript Modules (ESM) using 
+ * import and export statements.
+ */
