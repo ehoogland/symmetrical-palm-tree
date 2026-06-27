@@ -7,10 +7,14 @@
 // pages by specifying that the path and fs modules are used for handling file paths 
 // and file system operations, respectively.
 
-const http = require('http');     
+const http = require('http');    
 const hostname = 'localhost';
-const port = 3000;
-
+// The port is set to either the value of the PORT environment variable or 3000 
+// if the environment variable is not set.
+//const port = process.env.PORT || 3000;
+const port = 3001;
+// The path module is used to work with file and directory paths, and the fs module is used 
+// to interact with the file system.
 const path = require('path');
 const fs = require('fs');
 
