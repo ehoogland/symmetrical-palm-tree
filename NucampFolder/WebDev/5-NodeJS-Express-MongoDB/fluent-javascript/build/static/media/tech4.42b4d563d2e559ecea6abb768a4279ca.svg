@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 240" width="200" height="240">
+  <!-- Tech 4 rank insignia (two chevrons with 'T') - renamed to tech4.svg -->
+  <path d="M 100 10 L 190 80 L 190 180 Q 190 220 100 230 Q 10 220 10 180 L 10 80 Z" fill="#556B2F" stroke="none"/>
+  <path d="M 100 70 L 160 110 L 155 120 L 100 85 L 45 120 L 40 110 Z" fill="#FFD54F" stroke="#B8860B" stroke-width="1"/>
+  <path d="M 100 100 L 160 140 L 155 150 L 100 115 L 45 150 L 40 140 Z" fill="#FFD54F" stroke="#B8860B" stroke-width="1"/>
+
+  <!-- T moved slightly lower (more distance) -->
+  <g transform="translate(100, 165)">
+    <rect x="-20" y="-18" width="40" height="8" fill="#FFD54F" stroke="#B8860B" stroke-width="0.8"/>
+    <rect x="-7" y="-18" width="14" height="34" fill="#FFD54F" stroke="#B8860B" stroke-width="0.8"/>
+  </g>
+</svg>
