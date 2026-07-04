@@ -29,6 +29,64 @@ const assert = require('assert');
 const dboper = require('./operations');
 const url = 'mongodb://127.0.0.1:27017/';
 const dbName = 'nucampsite';
+(async function () {
+  try {
+    const client = await MongoClient.connect(url, {});
+    console.log("Connected correctly to server");
+    const db = client.db(dbName);
+
+    try {
+      const dropResult = await db.dropCollection("campsites");
+      console.log("Dropped Collection:", dropResult);
+    } catch (err) {
+      console.log("No collection to drop.");
+    }
+
+    const documentToInsert = {
+      name: "Breadcrumb Trail Campground",
+      description: "Test",
+    };
+
+    const insertResult = await dboper.insertDocument(
+      db,
+      documentToInsert,
+      "campsites"
+    );
+    console.log("Insert Document:", {
+      _id: insertResult.insertedId, 
+      ...documentToInsert,
+    });
+
+    const docs = await dboper.findDocuments(db, "campsites");
+    console.log("Found Documents:", docs);
+
+    const updateResult = await dboper.updateDocument(
+      db,
+      { name: "Breadcrumb Trail Campground" },
+      { description: "Updated Test Description" },
+      "campsites"
+    );
+    console.log("Updated Document Count:", updateResult.modifiedCount); 
+
+    const updatedDocs = await dboper.findDocuments(db, "campsites");
+    console.log("Found Documents:", updatedDocs);
+
+    const deleteResult = await dboper.removeDocument(
+      db,
+      { name: "Breadcrumb Trail Campground" },
+      "campsites"
+    );
+    console.log("Deleted Document Count:", deleteResult.deletedCount);
+
+    await client.close();
+  } catch (err) {
+    console.log(err);
+  }
+})();
+/* legacy MongoClient.connect() method is used to connect to the MongoDB server.
+The connect() method takes in the URL of the MongoDB server, an options object, and a callback function that will be called when the connection is established.
+The callback function will receive an error object and a client object as arguments. 
+The client object is used to interact with the MongoDB server and perform database operations.
 
 MongoClient.connect(url, {}, (err, client) => {
   assert.strictEqual(err, undefined);
@@ -40,11 +98,12 @@ MongoClient.connect(url, {}, (err, client) => {
   db.dropCollection('campsites', (err, result) => {
     assert.strictEqual(err, undefined);
     console.log('Dropped Collection', result);
-
+    
     const collection = db.collection('campsites');
-
+    
     const documentToInsert = { name: 'Breadcrumb Trail Campground', description: 'Test' };
-
+    
+    // Pyramid of doom, also known as callback hell, is a term used to describe the situation where multiple nested callbacks are used in asynchronous programming, leading to code that is difficult to read and maintain.
     dboper.insertDocument(db, documentToInsert, 'campsites', result => {
             console.log('Insert Document:', {
                 _id: result.insertedId,
@@ -53,8 +112,8 @@ MongoClient.connect(url, {}, (err, client) => {
 
             dboper.findDocuments(db, 'campsites', docs => {
                 console.log('Found Documents:', docs);
-
-                dboper.updateDocument(db, { name: "Breadcrumb Trail Campground" },
+             
+               dboper.updateDocument(db, { name: "Breadcrumb Trail Campground" },
                     { description: "Updated Test Description" }, 'campsites', result => {
                         console.log('Updated Document Count:', result.modifiedCount);
 
@@ -75,8 +134,8 @@ MongoClient.connect(url, {}, (err, client) => {
         });
     });
 });
-/*
-to run this code, you will need to have a MongoDB server running on your local machine. 
+*/
+/* to run this code, you will need to have a MongoDB server running on your local machine. 
 You can start a MongoDB server by running the following command in your terminal:
 mongod --dbpath <path_to_your_data_directory>
 
