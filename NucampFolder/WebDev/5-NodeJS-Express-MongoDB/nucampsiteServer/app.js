@@ -14,6 +14,18 @@ var usersRouter = require('./routes/users');
 const campsiteRouter = require('./routes/campsiteRouter');
 const promotionRouter = require('./routes/promotionRouter');
 const partnerRouter = require('./routes/partnerRouter');
+
+// Connect Express Server to MongoDB/Mongoose
+const mongoose = require('mongoose');
+// Give it the url in order to connect to MongoDB/Mongoose server, and
+// use defaults ( {} ), save to connect variable
+const url = 'mongodb://127.0.0.1:27017/nucampsite';
+const connect = mongoose.connect(url, {});
+// Handle the promise returned by  calling mongoose's connect method (return value gets assigned/bound to the constant variable connect
+connect.then(() => console.log('Connected correctly to server'),
+  err => console.log(err) // this is another way to handle errors besides catch, especially when it is the last "then"
+);
+
 // Create a new Express application
 var app = express();
 // view engine setup

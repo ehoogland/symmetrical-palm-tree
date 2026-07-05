@@ -12,10 +12,19 @@ connect.then(() => {
         name: 'React Lake Campground',
         description: 'test'
     })
+    // .then() is used to handle the promise returned by Campsite.create()
+    // The first .then() is called when the promise is resolved successfully
+    // The second .then() is called when the promise returned by Campsite.findByIdAndUpdate() is resolved successfully
+    // The third .then() is called when the promise returned by campsite.save() is resolved successfully
+    // The fourth .then() is called when the promise returned by Campsite.deleteMany() is resolved successfully
+    // The .catch() is called when any of the promises are rejected
+    //
     .then(campsite => {
         console.log(campsite);
 
         return Campsite.findByIdAndUpdate(campsite._id, {
+            /* $set is used to update the value of a field 
+            without affecting other fields in the document */
             $set: { description: 'Updated Test Document' }
         }, {
             new: true
