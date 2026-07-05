@@ -40,59 +40,102 @@ const dbName = 'nucampsite';
 // async/await syntax is used to handle asynchronous operations in a more readable and maintainable way,
 // allowing us to write asynchronous code that looks and behaves like synchronous code.
 (async function () {
-  // The try/catch block is used to handle any errors that may occur during the execution of the code within the try block.
+  // The try/catch block is used to handle any errors that may occur during the execution of the code 
+  // within the try block.
   try {
-    // The await keyword is used to wait for the completion of an asynchronous operation before proceeding to the next line of code.
+    // The await keyword is used to wait for the completion of an asynchronous operation 
+    // before proceeding to the next line of code. The const client = await MongoClient.connect(url, {}); line 
+    // waits for the connection to the MongoDB server to be established before proceeding.
     const client = await MongoClient.connect(url, {});
     console.log("Connected correctly to server");
     // The db() method is used to get a reference to a specific database within the MongoDB server.
     const db = client.db(dbName);
 
+// The dropCollection() method is used to drop (delete) a collection from the database.
+// The dropCollection() method takes in the name of the collection to be dropped as an argument and returns a promise
+// that resolves to the result of the operation. If the collection does not exist, an error will be thrown.
     try {
       const dropResult = await db.dropCollection("campsites");
       console.log("Dropped Collection:", dropResult);
     } catch (err) {
       console.log("No collection to drop.");
     }
-
+    // The documentToInsert object is defined to specify the document that we want to insert into 
+    // the "campsites" collection.
     const documentToInsert = {
       name: "Breadcrumb Trail Campground",
       description: "Test",
     };
+    // The insertDocument() function is called to insert the document into the "campsites" collection.
+    // The insertDocument() function takes in the database object, the document to be inserted, 
+    // and the name of the collection as arguments. The function returns a promise that resolves to 
+    // the result of the operation, which is logged to the console.
+    // const insertResult = await dboper.insertDocument(db, documentToInsert, "campsites");
 
     const insertResult = await dboper.insertDocument(
       db,
       documentToInsert,
       "campsites"
     );
+    // The insertedId property of the result object contains the unique identifier of the newly inserted document.
+    // The spread operator (...) is used here to copy the properties of the documentToInsert object into a new object,
+    // which is then logged to the console along with the insertedId property.
     console.log("Insert Document:", {
       _id: insertResult.insertedId, 
       ...documentToInsert,
     });
 
+    // The findDocuments() function is called to retrieve all documents in the "campsites" collection.
+    // The findDocuments() function takes in the database object and the name of the collection as arguments,
+    // and returns a promise that resolves to an array of documents that match the query criteria.
+    // In this case, we are using an empty query object {} to retrieve all documents in the collection.
     const docs = await dboper.findDocuments(db, "campsites");
     console.log("Found Documents:", docs);
 
+    /**
+      * Next, we want to update the description of the "Breadcrumb Trail Campground" document 
+      * and log how many documents were modified.
+      * The updateDocument() function is called to update the document in the "campsites" collection.
+      * The updateDocument() function takes in the database object, the filter criteria for the document we want to update,
+      * the fields we want to update and their new values, and the name of the collection as arguments.
+      * The function returns a promise that resolves to the result of the operation, which is logged to the console.
+     */
     const updateResult = await dboper.updateDocument(
       db,
       { name: "Breadcrumb Trail Campground" },
       { description: "Updated Test Description" },
       "campsites"
     );
+    // The modifiedCount property of the result object contains the number of documents 
+    // that were modified by the update operation.
     console.log("Updated Document Count:", updateResult.modifiedCount); 
 
+    // After updating the document, we want to retrieve all documents in the "campsites" collection again 
+    // and log them to the console.    
     const updatedDocs = await dboper.findDocuments(db, "campsites");
     console.log("Found Documents:", updatedDocs);
-
+    
+    /**
+     * Finally, we want to delete the "Breadcrumb Trail Campground" document and log how many documents were deleted.
+     * The removeDocument() function is called to delete the document from the "campsites" collection.
+     * The removeDocument() function takes in the database object, the filter criteria for the document 
+     * we want to remove, and the name of the collection as arguments. 
+     * The function returns a promise that resolves to the result of the operation, which is logged to the console.
+     */
     const deleteResult = await dboper.removeDocument(
       db,
       { name: "Breadcrumb Trail Campground" },
       "campsites"
     );
+    // The deletedCount property of the result object contains the number of documents
+    // that were deleted by the remove operation.
     console.log("Deleted Document Count:", deleteResult.deletedCount);
-
+  // After deleting the document, we want to close the connection to the MongoDB server.
+  // The close() method is called on the client object to close the connection to the MongoDB server.
     await client.close();
+    // catch block is used to handle any errors that may occur during the execution of the code within the try block.
   } catch (err) {
+    // If an error occurs, it will be logged to the console using console.log(err).
     console.log(err);
   }
 })();

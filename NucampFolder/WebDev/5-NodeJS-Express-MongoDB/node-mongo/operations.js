@@ -2,48 +2,58 @@
 // const assert = require('assert').strict;
 
 // pass in the database we are using (the database object), 
-// the document we want to insert, 
-// the name of the collection we want to insert it into, and
-// a callback function that will be called when the operation is complete. 
-// The callback function will receive the result of the operation as an argument. 
+// the document we want to insert, and
+// the name of the collection we want to insert it into.
+// The insertDocument() function will insert the document into the specified collection and return a promise
+// that resolves to the result of the operation.
+
 exports.insertDocument = (db, document, collection) => {
     // To obtain a reference to the collection, we use the db.collection() method, 
     // passing in the name of the collection as an argument.
     const coll = db.collection(collection);
-    // First previous version of the code used the insertOne() method on the collection object to insert a new document into the collection.
-    // The second version of the code uses the insertDocument() function defined in the operations.js file to insert a new document into the 
-    // collection.
-    // Finally, syntactic sugar is used in the form of async/await to make the code more readable and easier to understand.
+    // The insertOne() method is used to insert a single document into the collection.
     return coll.insertOne(document);
 };
 
-// The findDocuments() function takes in the database object, 
+// The findDocuments() function takes in the database object and
 // the name of the collection we want to query, 
-// and a callback function that will be called when the operation is complete.
-
+// and returns a promise that resolves to an array of documents that match the query criteria.
+// In this case, we are using an empty query object {} to retrieve all documents in the collection.
 exports.findDocuments = (db, collection) => {
     // To obtain a reference to the collection, we use the db.collection() method, 
     // passing in the name of the collection as an argument.
     const coll = db.collection(collection);
     return coll.find({}).toArray();
     };
+
+// The removeDocument() function takes in the database object,
+// the filter criteria for the document we want to remove, 
+// and the name of the collection we want to remove it from. 
+// It returns a promise that resolves to the result of the operation.
 exports.removeDocument = (db, document, collection) => {
     // To obtain a reference to the collection, we use the db.collection() method, 
     // passing in the name of the collection as an argument.
     const coll = db.collection(collection);
+    // The deleteOne() method is used to delete a single document from the collection that matches the filter criteria.
     return coll.deleteOne(document);
 };    
-    
+// The updateDocument() function takes in the database object,
+// the filter criteria for the document we want to update, 
+// the fields we want to update and their new values, 
+// and the name of the collection we want to update. 
+// It returns a promise that resolves to the result of the operation.    
 exports.updateDocument = (db, document, update, collection) => {
-
+    // To obtain a reference to the collection, we use the db.collection() method, 
+    // passing in the name of the collection as an argument.
     const coll = db.collection(collection);
     // document is an object that specifies the filter criteria for the document we want to update.
-    // $set is an update operator that sets the value of a field in a document.
+    // $set is an update operator that sets the value of a field in a document. The braces {} indicate 
+    // that we are passing in an object that specifies the fields we want to update and their new values.
     // update is an object that specifies the fields we want to update and their new values.
     return coll.updateOne(document, { $set: update });
 };
-// File as of 3. Node and MongoDB Part 2 lesson
-/*
+// Previously, we used callbacks to handle the results of our database operations:
+/* 
 const assert = require('assert').strict;
 
 exports.insertDocument = (db, document, collection, callback) => {
