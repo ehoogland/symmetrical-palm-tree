@@ -1,11 +1,14 @@
 const express = require('express');
 const Campsite = require('../models/campsite');
 
+// The campsiteRouter is an instance of the Express Router, which allows us to define 
+// routes for handling HTTP requests related to campsites. It is used to create 
+// modular route handlers for the /campsites endpoint and its sub-routes.
 const campsiteRouter = express.Router();
-
+// The campsiteRouter.route() method is used to define a route for the /campsites endpoint.
 campsiteRouter.route('/')
 .get((req, res, next) => {
-Campsite.find()
+    Campsite.find()
 .then(campsites => {
     res.statusCode = 200;
     res.setHeader('Content-Type', 'application/json');
