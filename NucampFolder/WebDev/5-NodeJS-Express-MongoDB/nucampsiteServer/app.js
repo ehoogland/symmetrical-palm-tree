@@ -50,7 +50,7 @@ var app = express();
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'pug');
 
-
+// command-shift-n to open a private window in Chrome, then go to http://127.0.0.1:3000 to see the app running
 /** 
  * Use middleware for logging, parsing JSON and URL-encoded data, and handling cookies
  * The app.use() method is used to mount middleware functions that will be executed for every incoming request.
@@ -120,19 +120,45 @@ function auth(req, res, next) {
   /**
    * @description - The 'authorization' header contains the base64-encoded credentials in the 
    * format 'username:password'.
-   * @global Buffer - Node.js global object for handling binary data. These globals are rare 
+   * @global @object Buffer - Node.js global object for handling binary data. Global objects are rare 
    * in Node.js, but they are used here to decode the base64-encoded credentials.
-   * @function Buffer.from() - from() is a static method of the Buffer class that creates a new buffer 
-   * containing the specified data. In this case, itcreates a new buffer from the base64-encoded string. 
-   * @method toString() - JavaScript method that converts the buffer to a string
-   * @method split(':') - JavaScript method that splits the string into an array of two elements: username and password
+   * @header authHeader - The 'authorization' header from the request, which contains the base64-encoded credentials.
+   * @function Buffer.from(..., 'base64') - from() is a static method of the Buffer class that creates a new buffer 
+   * containing the specified data. The ... represents the base64-encoded string, and the 'base64' argument specifies 
+   * the encoding of the input string. In this case, '...' is authHeader.split(' ')[1]. The base64 encoded string
+   * ia represented in memory as a buffer, which is a temporary storage area for binary data. The Buffer.from() method is 
+   * used to create a new buffer containing raw binary data from the encoded string, which in this case is base64-encoded, 
+   * allowing us to decode it into its original form.
+   * @method split with @param ' ' in parentheses- JavaScript method that splits the 'authorization' header string 
+   * into an array of two elements: the authentication scheme (e.g., 'Basic') and the base64-encoded credentials, 
+   * separated by a delimiter of blank space, indicated by the @parameter ' '. The resulting array is 
+   * then accessed at index 1 of the zero-indexed array, using [1] to get the base64-encoded credentials and not the 
+   * encoding scheme. The base64-encoded credentials are then passed to the Buffer.from() method for decoding. 
+   * @param (...) - The base64-encoded string extracted from the 'authorization' header. It is the second element of the 
+   * array returned by the split(' ') method, which splits the 'authorization' header into two parts: the authentication 
+   * scheme (e.g., 'Basic') and the base64-encoded credentials.
+   * @param base64 - A string that specifies the encoding of the input string. In this case, it indicates that the input string is
+   * base64-encoded, allowing the Buffer.from() method to correctly decode it into its original form.
+   * @method toString() - JavaScript method that converts the buffer loaded in to memory using Node.js to a string. 
+   * It is used here to convert the base64-decoded buffer into a string representation of the credentials.
+   * @method split(':') - JavaScript method that splits the string into an array of two elements: 
+   * username and password, separated by a delimiter. In this case, the delimiter is a colon (':'), which separates the username 
+   * and password.
+   * The resulting array is then destructured into the @constant user and @constant pass.
+   * @constant auth - An array containing the username and password extracted from the decoded credentials.
+   * @constant user - The username extracted from the decoded credentials.
+   * @constant pass - The password extracted from the decoded credentials.
+   * @returns {Array} - An array containing the username and password separated by a colon. 
+   * These values are then destructured into the @constant user and @constant pass.
    * If the 'authorization' header is present, decode the base64-encoded credentials
    * The credentials are in the format 'username:password', so we split them into user and pass
    * The Buffer.from() method is used to create a new buffer from the base64-encoded string,
    * and the toString() method is used to convert the buffer to a string. The split(':') method 
    * is then used to separate the username and password.
    */
-  const auth = Buffer.from(authHeader.split(' ')[1], 'base64').toString().split(':');
+  const auth = Buffer.from(authHeader.split(' ')[1], 'base64')
+  .toString()
+  .split(':');
   const user = auth[0];
   const pass = auth[1];
   if (user === 'admin' && pass === 'password') {

@@ -33,9 +33,18 @@ const promotionSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
+////////// FIX 1-3: You are missing the "featured" field.
+    featured: {
+        type: Boolean,
+        default: false
+    },
+////////// END FIX 1-3
     cost: {
         type: Currency, // Uses mongoose-currency to store as string with a currency symbol
         required: true,
+////////// NOTE: Another way you can ensure the field value will be greater than 0 is to make 0 the minimum.
+        min: 0
+////////// END NOTE
         //validate: [ // Optional validation, e.g., must be greater than zero
          //   {
          //       validator: function(cost) {
@@ -45,6 +54,7 @@ const promotionSchema = new mongoose.Schema({
          //   }
         //]
     },
+
     description: {
         type: String,
         required: true
