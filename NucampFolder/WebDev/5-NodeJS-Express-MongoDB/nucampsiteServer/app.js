@@ -17,9 +17,44 @@ const session = require('express-session');
  * function that can be used to create a new instance of the session store.
  */
 const FileStore = require('session-file-store')(session);
+/**
+ * @description The passport module is used for authentication in the Express application.
+ * It provides a simple and consistent API for handling authentication strategies, such as local authentication, 
+ * OAuth, and OpenID. In this application, passport is used to authenticate users during login and manage user sessions.
+ * @module passport
+ */
+const passport = require('passport');
+/**
+ * @description The authenticate module is a custom module that configures Passport to use the local strategy for authentication.
+ * It exports the local strategy, which is used to authenticate users based on their username and password.
+ * The authenticate module also handles serialization and deserialization of user information for session management.
+ * @module authenticate
+ * @requires passport
+ * @requires passport-local
+ * @requires ./models/user
+ * @exports local - The local strategy for Passport authentication.
+ * @exports serializeUser - The function to serialize user information into the session.
+ * @exports deserializeUser - The function to deserialize user information from the session.
+ * @exports authenticate - The authenticate module for Passport authentication.
+ * Since the authenticate module is imported, it will automatically configure Passport to use 
+ * the local strategy, and the serializeUser and deserializeUser functions will be available for 
+ * session management. Don't forget to call passport.initialize() and passport.session() in the 
+ * Express application to enable Passport authentication and session management.
+ * Don't forget to prepend the authenticate module with ./ to indicate that it is a local module 
+ * in the same directory as app.js.
+ */
+const authenticate = require('./authenticate');
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
+
+// To implement a RESTful API, create separate routers for each resource (campsites, promotions, and partners). 
+// This organizes our code better and handle requests for each resource in its own router file.
+// Import routers for different resources from public/routes directory, having already copied
+// the router files from the node-express/routes directory (or the server/routes directory) to the public/routes directory.
+const campsiteRouter = require('./routes/campsiteRouter');
+const promotionRouter = require('./routes/promotionRouter');
+const partnerRouter = require('./routes/partnerRouter');
 
 // Connect Express Server to MongoDB/Mongoose
 const mongoose = require('mongoose');
@@ -31,13 +66,6 @@ const connect = mongoose.connect(url, {});
 connect.then(() => console.log('Connected correctly to server'),
 err => console.log(err) // this is another way to handle errors besides catch, especially when it is the last "then"
 );
-// To implement a RESTful API, create separate routers for each resource (campsites, promotions, and partners). 
-// This organizes our code better and handle requests for each resource in its own router file.
-// Import routers for different resources from public/routes directory, having already copied
-// the router files from the node-express/routes directory (or the server/routes directory) to the public/routes directory.
-const campsiteRouter = require('./routes/campsiteRouter');
-const promotionRouter = require('./routes/promotionRouter');
-const partnerRouter = require('./routes/partnerRouter');
 /** 
  * Create a new Express application
  * The express() function creates an Express application, which is an object that has methods for 
@@ -180,6 +208,15 @@ app.use(session({
   store: new FileStore()
 }));
 /**
+ * @description The passport.initialize() middleware is used to initialize Passport for 
+ * authentication in the Express application. The passport.session() middleware is used 
+ * to manage user sessions with Passport. Only necessary if the application uses persistent 
+ * login sessions (session-based authentication), which is the case here.
+ */
+app.use(passport.initialize());
+app.use(passport.session());
+
+/**
  * @description The routers for the index and users routes are mounted on their respective paths.
  * The app.use() method is used to mount the routers for different resources on their respective paths.
  * The indexRouter is mounted on the root path ('/'), and the usersRouter is mounted on the '/users' path.
@@ -191,29 +228,20 @@ app.use(session({
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
 /** 
- * The session middleware will automatically add a property called session to the request message, 
- * which is an object that contains the session data for the current user. Adding a console.log during 
- * development can help debug session-related issues.
- * @constant session - The session object containing the session data for the current user.
- * @method console.log() - Logs the session object to the console for debugging purposes.
+ * @description The auth middleware function is used to check if the user is authenticated before 
+ * allowing access to certain routes. Passport is used to handle authentication, and the auth 
+ * middleware checks if the user is logged in by verifying the presence of a signed cookie named 'user'.
  */
 function auth(req, res, next) {
-  if (!req.session.user) {
-    console.log(req.session);
+  console.log(req.user);
+  if (!req.user) {
     const err = new Error('You are not authenticated!'); 
     err.status = 401;
     return next(err);
   } else {
-    if (req.session.user === 'authenticated') {
       return next();
-    } else {
-      const err = new Error('You are not authenticated!');
-      err.status = 401;
-      return next(err);
-    }
   }
 }
-
 
 app.use(auth);
 
