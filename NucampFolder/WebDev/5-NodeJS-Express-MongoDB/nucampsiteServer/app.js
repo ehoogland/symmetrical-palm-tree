@@ -30,7 +30,7 @@ const partnerRouter = require('./routes/partnerRouter');
  * Create a new Express application
  * The express() function creates an Express application, which is an object that has methods for 
  * routing HTTP requests, configuring middleware, rendering HTML views, and registering a template engine.
- */
+*/
 var app = express();
 
 /** 
@@ -46,7 +46,7 @@ var app = express();
  * application can locate the views folder regardless of where it is executed from.
  * @method app.set() method is used to set application-level settings, such as the views directory 
  * and view engine.
- */
+*/
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'pug');
 
@@ -58,29 +58,33 @@ app.set('view engine', 'pug');
  * The express.json() middleware parses incoming JSON payloads and makes the data available in req.body.
  * The express.urlencoded() middleware parses incoming URL-encoded payloads and makes the data available in req.body.
  * The cookieParser() middleware parses cookies attached to the client request object and makes them available in req.cookies.
- */
+*/
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
-app.use(cookieParser());
-
 /**
- * @note Setting up authentication middleware for the application
- * Because the authentication middleware is placed before the static file serving middleware 
- * [ app.use(express.static(path.join(__dirname, 'public'))); ], it will be executed for every 
- * incoming request before any static files are served. Placing the authentication middleware 
- * before the static file serving middleware ensures that all requests, including those for 
- * static files, are subject to authentication checks. This is important for protecting 
- * sensitive resources and ensuring that only authenticated users can access them.
- * If the authentication middleware were placed after the static file serving middleware, 
- * requests for static files would bypass the authentication checks, potentially exposing 
- * sensitive resources to unauthenticated users.
- */  
+ * @description The cookieParser() middleware is used to parse cookies attached to the client request object.
+ *              It takes an optional secret key as an argument, which is used to sign the cookies for added security. 
+ *              In this case, the secret key is set to '12345-67890-09876-54321'. Any cookies sent by the client 
+ *              will be signed with a hashed value of this key, and the server will verify the hashed value, 
+ *              or signature, when reading the cookies. If the signature does not match, it indicates that the 
+ *              cookie has been tampered with, and the server will reject it.  
+ * @function cookieParser() - The cookieParser() middleware is used to parse cookies, which get attached to the 
+ *              client request object. The function takes an optional secret key as a parameter. 
+ * @param {string} secret - The secret key used to sign the cookies. The key is used when added security is needed.
+ *              The secret key is a string that is used to generate a hash of the cookie value, and this hash is referred to 
+ *              as the signature. The hash is appended to the cookie value, and when the server receives the cookie, it 
+ *              verifies the signature using the same secret key. The signature can also be verified later to ensure 
+ *              that the cookie has not been tampered with.
+ * @returns @Object req.cookies - The parsed cookies are made available in the req.cookies object. 
+ *              This object contains key-value pairs of cookie names and their corresponding values.
+*/
+app.use(cookieParser('12345-67890-09876-54321')); // secret key for signing cookies
+
 /** 
  * @description:
- * @function auth is a middleware function that checks if the user is 
- * authenticated before allowing access to certain routes. If the user is not authenticated, 
- * it will respond with an error or redirect them to a login page.
+ * @function auth is a middleware function that checks if the user is authenticated before allowing access 
+ * to certain routes. If the user is not authenticated, it will respond with an error or redirect them to a login page.
  * @param {Object} req - The request object.
  * @param {Object} res - The response object.
  * @param {Function} next - The next middleware function in the stack.
@@ -103,73 +107,100 @@ app.use(cookieParser());
  * @method err.status - Sets the status code of the error object to 401 (Unauthorized).
  * @method res.setHeader() - Sets the 'WWW-Authenticate' header in the response to indicate that
  * the client must provide authentication credentials.
- * @method next() - Passes control to the next middleware function in the stack, 
+ * @return @method next() - Passes control to the next middleware function in the stack, 
  * which can be an error handler or another middleware function.
- */
-function auth(req, res, next) { 
-  console.log(req.headers);
-  // Check if the request has an 'authorization' header
-  const authHeader = req.headers.authorization;
-  if (!authHeader) {
-    // If the 'authorization' header is missing, create an error and set the 'WWW-Authenticate' header
+ * @return @method next(err) - Passes the error object to the next middleware function in the stack, an error handler
+*/
+/**
+ * @Note Added detailed JSDoc comments to the auth middleware function relating to cookies. There are also detailed comments for the 
+ * req, res, and next parameters, as well as the signedCookies and user properties of the req object.
+ * @description The auth middleware function checks if the user is authenticated by verifying the presence of a signed cookie named 'user'.
+ * If the signed cookie is not present, it checks for the 'authorization' header in the request. 
+ * If the header is missing, it creates an error and sets the 'WWW-Authenticate' header to prompt the client for credentials.
+ * If the 'authorization' header is present, it decodes the base64-encoded credentials, splits them into username and password, 
+ * and checks if they match predefined values ('admin' and 'password').
+ * If the credentials are correct, it sets a signed cookie named 'user' with the value 'admin' and calls the next middleware function. 
+ * If the credentials are incorrect, it creates an error and sets the 'WWW-Authenticate' header.
+ * If the signed cookie is present, it creates an error indicating that the user is not authenticated and passes it to the next 
+ * middleware function.
+ * @Object @function auth - The authentication middleware function that checks if the user is authenticated before allowing access 
+ * to certain routes.
+ * @Object @method req - The request object, which contains information about the incoming HTTP request, such as headers, query parameters, and the request body.
+ * @Object @method res - The response object, which is used to send the HTTP response back to the client, and contains methods for setting headers, status codes, and sending the response body.
+ * @Object @method next - The next middleware function in the stack, which is called to pass control to the next middleware function or route handler. If there are no more middleware functions, it will pass control to the error handler.
+ * @Object @method signedCookies - An object containing the signed cookies sent by the client. It is used to check whether the 'user' 
+ * signed cookie is present, which indicates that the user is authenticated.
+ * @Object @method user - The 'user' signed cookie, which contains the username of the authenticated user.
+*/
+function auth(req, res, next) {
+  if (!req.signedCookies.user) { // Check whether the 'user' signed cookie is not present
+    const authHeader = req.headers.authorization; // Get the 'authorization' header from the request
+    if (!authHeader) { 
+      // If the 'authorization' header is missing, create an error and set the 'WWW-Authenticate' header
+      const err = new Error('You are not authenticated!');
+      res.setHeader('WWW-Authenticate', 'Basic');
+      err.status = 401;
+      return next(err); // Pass the error to the next middleware (error handler)
+    }
+    /**
+     * @description - The 'authorization' header contains the base64-encoded credentials in the 
+     * format 'username:password'.
+     * @global @object Buffer - Node.js global object for handling binary data. Global objects are rare 
+     * in Node.js, but they are used here to decode the base64-encoded credentials.
+     * @header authHeader - The 'authorization' header from the request, which contains the base64-encoded credentials.
+     * @function Buffer.from(..., 'base64') - from() is a static method of the Buffer class that creates a new buffer 
+     * containing the specified data. The ... represents the base64-encoded string, and the 'base64' argument specifies 
+     * the encoding of the input string. In this case, '...' is authHeader.split(' ')[1]. The base64 encoded string
+     * ia represented in memory as a buffer, which is a temporary storage area for binary data. The Buffer.from() method is 
+     * used to create a new buffer containing raw binary data from the encoded string, which in this case is base64-encoded, 
+     * allowing us to decode it into its original form.
+     * @method split with @param ' ' in parentheses- JavaScript method that splits the 'authorization' header string 
+     * into an array of two elements: the authentication scheme (e.g., 'Basic') and the base64-encoded credentials, 
+     * separated by a delimiter of blank space, indicated by the @parameter ' '. The resulting array is 
+     * then accessed at index 1 of the zero-indexed array, using [1] to get the base64-encoded credentials and not the 
+     * encoding scheme. The base64-encoded credentials are then passed to the Buffer.from() method for decoding. 
+     * @param (...) - The base64-encoded string extracted from the 'authorization' header. It is the second element of the 
+     * array returned by the split(' ') method, which splits the 'authorization' header into two parts: the authentication 
+     * scheme (e.g., 'Basic') and the base64-encoded credentials.
+     * @param base64 - A string that specifies the encoding of the input string. In this case, it indicates that the input string is
+     * base64-encoded, allowing the Buffer.from() method to correctly decode it into its original form.
+     * @method toString() - JavaScript method that converts the buffer loaded in to memory using Node.js to a string. 
+     * It is used here to convert the base64-decoded buffer into a string representation of the credentials.
+     * @method split(':') - JavaScript method that splits the string into an array of two elements: 
+     * username and password, separated by a delimiter. In this case, the delimiter is a colon (':'), which separates the username 
+     * and password.
+     * The resulting array is then destructured into the @constant user and @constant pass.
+     * @constant auth - An array containing the username and password extracted from the decoded credentials.
+     * @constant user - The username extracted from the decoded credentials.
+     * @constant pass - The password extracted from the decoded credentials.
+     * @returns {Array} - An array containing the username and password separated by a colon. 
+     * These values are then destructured into the @constant user and @constant pass.
+     * If the 'authorization' header is present, decode the base64-encoded credentials
+     * The credentials are in the format 'username:password', so we split them into user and pass
+     * The Buffer.from() method is used to create a new buffer from the base64-encoded string,
+     * and the toString() method is used to convert the buffer to a string. The split(':') method 
+     * is then used to separate the username and password.
+    */
+   const auth = Buffer.from(authHeader.split(' ')[1], 'base64')
+   .toString()
+   .split(':');
+   const user = auth[0];
+   const pass = auth[1];
+   if (user === 'admin' && pass === 'password') {
+     res.cookie('user', 'admin', { signed: true }); // Set a signed cookie named 'user' 
+     // with the value 'admin'. If the username and password are correct, call the next middleware function
+     return next(); // authorized >> proceed to the next middleware or route handler
+    } else {
+      const err = new Error('You are not authenticated!');
+      res.setHeader('WWW-Authenticate', 'Basic'); // Set the 'WWW-Authenticate' header to prompt the client for credentials
+      err.status = 401; // Unauthorized status code
+      return next(err); // Pass the error to the next middleware (error handler)
+    }
+  } else {
     const err = new Error('You are not authenticated!');
-    res.setHeader('WWW-Authenticate', 'Basic');
-    err.status = 401; // Unauthorized status code
-    return next(err); // Pass the error to the next middleware (error handler)
-  }
-  /**
-   * @description - The 'authorization' header contains the base64-encoded credentials in the 
-   * format 'username:password'.
-   * @global @object Buffer - Node.js global object for handling binary data. Global objects are rare 
-   * in Node.js, but they are used here to decode the base64-encoded credentials.
-   * @header authHeader - The 'authorization' header from the request, which contains the base64-encoded credentials.
-   * @function Buffer.from(..., 'base64') - from() is a static method of the Buffer class that creates a new buffer 
-   * containing the specified data. The ... represents the base64-encoded string, and the 'base64' argument specifies 
-   * the encoding of the input string. In this case, '...' is authHeader.split(' ')[1]. The base64 encoded string
-   * ia represented in memory as a buffer, which is a temporary storage area for binary data. The Buffer.from() method is 
-   * used to create a new buffer containing raw binary data from the encoded string, which in this case is base64-encoded, 
-   * allowing us to decode it into its original form.
-   * @method split with @param ' ' in parentheses- JavaScript method that splits the 'authorization' header string 
-   * into an array of two elements: the authentication scheme (e.g., 'Basic') and the base64-encoded credentials, 
-   * separated by a delimiter of blank space, indicated by the @parameter ' '. The resulting array is 
-   * then accessed at index 1 of the zero-indexed array, using [1] to get the base64-encoded credentials and not the 
-   * encoding scheme. The base64-encoded credentials are then passed to the Buffer.from() method for decoding. 
-   * @param (...) - The base64-encoded string extracted from the 'authorization' header. It is the second element of the 
-   * array returned by the split(' ') method, which splits the 'authorization' header into two parts: the authentication 
-   * scheme (e.g., 'Basic') and the base64-encoded credentials.
-   * @param base64 - A string that specifies the encoding of the input string. In this case, it indicates that the input string is
-   * base64-encoded, allowing the Buffer.from() method to correctly decode it into its original form.
-   * @method toString() - JavaScript method that converts the buffer loaded in to memory using Node.js to a string. 
-   * It is used here to convert the base64-decoded buffer into a string representation of the credentials.
-   * @method split(':') - JavaScript method that splits the string into an array of two elements: 
-   * username and password, separated by a delimiter. In this case, the delimiter is a colon (':'), which separates the username 
-   * and password.
-   * The resulting array is then destructured into the @constant user and @constant pass.
-   * @constant auth - An array containing the username and password extracted from the decoded credentials.
-   * @constant user - The username extracted from the decoded credentials.
-   * @constant pass - The password extracted from the decoded credentials.
-   * @returns {Array} - An array containing the username and password separated by a colon. 
-   * These values are then destructured into the @constant user and @constant pass.
-   * If the 'authorization' header is present, decode the base64-encoded credentials
-   * The credentials are in the format 'username:password', so we split them into user and pass
-   * The Buffer.from() method is used to create a new buffer from the base64-encoded string,
-   * and the toString() method is used to convert the buffer to a string. The split(':') method 
-   * is then used to separate the username and password.
-   */
-  const auth = Buffer.from(authHeader.split(' ')[1], 'base64')
-  .toString()
-  .split(':');
-  const user = auth[0];
-  const pass = auth[1];
-  if (user === 'admin' && pass === 'password') {
-    // If the username and password are correct, call the next middleware function
-    return next(); // authorized, proceed to the next middleware or route handler
-  }
-  else {
-    // If the username and password are incorrect, create an error and set the 'WWW-Authenticate' header
-    const err = new Error('You are not authenticated!');
-    res.setHeader('WWW-Authenticate', 'Basic');
-    err.status = 401; // Unauthorized status code
+    /** Do not set the 'WWW-Authenticate' header again to prompt the client for credentials; already set it 
+        in the previous block of code and we don't want to challenge the user again */
+    err.status = 401; // "Unauthorized" status code
     return next(err); // Pass the error to the next middleware (error handler)
   }
 }
@@ -180,9 +211,21 @@ app.use(auth); // Use the auth middleware for all routes
  * middleware to protect routes that require authentication. It checks whether the user is authenticated before 
  * allowing access to certain routes. If the user is not authenticated, it will respond with an error or 
  * redirect them to a login page.
- */
+*/
 // const authenticate = require('./authenticate');
 // app.use(authenticate);
+/**
+ * @note Setting up authentication middleware for the application
+ * Because the authentication middleware is placed before the static file serving middleware 
+ * [ app.use(express.static(path.join(__dirname, 'public'))); ], it will be executed for every 
+ * incoming request before any static files are served. Placing the authentication middleware 
+ * before the static file serving middleware ensures that all requests, including those for 
+ * static files, are subject to authentication checks. This is important for protecting 
+ * sensitive resources and ensuring that only authenticated users can access them.
+ * If the authentication middleware were placed after the static file serving middleware, 
+ * requests for static files would bypass the authentication checks, potentially exposing 
+ * sensitive resources to unauthenticated users.
+*/  
 /**
  * @description @function express.static is used to serve static files, such as images, CSS files, and 
  * JavaScript files from the 'public' directory. This allows clients to access these files directly via 
@@ -191,7 +234,7 @@ app.use(auth); // Use the auth middleware for all routes
  * ensuring that the application works correctly on different operating systems.
  * @param {string} __dirname - A Node.js global variable that represents the directory name of the current module.
  * @param {string} 'public' - The name of the directory containing static files to be served.
- */
+*/
 app.use(express.static(path.join(__dirname, 'public')));
 
 /** 
