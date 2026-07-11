@@ -4,8 +4,24 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 
+// Add session support to the Express application by importing the express-session 
+// and session-file-store modules.
+const session = require('express-session');
+/** 
+ * The session-file-store module is a session store for Express that uses the file system 
+ * to store session data. 
+ * There are two sets of parameters here: one for the session-file-store module itself, 
+ * and one for the session object.
+ * The entire function is returning another function as its return value, then the returned 
+ * function is called with the session object as its argument, which then returns a constructor
+ * function that can be used to create a new instance of the session store.
+ */
+const FileStore = require('session-file-store')(session);
+
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
+
+
 
 
 // Connect Express Server to MongoDB/Mongoose
@@ -63,6 +79,13 @@ app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 /**
+ * There can be conflicts between the cookieParser() middleware and the express-session middleware, as both can handle cookies.
+ * The cookieParser() middleware is used to parse cookies attached to the client request object, while the express-session middleware is used to manage session data and store it in a cookie.
+ * If both middlewares are used together, the cookieParser() middleware may interfere with the session management of express-session, leading to unexpected behavior or errors.
+ * To avoid conflicts, it is recommended to use only one of these middlewares in an application. 
+ * If you need to manage sessions, use express-session and avoid using cookieParser(). 
+ * If you only need to parse cookies, use cookieParser() and avoid using express-session().
+ * 
  * @description The cookieParser() middleware is used to parse cookies attached to the client request object.
  *              It takes an optional secret key as an argument, which is used to sign the cookies for added security. 
  *              In this case, the secret key is set to '12345-67890-09876-54321'. Any cookies sent by the client 
@@ -78,9 +101,11 @@ app.use(express.urlencoded({ extended: false }));
  *              that the cookie has not been tampered with.
  * @returns @Object req.cookies - The parsed cookies are made available in the req.cookies object. 
  *              This object contains key-value pairs of cookie names and their corresponding values.
-*/
-app.use(cookieParser('12345-67890-09876-54321')); // secret key for signing cookies
-
+ * 
+ * Note: Not used in this application, but if you want to use signed cookies, you can uncomment the following 
+ * line and provide a secret key for signing cookies.
+ * app.use(cookieParser('12345-67890-09876-54321')); // secret key for signing cookies
+ */
 /** 
  * @description:
  * @function auth is a middleware function that checks if the user is authenticated before allowing access 
@@ -132,15 +157,57 @@ app.use(cookieParser('12345-67890-09876-54321')); // secret key for signing cook
  * signed cookie is present, which indicates that the user is authenticated.
  * @Object @method user - The 'user' signed cookie, which contains the username of the authenticated user.
 */
+/** 
+ * @description The session middleware is used to manage user sessions in the Express application. 
+ * It creates a session for each user and stores session data on the server side. 
+ * The session ID is stored in a cookie on the client side, which is sent with each request 
+ * to identify the user's session. The session middleware is configured with options such as the name 
+ * of the session ID cookie, a secret key for signing the cookie, and a file store for storing session 
+ * data on the server side.
+ * @name - The name of the session ID cookie is set to 'session-id', which is the name of the cookie that will be sent 
+ *        to the client and used to identify the user's session.
+ * @secret - The secret option is set to a string value, which is used to sign the session ID cookie. 
+ *        This helps prevent tampering with the cookie and ensures that the session data is secure.
+ * @resave - The resave option is set to false, which means that the session will not be saved back 
+ *        to the session store if it hasn't been modified during the request. It will mainly help to keep the 
+ *        session marked as active.
+ * @saveUninitialized - The saveUninitialized option is set to false, which means that a session will not be 
+ *        created and saved to the session store unless it has been modified. This helps reduce the number of 
+ *        empty sessions stored in the session store.
+ * @store - The store option is set to a new instance of FileStore, which is a session store that uses the 
+ *          file system to store session data. This allows session data to persist across server restarts 
+ *          and provides a simple way to manage sessions without requiring a separate database.
+*/
+app.use(session({
+  name: 'session-id',
+  secret: '12345-67890-09876-54321',
+  saveUninitialized: false,
+  resave: false,
+  store: new FileStore()
+}));
+/** 
+ * The session middleware will automatically add a property called session to the request message, 
+ * which is an object that contains the session data for the current user. Adding a console.log during 
+ * development can help debug session-related issues.
+ * @constant session - The session object containing the session data for the current user.
+ * @method console.log() - Logs the session object to the console for debugging purposes.
+*/
+
 function auth(req, res, next) {
-  if (!req.signedCookies.user) { // Check whether the 'user' signed cookie is not present
+  console.log(req.session);  
+  if (!req.session.user) { // Check whether the 'user' property is not present in the session object
     const authHeader = req.headers.authorization; // Get the 'authorization' header from the request
+  /** 
+   * Used in cookie parser: if (!req.signedCookies.user) { // Check whether the 'user' signed cookie 
+   * is not present
+   */
     if (!authHeader) { 
-      // If the 'authorization' header is missing, create an error and set the 'WWW-Authenticate' header
+      /** If the 'authorization' header is missing, create an error and set the 'WWW-Authenticate' header */
       const err = new Error('You are not authenticated!');
       res.setHeader('WWW-Authenticate', 'Basic');
       err.status = 401;
-      return next(err); // Pass the error to the next middleware (error handler)
+      /** Pass the error to the next middleware, i.e., the error handler */
+      return next(err); 
     }
     /**
      * @description - The 'authorization' header contains the base64-encoded credentials in the 
@@ -169,7 +236,8 @@ function auth(req, res, next) {
      * @method split(':') - JavaScript method that splits the string into an array of two elements: 
      * username and password, separated by a delimiter. In this case, the delimiter is a colon (':'), which separates the username 
      * and password.
-     * The resulting array is then destructured into the @constant user and @constant pass.
+     * The resulting array is then destructured into the @constant user and @constant pass variables, 
+     * which are used to verify the user's credentials.
      * @constant auth - An array containing the username and password extracted from the decoded credentials.
      * @constant user - The username extracted from the decoded credentials.
      * @constant pass - The password extracted from the decoded credentials.
@@ -186,32 +254,78 @@ function auth(req, res, next) {
    .split(':');
    const user = auth[0];
    const pass = auth[1];
+   /**
+    * @description If the username and password are correct, set the 'user' property in the session object 
+    * to 'admin'. This indicates that the user is authenticated and allows access to protected routes.
+    * @property req.session.user - The 'user' property in the session object is set to 'admin', indicating 
+    * that the user is authenticated.
+    */
    if (user === 'admin' && pass === 'password') {
-     res.cookie('user', 'admin', { signed: true }); // Set a signed cookie named 'user' 
-     // with the value 'admin'. If the username and password are correct, call the next middleware function
+     req.session.user = 'admin';
+     /** 
+      * @description The following line of code is commented out because it is not used in this application.
+      * It is an example of how to set a signed cookie named 'user' with the value 'admin' using the res.cookie() method.
+      * The app is currently using session management with express-session, so the signed cookie is not needed.
+      * The former code is from the previous version of the application that used cookie-based authentication 
+      * instead of session-based authentication.
+      * Set a signed cookie named 'user' with the value 'admin'. If the username and password are correct, 
+      * call the next middleware function
+      * 
+      * res.cookie('user', 'admin', { signed: true }); 
+     */ 
      return next(); // authorized >> proceed to the next middleware or route handler
     } else {
+      /**
+       * @constant err - An error object created when the user is not authenticated. It contains a message and a status code.
+       * @description If the username and password are incorrect, create an error and set the 'WWW-Authenticate' header 
+       * to prompt the client for credentials. The error object is then passed to the next middleware (error handler).
+       * @method setHeader Set the 'WWW-Authenticate' header on the response object to prompt the 
+       *                   client for credentials
+       * @param {string} 'WWW-Authenticate' - The name of the header to be set on the response object.
+       * @param {string} 'Basic' - The value of the 'WWW-Authenticate' header, indicating that the client 
+       *                          should use Basic authentication to provide credentials.
+       * @method err.status Unauthorized status code 401 is set to the error object to indicate 
+       *                    that the user is not authenticated.
+       * @return @function next(err) Pass the error to the next middleware (error handler)
+       * @param {Object} err - The error object created when the user is not authenticated. 
+       *                        It contains a message and a status code.
+       * @param {number} err.status - The status code of the error object, set to 401 (Unauthorized).
+       * 
+       */
       const err = new Error('You are not authenticated!');
-      res.setHeader('WWW-Authenticate', 'Basic'); // Set the 'WWW-Authenticate' header to prompt the client for credentials
-      err.status = 401; // Unauthorized status code
-      return next(err); // Pass the error to the next middleware (error handler)
+      res.setHeader('WWW-Authenticate', 'Basic'); 
+      err.status = 401; 
+      return next(err); 
     }
   } else {
-    const err = new Error('You are not authenticated!');
-    /** Do not set the 'WWW-Authenticate' header again to prompt the client for credentials; already set it 
-        in the previous block of code and we don't want to challenge the user again */
-    err.status = 401; // "Unauthorized" status code
-    return next(err); // Pass the error to the next middleware (error handler)
-  }
-}
-
-app.use(auth); // Use the auth middleware for all routes
-/** 
- * @description @function authenticate is imported from the 'authenticate' module and is used as 
- * middleware to protect routes that require authentication. It checks whether the user is authenticated before 
- * allowing access to certain routes. If the user is not authenticated, it will respond with an error or 
- * redirect them to a login page.
-*/
+            if (req.session.user === 'admin') {
+            return next();
+        } else {
+            const err = new Error('You are not authenticated!');
+            err.status = 401;
+            return next(err);
+        }
+    }
+} 
+    /**  
+     * this 'if' block was missing and gave a 401 error when 
+     * trying to access the /campsites route after logging in with the correct credentials.
+     * It checks whether the 'user' signed cookie is present and has the value 'admin' 
+     * 
+     * if (req.signedCookies.user === 'admin') { return next(); }
+     * replaced above by if (req.session.user === 'admin') { return next(); } to use session management 
+     * instead of signed cookies
+     * 
+     */
+   
+    
+    app.use(auth); // Use the auth middleware for all routes
+    /** 
+     * @description @function authenticate is imported from the 'authenticate' module and is used as 
+     * middleware to protect routes that require authentication. It checks whether the user is authenticated before 
+     * allowing access to certain routes. If the user is not authenticated, it will respond with an error or 
+     * redirect them to a login page.
+     */
 // const authenticate = require('./authenticate');
 // app.use(authenticate);
 /**
