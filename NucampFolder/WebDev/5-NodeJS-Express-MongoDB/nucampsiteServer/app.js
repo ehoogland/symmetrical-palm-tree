@@ -1,7 +1,7 @@
 var createError = require('http-errors');
 var express = require('express');
 var path = require('path');
-var cookieParser = require('cookie-parser');
+//var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 
 // Add session support to the Express application by importing the express-session 
@@ -21,9 +21,6 @@ const FileStore = require('session-file-store')(session);
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 
-
-
-
 // Connect Express Server to MongoDB/Mongoose
 const mongoose = require('mongoose');
 // Give it the url in order to connect to MongoDB/Mongoose server, and
@@ -41,14 +38,12 @@ err => console.log(err) // this is another way to handle errors besides catch, e
 const campsiteRouter = require('./routes/campsiteRouter');
 const promotionRouter = require('./routes/promotionRouter');
 const partnerRouter = require('./routes/partnerRouter');
-
 /** 
  * Create a new Express application
  * The express() function creates an Express application, which is an object that has methods for 
  * routing HTTP requests, configuring middleware, rendering HTML views, and registering a template engine.
 */
 var app = express();
-
 /** 
  * View engine setup
  * @description Set the views directory and view engine for rendering templates
@@ -65,7 +60,6 @@ var app = express();
 */
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'pug');
-
 // command-shift-n to open a private window in Chrome, then go to http://127.0.0.1:3000 to see the app running
 /** 
  * Use middleware for logging, parsing JSON and URL-encoded data, and handling cookies
@@ -74,7 +68,7 @@ app.set('view engine', 'pug');
  * The express.json() middleware parses incoming JSON payloads and makes the data available in req.body.
  * The express.urlencoded() middleware parses incoming URL-encoded payloads and makes the data available in req.body.
  * The cookieParser() middleware parses cookies attached to the client request object and makes them available in req.cookies.
-*/
+ */
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
@@ -185,161 +179,44 @@ app.use(session({
   resave: false,
   store: new FileStore()
 }));
+/**
+ * @description The routers for the index and users routes are mounted on their respective paths.
+ * The app.use() method is used to mount the routers for different resources on their respective paths.
+ * The indexRouter is mounted on the root path ('/'), and the usersRouter is mounted on the '/users' path.
+ * This allows the application to handle requests for these routes and delegate them to the appropriate router.
+ * @method app.use() method is used to mount middleware functions that will be executed for every incoming request.
+ * @param {string} '/' - The root path for the indexRouter, which handles requests to the home page of the application.
+ * @param {string} '/users' - The path for the usersRouter, which handles requests related to user management, such as signup and login.  
+ */
+app.use('/', indexRouter);
+app.use('/users', usersRouter);
 /** 
  * The session middleware will automatically add a property called session to the request message, 
  * which is an object that contains the session data for the current user. Adding a console.log during 
  * development can help debug session-related issues.
  * @constant session - The session object containing the session data for the current user.
  * @method console.log() - Logs the session object to the console for debugging purposes.
-*/
-
+ */
 function auth(req, res, next) {
-  console.log(req.session);  
-  if (!req.session.user) { // Check whether the 'user' property is not present in the session object
-    const authHeader = req.headers.authorization; // Get the 'authorization' header from the request
-  /** 
-   * Used in cookie parser: if (!req.signedCookies.user) { // Check whether the 'user' signed cookie 
-   * is not present
-   */
-    if (!authHeader) { 
-      /** If the 'authorization' header is missing, create an error and set the 'WWW-Authenticate' header */
-      const err = new Error('You are not authenticated!');
-      res.setHeader('WWW-Authenticate', 'Basic');
-      err.status = 401;
-      /** Pass the error to the next middleware, i.e., the error handler */
-      return next(err); 
-    }
-    /**
-     * @description - The 'authorization' header contains the base64-encoded credentials in the 
-     * format 'username:password'.
-     * @global @object Buffer - Node.js global object for handling binary data. Global objects are rare 
-     * in Node.js, but they are used here to decode the base64-encoded credentials.
-     * @header authHeader - The 'authorization' header from the request, which contains the base64-encoded credentials.
-     * @function Buffer.from(..., 'base64') - from() is a static method of the Buffer class that creates a new buffer 
-     * containing the specified data. The ... represents the base64-encoded string, and the 'base64' argument specifies 
-     * the encoding of the input string. In this case, '...' is authHeader.split(' ')[1]. The base64 encoded string
-     * ia represented in memory as a buffer, which is a temporary storage area for binary data. The Buffer.from() method is 
-     * used to create a new buffer containing raw binary data from the encoded string, which in this case is base64-encoded, 
-     * allowing us to decode it into its original form.
-     * @method split with @param ' ' in parentheses- JavaScript method that splits the 'authorization' header string 
-     * into an array of two elements: the authentication scheme (e.g., 'Basic') and the base64-encoded credentials, 
-     * separated by a delimiter of blank space, indicated by the @parameter ' '. The resulting array is 
-     * then accessed at index 1 of the zero-indexed array, using [1] to get the base64-encoded credentials and not the 
-     * encoding scheme. The base64-encoded credentials are then passed to the Buffer.from() method for decoding. 
-     * @param (...) - The base64-encoded string extracted from the 'authorization' header. It is the second element of the 
-     * array returned by the split(' ') method, which splits the 'authorization' header into two parts: the authentication 
-     * scheme (e.g., 'Basic') and the base64-encoded credentials.
-     * @param base64 - A string that specifies the encoding of the input string. In this case, it indicates that the input string is
-     * base64-encoded, allowing the Buffer.from() method to correctly decode it into its original form.
-     * @method toString() - JavaScript method that converts the buffer loaded in to memory using Node.js to a string. 
-     * It is used here to convert the base64-decoded buffer into a string representation of the credentials.
-     * @method split(':') - JavaScript method that splits the string into an array of two elements: 
-     * username and password, separated by a delimiter. In this case, the delimiter is a colon (':'), which separates the username 
-     * and password.
-     * The resulting array is then destructured into the @constant user and @constant pass variables, 
-     * which are used to verify the user's credentials.
-     * @constant auth - An array containing the username and password extracted from the decoded credentials.
-     * @constant user - The username extracted from the decoded credentials.
-     * @constant pass - The password extracted from the decoded credentials.
-     * @returns {Array} - An array containing the username and password separated by a colon. 
-     * These values are then destructured into the @constant user and @constant pass.
-     * If the 'authorization' header is present, decode the base64-encoded credentials
-     * The credentials are in the format 'username:password', so we split them into user and pass
-     * The Buffer.from() method is used to create a new buffer from the base64-encoded string,
-     * and the toString() method is used to convert the buffer to a string. The split(':') method 
-     * is then used to separate the username and password.
-    */
-   const auth = Buffer.from(authHeader.split(' ')[1], 'base64')
-   .toString()
-   .split(':');
-   const user = auth[0];
-   const pass = auth[1];
-   /**
-    * @description If the username and password are correct, set the 'user' property in the session object 
-    * to 'admin'. This indicates that the user is authenticated and allows access to protected routes.
-    * @property req.session.user - The 'user' property in the session object is set to 'admin', indicating 
-    * that the user is authenticated.
-    */
-   if (user === 'admin' && pass === 'password') {
-     req.session.user = 'admin';
-     /** 
-      * @description The following line of code is commented out because it is not used in this application.
-      * It is an example of how to set a signed cookie named 'user' with the value 'admin' using the res.cookie() method.
-      * The app is currently using session management with express-session, so the signed cookie is not needed.
-      * The former code is from the previous version of the application that used cookie-based authentication 
-      * instead of session-based authentication.
-      * Set a signed cookie named 'user' with the value 'admin'. If the username and password are correct, 
-      * call the next middleware function
-      * 
-      * res.cookie('user', 'admin', { signed: true }); 
-     */ 
-     return next(); // authorized >> proceed to the next middleware or route handler
-    } else {
-      /**
-       * @constant err - An error object created when the user is not authenticated. It contains a message and a status code.
-       * @description If the username and password are incorrect, create an error and set the 'WWW-Authenticate' header 
-       * to prompt the client for credentials. The error object is then passed to the next middleware (error handler).
-       * @method setHeader Set the 'WWW-Authenticate' header on the response object to prompt the 
-       *                   client for credentials
-       * @param {string} 'WWW-Authenticate' - The name of the header to be set on the response object.
-       * @param {string} 'Basic' - The value of the 'WWW-Authenticate' header, indicating that the client 
-       *                          should use Basic authentication to provide credentials.
-       * @method err.status Unauthorized status code 401 is set to the error object to indicate 
-       *                    that the user is not authenticated.
-       * @return @function next(err) Pass the error to the next middleware (error handler)
-       * @param {Object} err - The error object created when the user is not authenticated. 
-       *                        It contains a message and a status code.
-       * @param {number} err.status - The status code of the error object, set to 401 (Unauthorized).
-       * 
-       */
-      const err = new Error('You are not authenticated!');
-      res.setHeader('WWW-Authenticate', 'Basic'); 
-      err.status = 401; 
-      return next(err); 
-    }
+  if (!req.session.user) {
+    console.log(req.session);
+    const err = new Error('You are not authenticated!'); 
+    err.status = 401;
+    return next(err);
   } else {
-            if (req.session.user === 'admin') {
-            return next();
-        } else {
-            const err = new Error('You are not authenticated!');
-            err.status = 401;
-            return next(err);
-        }
+    if (req.session.user === 'authenticated') {
+      return next();
+    } else {
+      const err = new Error('You are not authenticated!');
+      err.status = 401;
+      return next(err);
     }
-} 
-    /**  
-     * this 'if' block was missing and gave a 401 error when 
-     * trying to access the /campsites route after logging in with the correct credentials.
-     * It checks whether the 'user' signed cookie is present and has the value 'admin' 
-     * 
-     * if (req.signedCookies.user === 'admin') { return next(); }
-     * replaced above by if (req.session.user === 'admin') { return next(); } to use session management 
-     * instead of signed cookies
-     * 
-     */
-   
-    
-    app.use(auth); // Use the auth middleware for all routes
-    /** 
-     * @description @function authenticate is imported from the 'authenticate' module and is used as 
-     * middleware to protect routes that require authentication. It checks whether the user is authenticated before 
-     * allowing access to certain routes. If the user is not authenticated, it will respond with an error or 
-     * redirect them to a login page.
-     */
-// const authenticate = require('./authenticate');
-// app.use(authenticate);
-/**
- * @note Setting up authentication middleware for the application
- * Because the authentication middleware is placed before the static file serving middleware 
- * [ app.use(express.static(path.join(__dirname, 'public'))); ], it will be executed for every 
- * incoming request before any static files are served. Placing the authentication middleware 
- * before the static file serving middleware ensures that all requests, including those for 
- * static files, are subject to authentication checks. This is important for protecting 
- * sensitive resources and ensuring that only authenticated users can access them.
- * If the authentication middleware were placed after the static file serving middleware, 
- * requests for static files would bypass the authentication checks, potentially exposing 
- * sensitive resources to unauthenticated users.
-*/  
+  }
+}
+
+
+app.use(auth);
+
 /**
  * @description @function express.static is used to serve static files, such as images, CSS files, and 
  * JavaScript files from the 'public' directory. This allows clients to access these files directly via 
@@ -350,13 +227,6 @@ function auth(req, res, next) {
  * @param {string} 'public' - The name of the directory containing static files to be served.
 */
 app.use(express.static(path.join(__dirname, 'public')));
-
-/** 
- * @description indexRouter is mounted on the root path ('/'), and usersRouter is mounted on the '/users' path.
- * The app.use() method is used to mount the routers for different resources on their respective paths.
- */
-app.use('/', indexRouter);
-app.use('/users', usersRouter);
 
 /** 
  * @description The imported routers for campsites, promotions, and partners are mounted on their respective paths.
