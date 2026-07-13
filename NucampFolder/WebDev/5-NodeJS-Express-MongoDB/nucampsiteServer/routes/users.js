@@ -12,10 +12,36 @@ router.get('/', function(req, res, next) {
 });
 
 router.post('/signup', (req, res) => {
-    User.register(
-        new User({username: req.body.username}),
-        req.body.password,
-        (err, user) => {
+    const user = new User({username: req.body.username});
+    
+    User.register(user, req.body.password)
+    .then(registeredUser => {
+        if (req.body.firstname) {
+            registeredUser.firstname = req.body.firstname;
+        }
+        if (req.body.lastname) {
+            registeredUser.lastname = req.body.lastname;
+        }
+        return registeredUser.save();
+    })
+    .then(user => {
+        passport.authenticate('local')(req, res, () => {
+            res.statusCode = 200;
+            res.setHeader('Content-Type', 'application/json');
+            res.json({success: true, status: 'Registration Successful!'});
+            });
+        })
+        .catch(err => {
+            res.statusCode = 500;
+            res.setHeader('Content-Type', 'application/json');
+            res.json({err: err});
+        });
+    })
+    .catch(err => {
+        res.statusCode = 500;
+        res.setHeader('Content-Type', 'application/json');
+        res.json({err: err});
+    });
             if (err) {
                 res.statusCode = 500;
                 res.setHeader('Content-Type', 'application/json');
@@ -41,9 +67,6 @@ router.post('/signup', (req, res) => {
                     });
                 });
             }
-        }
-    );
-});
 
 router.post('/login', passport.authenticate('local', {session: false}), (req, res) => {
     const token = authenticate.getToken({_id: req.user._id});
