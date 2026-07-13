@@ -1,71 +1,170 @@
+/**
+ * @file app.js
+ * @description This file sets up the Express application, connects to the MongoDB database using Mongoose, 
+ * and configures middleware for logging, parsing JSON and URL-encoded data, handling cookies, and 
+ * authentication using Passport. It also defines routes for handling requests to different resources, 
+ * such as users, campsites, promotions, and partners.
+ * @module app
+ * @requires express
+ * @requires path
+ * @var createError - The http-errors module is used to create HTTP error objects for handling errors in the application.
+ * @var express - The Express module is used to create the Express application and define routes and middleware.
+ * @var path - The path module is used to work with file and directory paths.
+ * @var logger - The morgan module is used for logging HTTP requests to the console.
+ * @var passport - The passport module is used for authentication in the Express application.
+ * @var config - The config module is used to import configuration settings from the config.js file.
+ * @var indexRouter - The router for handling requests to the index route.
+ * @var usersRouter - The router for handling requests to the users route.
+ * @var campsiteRouter - The router for handling requests to the campsites resource.
+ * @var promotionRouter - The router for handling requests to the promotions resource.
+ * @var partnerRouter - The router for handling requests to the partners resource.
+ * @var mongoose - The mongoose module is used to connect the Express server to a MongoDB database and 
+ *                 define data models.
+ * @var url - The connection string for the MongoDB database, specifying the protocol, host, port, 
+ *            and database name.
+ * @var connect - The promise returned by calling mongoose.connect() with the url and an empty options object.
+ * @var app - The Express application object created using the express() function.
+ * @var __dirname - A Node.js global variable that represents the directory name of the current module.
+ * @var next - The next middleware function in the stack, which is called to pass control to the next 
+ *             middleware function or route handler.
+ * @var req - The request object, which contains information about the incoming HTTP request, such as headers, 
+ *            query parameters, and the request body.
+ * @var res - The response object, which is used to send the HTTP response back to the client, and contains 
+ *            methods for setting headers, status codes, and sending the response body.
+ */
+/**
+ * @description The http-errors module is used to create HTTP error objects for handling errors in the application.
+ * @module createError
+ * @requires http-errors
+ */
 var createError = require('http-errors');
 var express = require('express');
-var path = require('path');
-//var cookieParser = require('cookie-parser');
-var logger = require('morgan');
-
-// Add session support to the Express application by importing the express-session 
-// and session-file-store modules.
-const session = require('express-session');
-/** 
- * The session-file-store module is a session store for Express that uses the file system 
- * to store session data. 
- * There are two sets of parameters here: one for the session-file-store module itself, 
- * and one for the session object.
- * The entire function is returning another function as its return value, then the returned 
- * function is called with the session object as its argument, which then returns a constructor
- * function that can be used to create a new instance of the session store.
+/**
+ * @description path module is used to work with file and directory paths. It provides utilities 
+ * for handling and transforming file paths, making it easier to work with file system paths 
+ * in a cross-platform manner.
+ * @module path
+ * @requires path
  */
-const FileStore = require('session-file-store')(session);
+var path = require('path');
+/**
+ * @var logger - The morgan module is used for logging HTTP requests to the console. It provides a simple and 
+ * configurable way to log request details, such as the request method, URL, status code, and response time. 
+ * This helps in monitoring and debugging the application by providing insights into incoming requests and 
+ * their outcomes.
+ * @module logger
+ * @requires morgan
+ */
+var logger = require('morgan');
 /**
  * @description The passport module is used for authentication in the Express application.
  * It provides a simple and consistent API for handling authentication strategies, such as local authentication, 
  * OAuth, and OpenID. In this application, passport is used to authenticate users during login and manage user sessions.
  * @module passport
+ * @requires passport
  */
 const passport = require('passport');
 /**
- * @description The authenticate module is a custom module that configures Passport to use the local strategy for authentication.
- * It exports the local strategy, which is used to authenticate users based on their username and password.
- * The authenticate module also handles serialization and deserialization of user information for session management.
- * @module authenticate
- * @requires passport
- * @requires passport-local
- * @requires ./models/user
- * @exports local - The local strategy for Passport authentication.
- * @exports serializeUser - The function to serialize user information into the session.
- * @exports deserializeUser - The function to deserialize user information from the session.
- * @exports authenticate - The authenticate module for Passport authentication.
- * Since the authenticate module is imported, it will automatically configure Passport to use 
- * the local strategy, and the serializeUser and deserializeUser functions will be available for 
- * session management. Don't forget to call passport.initialize() and passport.session() in the 
- * Express application to enable Passport authentication and session management.
- * Don't forget to prepend the authenticate module with ./ to indicate that it is a local module 
+ * @description The config module is used to import the configuration settings from the config.js file.
+ * The config object contains the secret key used for signing JSON Web Tokens (JWTs) and the MongoDB 
+ * connection URL. These settings are used throughout the application for authentication and database 
+ * connection purposes.
+ * @module config
+ * @requires ./config
+ */
+const config = require('./config');
+/**
+ * @description indexRouter and usersRouter are imported from the routes directory. These routers 
+ * handle requests for the index and users routes, respectively.
+ * @module indexRouter
+ * @module usersRouter
+ * @requires ./routes/index
+ * @requires ./routes/users
+ * @exports indexRouter - The router for handling requests to the index route.
+ * @exports usersRouter - The router for handling requests to the users route.
+ * The routers are mounted on their respective paths using app.use() in the 
+ * Express application, allowing the application to handle requests for these 
+ * routes and delegate them to the appropriate router.
+ * 
+ * Don't forget to prepend the routers with ./ to indicate that they are local modules 
  * in the same directory as app.js.
  */
-const authenticate = require('./authenticate');
-
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 
-// To implement a RESTful API, create separate routers for each resource (campsites, promotions, and partners). 
-// This organizes our code better and handle requests for each resource in its own router file.
-// Import routers for different resources from public/routes directory, having already copied
-// the router files from the node-express/routes directory (or the server/routes directory) to the public/routes directory.
+/** 
+ * @general In MongoDB, @database {string} is a container that holds a set of data collections.
+ * @collection {string} In MongoDB, a collection is a grouping of documents within a database 
+ *             (that is, within a set of [data] collections).
+ * @document {Object} In MongoDB, a document is a single record in a collection, represented as 
+ *           a JSON-like object, which can contain nested fields and arrays.
+ * @format BSON (Binary JSON) format for each document in a collection.
+ * @identifier Each document has a unique identifier (_id) and can have different fields and data types.
+ */
+/**
+ * @note As a part of implementing a REST (Representational State Transfer) API, 
+ *       create separate routers for each resource (campsites, promotions, and partners). 
+ * @description The campsiteRouter, promotionRouter, and partnerRouter are imported from 
+ * the routes directory. These routers handle requests for the campsites, promotions, and 
+ * partners resources, respectively.
+ * @modules campsiteRouter, promotionRouter, partnerRouter
+ * These modules organize code better and handle requests for each resource in its own router file.
+ */
 const campsiteRouter = require('./routes/campsiteRouter');
 const promotionRouter = require('./routes/promotionRouter');
 const partnerRouter = require('./routes/partnerRouter');
-
-// Connect Express Server to MongoDB/Mongoose
+/**
+ * Connect Express server to MongoDB/Mongoose
+ * @description The mongoose module is used to connect the Express server to a MongoDB database.
+ * It provides a straightforward, schema-based solution to model application data and includes 
+ * built-in type casting, validation, query building, and business logic hooks. In this application, 
+ * mongoose is used to connect to the MongoDB database, define schemas for the data models, and 
+ * perform CRUD (create-read-update-delete) operations on the database.
+ * @module mongoose
+ * @requires mongoose
+ * @exports mongoose - The mongoose module for connecting to MongoDB and defining data models.
+ * @method mongoose.connect() method is used to establish a connection to the MongoDB database, 
+ * and the connection is handled using promises. If the connection is successful, a message is 
+ * logged to the console. If there is an error, the error is logged to the console. 
+ * @const @var connect variable is assigned the promise returned by calling mongoose.connect() with the url 
+ * and an empty options object.
+ * @param {string} url - The connection string for the MongoDB database, specifying the protocol, host, port, 
+ * and database name.
+ * @port {number} 27017 - The default port number for MongoDB connections.
+ * @param {string} nucampsite - The name of the MongoDB database to connect to. 
+ * @param {Object} options - An empty options object passed to mongoose.connect().
+ * @returns {Promise} A promise that resolves when the connection to the MongoDB database is successful, 
+ * or rejects with an error if the connection fails.
+ * @throws {Error} If there is an error connecting to the MongoDB database, an error is thrown.
+ * @param {function} then() - A method called on the connect promise to handle successful connection to the MongoDB database.
+ * @param {function} catch() - A method called on the connect promise to handle errors that occur while trying to connect 
+ * to the MongoDB database.
+ * @param {function} console.log() - log messages to the console that indicate if the connection was successful or if an error occurred.
+ * @param {function} console.error() - log error messages to the console if an error occurs while trying to connect to the MongoDB database.
+ * @throws {Error} If there is an error connecting to the MongoDB database, an error is thrown.
+ * @returns {void} The function does not return a value, but it either logs a success message to the console
+ * or logs an error message to the console if the connection fails.
+ */
 const mongoose = require('mongoose');
-// Give it the url in order to connect to MongoDB/Mongoose server, and
-// use defaults ( {} ), save to connect variable
-const url = 'mongodb://127.0.0.1:27017/nucampsite';
-const connect = mongoose.connect(url, {});
-// Handle the promise returned by  calling mongoose's connect method (return value gets assigned/bound to the constant variable connect
+
+const url = config.mongoUrl; 
+/**
+ * Previously, mongoose.connect() was called with an options object:
+ *   { useCreateIndex: true, useFindAndModify: false, useNewUrlParser: true, useUnifiedTopology: true }
+ * These options are no longer supported in Mongoose 6+ / MongoDB driver 4+:
+ *   - useNewUrlParser and useUnifiedTopology are enabled by default and the options were removed.
+ *   - useCreateIndex and useFindAndModify were Mongoose-specific shims for deprecated MongoDB driver
+ *     behaviours; they were removed in Mongoose 6 because the underlying driver no longer supports them.
+ * Passing any of these options now throws a MongoParseError at startup, so the options object is omitted.
+ */
+const connect = mongoose.connect(url);
+/** Handle the promise returned by calling mongoose's connect method (return value gets assigned/bound 
+ * to the constant variable connect) */
 connect.then(() => console.log('Connected correctly to server'),
-err => console.log(err) // this is another way to handle errors besides catch, especially when it is the last "then"
+err => console.log(err) 
 );
+/** this is another way to handle errors besides catch, especially when 
+it is the last "then" */
 /** 
  * Create a new Express application
  * The express() function creates an Express application, which is an object that has methods for 
@@ -76,7 +175,22 @@ var app = express();
  * View engine setup
  * @description Set the views directory and view engine for rendering templates
  * @dir The views directory is set to the 'views' folder in the root directory of the application, 
- * and the view engine is set to 'pug'
+ * and the view engine is set to 'pug', which is a template engine for rendering dynamic HTML pages.
+ * @method app.set() method is used to set application-level settings, such as the views directory 
+ * and view engine.
+ * @param {string} 'views' - The name of the setting to configure, which is the views directory.
+ * @param {string} 'view engine' - The name of the setting to configure, which is the view engine.
+ * @param {string} 'pug' - The name of the template engine to use for rendering dynamic HTML pages.
+ * @param {string} path.join(__dirname, 'views') - The absolute path to the views directory, constructed using the path.join() method and the __dirname global variable.
+ * @global @variable __dirname is a Node.js global variable that represents the directory name of the current module. 
+ * It is used here to construct the absolute path to the 'views' directory, ensuring that the 
+ * application can locate the views folder regardless of where it is executed from.
+ * @method path.join() method is used to create a cross-platform compatible path to the views directory, 
+ * ensuring that the application works correctly on different operating systems.
+ * @returns {string} The absolute path to the views directory, which is used by the Express application to locate and render templates.
+ * @note The views directory is where the template files (e.g., .pug files) are stored, and the view engine is responsible for rendering these templates into HTML pages that can be sent to the client.
+ * @note The view engine 'jade' has been renamed to 'pug' in later versions, but it is still commonly referred to as 'jade' in many applications.
+ * @note The app.set() method is used to configure application-level settings, and it can be called multiple times to set different settings. In this case, it is called
  * @engine pug is a template engine for rendering dynamic HTML pages.
  * @method path.join() method is used to create a cross-platform compatible path to the views directory, 
  * ensuring that the application works correctly on different operating systems.
@@ -179,42 +293,12 @@ app.use(express.urlencoded({ extended: false }));
  * signed cookie is present, which indicates that the user is authenticated.
  * @Object @method user - The 'user' signed cookie, which contains the username of the authenticated user.
 */
-/** 
- * @description The session middleware is used to manage user sessions in the Express application. 
- * It creates a session for each user and stores session data on the server side. 
- * The session ID is stored in a cookie on the client side, which is sent with each request 
- * to identify the user's session. The session middleware is configured with options such as the name 
- * of the session ID cookie, a secret key for signing the cookie, and a file store for storing session 
- * data on the server side.
- * @name - The name of the session ID cookie is set to 'session-id', which is the name of the cookie that will be sent 
- *        to the client and used to identify the user's session.
- * @secret - The secret option is set to a string value, which is used to sign the session ID cookie. 
- *        This helps prevent tampering with the cookie and ensures that the session data is secure.
- * @resave - The resave option is set to false, which means that the session will not be saved back 
- *        to the session store if it hasn't been modified during the request. It will mainly help to keep the 
- *        session marked as active.
- * @saveUninitialized - The saveUninitialized option is set to false, which means that a session will not be 
- *        created and saved to the session store unless it has been modified. This helps reduce the number of 
- *        empty sessions stored in the session store.
- * @store - The store option is set to a new instance of FileStore, which is a session store that uses the 
- *          file system to store session data. This allows session data to persist across server restarts 
- *          and provides a simple way to manage sessions without requiring a separate database.
-*/
-app.use(session({
-  name: 'session-id',
-  secret: '12345-67890-09876-54321',
-  saveUninitialized: false,
-  resave: false,
-  store: new FileStore()
-}));
+
 /**
  * @description The passport.initialize() middleware is used to initialize Passport for 
- * authentication in the Express application. The passport.session() middleware is used 
- * to manage user sessions with Passport. Only necessary if the application uses persistent 
- * login sessions (session-based authentication), which is the case here.
- */
+ * authentication in the Express application. 
+ */ 
 app.use(passport.initialize());
-app.use(passport.session());
 
 /**
  * @description The routers for the index and users routes are mounted on their respective paths.
@@ -227,23 +311,6 @@ app.use(passport.session());
  */
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
-/** 
- * @description The auth middleware function is used to check if the user is authenticated before 
- * allowing access to certain routes. Passport is used to handle authentication, and the auth 
- * middleware checks if the user is logged in by verifying the presence of a signed cookie named 'user'.
- */
-function auth(req, res, next) {
-  console.log(req.user);
-  if (!req.user) {
-    const err = new Error('You are not authenticated!'); 
-    err.status = 401;
-    return next(err);
-  } else {
-      return next();
-  }
-}
-
-app.use(auth);
 
 /**
  * @description @function express.static is used to serve static files, such as images, CSS files, and 

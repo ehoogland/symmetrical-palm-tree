@@ -1,5 +1,6 @@
 const express = require('express');
 const Partner = require('../models/partner');
+const authenticate = require('../authenticate');
 /**
  * @description The partnerRouter is an instance of the Express Router, which allows us to define routes for handling HTTP requests 
  *              related to partners. It is used to create modular route handlers for the /partners endpoint and its sub-routes.
@@ -46,8 +47,8 @@ partnerRouter.route('/')
     })
     .catch(err => next(err));
 })
-.post((req, res, next) => {
-    Partner.create(req.body)
+.post(authenticate.verifyUser, (req, res, next) => {
+        Partner.create(req.body)
     .then(partner => {
         console.log('Partner Created ', partner);
         res.statusCode = 200;
@@ -56,15 +57,11 @@ partnerRouter.route('/')
     })
     .catch(err => next(err));
 })
-.put((req, res) => {
+.put(authenticate.verifyUser, (req, res) => {
     res.statusCode = 403;
-////////// NOTE: Remember, since this router file no longer has an "all" rooute that sets a defailt
-// content type, it is best practice to specify it in all cases. I will add it here.
-    res.setHeader('Content-Type', 'text/plain');
-////////// END NOTE
     res.end('PUT operation not supported on /partners');
 })
-.delete((req, res, next) => {
+.delete(authenticate.verifyUser, (req, res, next) => {
     Partner.deleteMany()
     .then(response => {
         res.statusCode = 200;
@@ -73,10 +70,12 @@ partnerRouter.route('/')
     })
     .catch(err => next(err));
 });
-// The partnerRouter.route() method is used to define a route for the /partners/:partnerId endpoint.
-// The :partnerId is a route parameter that allows us to access a specific partner by its unique identifier.
-// The route handlers for GET, POST, PUT, and DELETE requests are defined for this endpoint, allowing us to retrieve, 
-// create, update, and delete a specific partner by its ID.
+/**
+ * The partnerRouter.route() method is used to define a route for the /partners/:partnerId endpoint.
+ * The :partnerId is a route parameter that allows us to access a specific partner by its unique identifier.
+ * The route handlers for GET, POST, PUT, and DELETE requests are defined for this endpoint, allowing us to retrieve, 
+ * create, update, and delete a specific partner by its ID.
+ */
 partnerRouter.route('/:partnerId')
 .get((req, res, next) => {
     Partner.findById(req.params.partnerId)
@@ -87,11 +86,23 @@ partnerRouter.route('/:partnerId')
     })
     .catch(err => next(err));
 })
-.post((req, res) => {
+/**
+ * The POST operation is not supported on the /partners/:partnerId endpoint, as it is intended for creating new partners,
+ * not for updating existing ones. Therefore, we return a 403 Forbidden status code and an appropriate message.
+ * The PUT operation is supported on the /partners/:partnerId endpoint, allowing us to update an existing partner's information.
+ * We use the Partner.findByIdAndUpdate() method to find the partner by its ID and update it with the data provided in the request body.
+ * The { new: true } option ensures that the updated document is returned in the response.
+ * The DELETE operation is also supported on the /partners/:partnerId endpoint, allowing us to delete a specific partner by its ID.
+ * We use the Partner.findByIdAndDelete() method to find and remove the partner from the database.
+ * The response includes the result of the deletion operation, which can be used to confirm that the partner was successfully removed.
+ * @param {function} authenticate.verifyUser - A middleware function that verifies the user's authentication status before allowing 
+ *                                             access to certain routes.
+ */
+.post(authenticate.verifyUser, (req, res) => {      
     res.statusCode = 403;
     res.end(`POST operation not supported on /partners/${req.params.partnerId}`);
 })
-.put((req, res, next) => {
+.put(authenticate.verifyUser, (req, res, next) => {
     Partner.findByIdAndUpdate(req.params.partnerId, {
         $set: req.body
     }, { new: true })
@@ -102,7 +113,7 @@ partnerRouter.route('/:partnerId')
     })
     .catch(err => next(err));
 })
-.delete((req, res, next) => {
+.delete(authenticate.verifyUser, (req, res, next) => {
     Partner.findByIdAndDelete(req.params.partnerId)
     .then(response => {
         res.statusCode = 200;
