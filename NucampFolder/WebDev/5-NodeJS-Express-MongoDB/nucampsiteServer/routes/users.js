@@ -5,9 +5,24 @@ const passport = require('passport');
 const authenticate = require('../authenticate');
 const router = express.Router();
 
-/* GET users listing. */
-router.get('/', function(req, res, next) {
-  res.send('respond with a resource');
+/**
+ * Task 3: Complete the GET /users endpoint.
+ * @route GET /users
+ * @description Returns all user documents from the database.
+ * Access is restricted to admin users only. verifyUser runs first to authenticate
+ * the JWT and populate req.user, then verifyAdmin checks req.user.admin === true.
+ * Non-admin authenticated users receive 403 Forbidden.
+ * Unauthenticated requests receive 401 Unauthorized.
+ * @returns {Array} JSON array of all user documents.
+ */
+router.get('/', authenticate.verifyUser, authenticate.verifyAdmin, (req, res, next) => {
+    User.find()
+    .then(users => {
+        res.statusCode = 200;
+        res.setHeader('Content-Type', 'application/json');
+        res.json(users);
+    })
+    .catch(err => next(err));
 });
 
 /**

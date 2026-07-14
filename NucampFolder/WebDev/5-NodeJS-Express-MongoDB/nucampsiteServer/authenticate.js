@@ -115,22 +115,18 @@ exports.jwtPassport = passport.use(
         }
     )
 );
-/**
- * @description Middleware function to verify that the incoming request is from an authenticated user.
- * This function uses the Passport.js library to authenticate the request using the JWT strategy.
- * If the user is authenticated, the request proceeds to the next middleware or route handler.
- * If the user is not authenticated, an error response is sent back to the client.
- * @token JSON Web Token (JWT) is a compact, URL-safe means of representing claims to be transferred between 
- * two parties. A claim is a statement about an entity (typically, the user) and additional metadata.
- * @constant @variable verifyUser is the binding holding the return value of the passport.authenticate function.
- * This makes it available for use in other parts of the application, such as in route handlers where user 
- * authentication is required. 
- * @function passport.authenticate is a middleware function that is used to authenticate requests. It is
- * used here to verify that the incoming request is from an authenticated user. @memberof module:authenticate
- * @param 'jwt' - the strategy to use for authentication. Passport supports various strategies for authentication, 
- * and in this case, the 'jwt' strategy is used to verify the JSON Web Token (JWT) provided in the request. 
- * This strategy is used for stateless authentication and not the local [session-based] strategy.
- * @param @boolean  session - The session option is set to false, indicating that Passport should not create a 
- * session for the user. This is because JWTs are stateless and do not require server-side sessions.
- */
+
 exports.verifyUser = passport.authenticate('jwt', {session: false});
+exports.verifyAdmin = (req, res, next) => {
+    /**
+     * The admin field exists and is explicitly true — 
+     * proceed to the next middleware or route handler. 
+     */
+    if (req.user && req.user.admin === true) {
+        next(); 
+    } else {
+        const err = new Error('You are not authorized to perform this operation!');
+        err.status = 403;
+        return next(err);
+    }
+};

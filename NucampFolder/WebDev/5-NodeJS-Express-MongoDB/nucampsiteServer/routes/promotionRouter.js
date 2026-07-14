@@ -37,6 +37,22 @@ const Promotion = require('../models/promotion');
 const authenticate = require('../authenticate');
 const promotionRouter = express.Router();
 
+/**
+ * Task 2: Set up admin-only access points.
+ * Access levels across all promotion routes:
+ *
+ * /promotions
+ *   GET    — public (no auth required)
+ *   POST   — admin only  (verifyUser + verifyAdmin)
+ *   PUT    — authenticated user (verifyUser); always returns 403 — method not supported
+ *   DELETE — admin only  (verifyUser + verifyAdmin)
+ *
+ * /promotions/:promotionId
+ *   GET    — public
+ *   POST   — authenticated user (verifyUser); always returns 403 — method not supported
+ *   PUT    — admin only  (verifyUser + verifyAdmin)
+ *   DELETE — admin only  (verifyUser + verifyAdmin)
+ */
 promotionRouter.route('/')
 .get((req, res, next) => {
     Promotion.find()
@@ -47,7 +63,7 @@ promotionRouter.route('/')
     })
     .catch(err => next(err));
 })
-.post(authenticate.verifyUser, (req, res, next) => {
+.post(authenticate.verifyUser, authenticate.verifyAdmin, (req, res, next) => {
     Promotion.create(req.body)
     .then(promotion => {
         console.log('Promotion Created ', promotion);
@@ -61,7 +77,7 @@ promotionRouter.route('/')
     res.statusCode = 403;
     res.end('PUT operation not supported on /promotions');
 })
-.delete(authenticate.verifyUser, (req, res, next) => {
+.delete(authenticate.verifyUser, authenticate.verifyAdmin, (req, res, next) => {
     Promotion.deleteMany()
     .then(response => {
         res.statusCode = 200;
@@ -92,7 +108,7 @@ promotionRouter.route('/:promotionId')
 // The { new: true } option is used to return the updated document in the response.
 // The response is sent back to the client with a status code of 200 and the updated 
 // promotion document in JSON format.
-.put(authenticate.verifyUser, (req, res, next) => {
+.put(authenticate.verifyUser, authenticate.verifyAdmin, (req, res, next) => {
     Promotion.findByIdAndUpdate(req.params.promotionId, {
         $set: req.body
     }, { new: true })
@@ -103,7 +119,7 @@ promotionRouter.route('/:promotionId')
     })
     .catch(err => next(err));
 })
-.delete(authenticate.verifyUser, (req, res, next) => {
+.delete(authenticate.verifyUser, authenticate.verifyAdmin, (req, res, next) => {
     Promotion.findByIdAndDelete(req.params.promotionId)
     .then(response => {
         res.statusCode = 200;
