@@ -1,3 +1,24 @@
+/**
+ * Testing the campsiteRouter.js file for the Nucamp server application.
+ * 
+ * Be sure to test your application using Postman while logged in as both an admin user, 
+ * a regular non-admin user, and not logged in at all. Some of the tests you will want to try:
+ * Confirm that while logged in as an admin user, you are able to post/put/delete to the /campsites 
+ * and /campsites/:campsiteId/comments endpoints, and the same endpoints for promotions and partners. 
+ * Confirm that you cannot as a regular user, or while not logged in.
+ * Confirm that as an admin, you have access to DELETE all comments. 
+ * Confirm that you cannot as a regular user, or while not logged in.
+ * Confirm that as an admin, you can get a list of all user documents with a GET request to the /users 
+ * path. Confirm that you cannot as a regular user, or while not logged in.
+ * Confirm that as an admin or regular user, you are able to PUT or DELETE to a comment that you 
+ * yourself submitted. You will first need to submit a comment while logged in for this, using a 
+ * POST request from Postman. Then try to update or delete that same comment using its ID, 
+ * while logged in with the same account. 
+ * Confirm that you cannot update or delete that comment while not logged in, or logged into 
+ * a different account.
+ *
+ */
+
 const express = require('express');
 const Campsite = require('../models/campsite');
 const authenticate = require('../authenticate');
@@ -155,8 +176,13 @@ campsiteRouter.route('/:campsiteId/comments')
     Campsite.findById(req.params.campsiteId)
     .then(campsite => {
         if (campsite) {
+            /**
+             * @note Mongoose 7+ removed the `.remove()` method on subdocuments.
+             * Use `.deleteOne()` instead to remove a subdocument from its parent array.
+             * `.remove()` will throw `TypeError: comment.remove is not a function` in Mongoose 7+.
+             */
             for (let i = (campsite.comments.length-1); i >= 0; i--) {
-                campsite.comments.id(campsite.comments[i]._id).remove();
+                campsite.comments.id(campsite.comments[i]._id).deleteOne();
             }
             campsite.save()
             .then(campsite => {
@@ -255,7 +281,12 @@ campsiteRouter.route('/:campsiteId/comments/:commentId')
             /** Task 4: Only allow the comment's author to delete it. */
             const comment = campsite.comments.id(req.params.commentId);
             if (comment.author.equals(req.user._id)) {
-                comment.remove();
+                /**
+                 * @note Mongoose 7+ removed the `.remove()` method on subdocuments.
+                 * Use `.deleteOne()` instead to remove a subdocument from its parent array.
+                 * `.remove()` will throw `TypeError: comment.remove is not a function` in Mongoose 7+.
+                 */
+                comment.deleteOne();
                 campsite.save()
                 .then(campsite => {
                     res.statusCode = 200;
