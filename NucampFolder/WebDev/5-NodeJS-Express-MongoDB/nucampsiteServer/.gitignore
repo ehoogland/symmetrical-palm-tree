@@ -1,0 +1,19 @@
+#Mac
+.DS_Store
+#keys
+# Do not just exclude bin directory there per usual because 
+# the 'www' server file is stored there in Node.js, and possibly
+# other script files
+bin/server.key
+bin/server.cert
+target
+dist
+.parcel-cache
+
+
+# Dependency directories
+node_modules/
+
+# Environment variables
+.env
+

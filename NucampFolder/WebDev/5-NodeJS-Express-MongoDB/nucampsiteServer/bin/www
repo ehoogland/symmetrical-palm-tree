@@ -1,0 +1,231 @@
+#!/usr/bin/env node
+
+/**
+ * Module dependencies and configuration.
+ * This file is the entry point for the Node.js application. It sets up the HTTP server and listens for incoming requests.
+ * @note The HTTPS server is created using the https module and requires
+ * SSL/TLS certificates (server.key and server.cert) to establish secure 
+ * connections. The certificates are read from the file system using the fs module.
+ * @note The HTTPS server listens on a separate port (secPort) which is 
+ * set to the HTTP port + 443. This allows the application to handle both
+ * HTTP and HTTPS requests.
+ * @note The server listens on all network interfaces, allowing it to accept incoming requests from any IP address.
+ * @note The server includes error handling for both the HTTP and HTTPS servers, 
+ * ensuring that any errors during startup or listening are properly handled and logged.
+ * It imports the Express application from app.js and creates an HTTP server using the http module.
+ * The server listens on a specified port, which can be set via an environment variable or defaults to 3000.
+ * It also includes error handling for common server errors, such as EACCES and EADDRINUSE, which are logged to the console 
+ * with user-friendly messages.
+ * @note The server uses the debug module for logging debug information, which can be enabled or disabled using the DEBUG 
+ * environment variable.
+ * @module debug - Namespaced logging module for debugging. The debug module is used for logging debug information with 
+ * a specific namespace. That is, the debug module is imported and invoked with a specific namespace, 'nucampsiteserver:server',
+ * matching the name of the application. This allows us to enable or disable debugging output for specific parts of the application 
+ * by setting the DEBUG environment variable.
+ * @note The port is normalized using the normalizePort function, which ensures that it is a valid number or named pipe. Normalizing 
+ * the port means converting it to a number if it is a string, or returning the string if it is a named pipe. If the port is invalid,
+ * the function returns false. This ensures that the server listens on a valid port or named pipe.
+ * @function @method normalizePort - This function normalizes the port value to ensure it is a valid number or named pipe.
+ * @module http - The http module is a built-in Node.js module that provides the functionality to create an HTTP server.
+ * @module https - The https module is a built-in Node.js module that provides the functionality to create an HTTPS server.
+ * @module fs - The fs module is a built-in Node.js module that provides an API for interacting with the file system.
+ * @module app - The app module is the Express application imported from app.js, which contains the middleware, routes, 
+ * and other configurations for the application.
+ * @function onError - This function handles errors that occur when the server is starting or listening on the specified port. 
+ * It provides user-friendly error messages for common errors such as EACCES and EADDRINUSE.
+ * @function onListening - This function logs a message indicating that the server is listening on the specified port. 
+ * It retrieves the address information from the server and logs it using the debug module.
+ * @note The server listens on all network interfaces,
+ */
+
+var app = require('../app');
+var debug = require('debug')('nucampsiteserver:server'); 
+
+var http = require('http');
+const https = require('https');
+const fs = require('fs');
+
+/**
+ * Get port from environment and store in Express.
+ * @description Set the port for the Express application. The port is either obtained from the environment variable PORT 
+ * or defaults to 3000.
+ * @note The port is stored in the Express application using app.set('port', port), allowing it to be accessed later in the 
+ * application. This is important for ensuring that the server listens on 
+ * the correct port and can handle incoming requests.
+ * @method app.set is a way to set a variable in Express that can be accessed later in the application from anywhere in the 
+ * codebase, using app.get('port') or app.get('secPort'). It is used to store the port number for the server, which can be accessed 
+ * later when creating the HTTP and HTTPS servers.
+ * @note The secPort is set to the HTTP port + 443, which is the standard port for HTTPS. This allows the application to handle 
+ * both HTTP and HTTPS requests on different ports.
+ * @method createSecureServer - Creates an HTTPS server using the Express application and SSL/TLS certificates.
+*/
+var port = normalizePort(process.env.PORT || '3000');
+app.set('port', port); // later we will redirect all HTTP traffic to HTTPS, so we need to know the HTTP port
+app.set('secPort', port+443); // could just be 443
+
+/**
+ * Create HTTP server.
+ * Express Generator creates an HTTP server using the http module and the Express application. 
+ * The server listens for incoming requests on the specified port.
+ * @Object @param app - The Express application that handles incoming requests and responses.
+ * @method http.createServer - Creates an HTTP server using the provided Express application. The server listens for incoming HTTP requests on the specified port.
+ * @note The HTTP server is created using the http.createServer method, which takes the Express application as an argument.
+ * @note The HTTP server listens on the port specified in the app.set('port', port) method, which is either obtained from the
+ * @note The HTTP server is created using the http.createServer method, which takes the Express application as an argument.
+ * @note The HTTP server listens on the port specified in the app.set('port', port) method, which is either obtained from the 
+ * environment variable PORT or defaults to 3000.
+ * @note The HTTP server includes error handling for common errors such as EACCES and EADDRINUSE, which are logged to the console 
+ * with user-friendly messages.
+*/
+var server = http.createServer(app);
+/**
+ * Listen on provided port, on all network interfaces.
+*/
+server.listen(port);
+server.on('error', onError);
+server.on('listening', onListening);
+
+function normalizePort(val) {
+  var port = parseInt(val, 10);
+  
+  if (isNaN(port)) {
+    // named pipe
+    return val;
+  }
+  
+  if (port >= 0) {
+    // port number
+    return port;
+  }
+  
+  return false;
+}
+
+/**
+ * Event listener for HTTP server "error" event.
+*/
+
+function onError(error) {
+  if (error.syscall !== 'listen') {
+    throw error;
+  }
+  
+  var bind = typeof port === 'string'
+  ? 'Pipe ' + port
+  : 'Port ' + port;
+  
+  // handle specific listen errors with friendly messages
+  switch (error.code) {
+    case 'EACCES':
+      console.error(bind + ' requires elevated privileges');
+      process.exit(1);
+      break;
+      case 'EADDRINUSE':
+        console.error(bind + ' is already in use');
+        process.exit(1);
+        break;
+        default:
+          throw error;
+        }
+      }
+      
+     function onListening() {
+       var addr = server.address();
+       var bind = typeof addr === 'string'
+       ? 'pipe ' + addr
+       : 'port ' + addr.port;
+       debug('Listening on ' + bind);
+      }
+     
+
+/**
+ * Create HTTPS server.
+ * @description The HTTPS server is created using the https module and requires SSL/TLS certificates (server.key and server.cert) 
+ * to establish secure connections. The certificates are read from the file system using the fs module.
+ * @note The HTTPS server listens on a separate port (secPort) which is set to the HTTP port + 443. This allows the application 
+ * to handle both HTTP and HTTPS requests.
+ * @note The HTTPS server includes error handling for common errors such as EACCES and EADDRINUSE, which are logged to the console 
+ * with user-friendly messages.
+ * @method fs.readFileSync - Synchronously reads the contents of a file. In this case, it is used to read the SSL/TLS certificate
+ * files (server.key and server.cert) from the file system into the Express application's running memory.
+ * @param __dirname+filename - The directory name of the current module combined with the filename. It is used to construct 
+ * the path to the SSL/TLS certificate files.
+ * @param {string} path - The path to the file to be read. In this case, it is the path to the SSL/TLS certificate files.
+ * @param {Object} options - An object containing the SSL/TLS certificate and key. The key is read from server.key and the certificate is read from server.cert.
+ * @param {Object} options.key - The private key for the SSL/TLS certificate, read from server.key.
+ * @param {Object} options.cert - The public certificate for the SSL/TLS certificate, read from server.cert.
+ * @method https.createServer - Creates an HTTPS server using the provided options (SSL/TLS certificates) and the Express application.
+ * @param {Object} options - An object containing the SSL/TLS certificate and key. The key is read from server.key and the certificate is read from server.cert.
+ * @param {Object} app - The Express application that handles incoming requests and responses.
+ * @returns {Object} secureServer - The created HTTPS server instance that listens for incoming HTTPS requests on the specified port.
+ * @note The HTTPS server is created using the https.createServer method, which takes the SSL/TLS certificate options and the Express application as arguments.
+ * @note The HTTPS server listens on the port specified in the app.set('secPort', port+443) method, which is either obtained from the environment variable 
+ * PORT or defaults to 3000 + 443.
+ */
+const options = {
+    key: fs.readFileSync(__dirname+'/server.key'),
+    cert: fs.readFileSync(__dirname+'/server.cert')
+};
+
+const secureServer = https.createServer(options, app);
+/**
+ * Normalize a port into a number, string, or false.
+*/
+secureServer.listen(app.get('secPort'), () => {
+       console.log('Server listening on port', app.get('secPort'));
+      });
+secureServer.on('error', onError);
+secureServer.on('listening', onListening);
+
+function normalizePort(val) {
+  var port = parseInt(val, 10);
+  
+  if (isNaN(port)) {
+    // named pipe
+    return val;
+  }
+  
+  if (port >= 0) {
+    // port number
+    return port;
+  }
+  
+  return false;
+}
+
+/**
+ * Event listener for HTTPS server "error" event.
+*/
+
+function onError(error) {
+  if (error.syscall !== 'listen') {
+    throw error;
+  }
+  
+  var bind = typeof port === 'string'
+  ? 'Pipe ' + port
+  : 'Port ' + port;
+  
+  // handle specific listen errors with friendly messages
+  switch (error.code) {
+    case 'EACCES':
+      console.error(bind + ' requires elevated privileges');
+      process.exit(1);
+      break;
+      case 'EADDRINUSE':
+        console.error(bind + ' is already in use');
+        process.exit(1);
+        break;
+        default:
+          throw error;
+        }
+      }
+      
+     function onListening() {
+       var addr = server.address();
+       var bind = typeof addr === 'string'
+       ? 'pipe ' + addr
+       : 'port ' + addr.port;
+       debug('Listening on ' + bind);
+      }
+    

@@ -31,21 +31,23 @@
  *            query parameters, and the request body.
  * @var res - The response object, which is used to send the HTTP response back to the client, and contains 
  *            methods for setting headers, status codes, and sending the response body.
- */
+*/
 /**
  * @description The http-errors module is used to create HTTP error objects for handling errors in the application.
  * @module createError
  * @requires http-errors
- */
+*/
 var createError = require('http-errors');
-var express = require('express');
+
+const express = require('express');
+
 /**
  * @description path module is used to work with file and directory paths. It provides utilities 
  * for handling and transforming file paths, making it easier to work with file system paths 
  * in a cross-platform manner.
  * @module path
  * @requires path
- */
+*/
 var path = require('path');
 /**
  * @var logger - The morgan module is used for logging HTTP requests to the console. It provides a simple and 
@@ -54,7 +56,7 @@ var path = require('path');
  * their outcomes.
  * @module logger
  * @requires morgan
- */
+*/
 var logger = require('morgan');
 /**
  * @description The passport module is used for authentication in the Express application.
@@ -62,8 +64,9 @@ var logger = require('morgan');
  * OAuth, and OpenID. In this application, passport is used to authenticate users during login and manage user sessions.
  * @module passport
  * @requires passport
- */
+*/
 const passport = require('passport');
+
 /**
  * @description The config module is used to import the configuration settings from the config.js file.
  * The config object contains the secret key used for signing JSON Web Tokens (JWTs) and the MongoDB 
@@ -71,7 +74,7 @@ const passport = require('passport');
  * connection purposes.
  * @module config
  * @requires ./config
- */
+*/
 const config = require('./config');
 /**
  * @description indexRouter and usersRouter are imported from the routes directory. These routers 
@@ -88,7 +91,7 @@ const config = require('./config');
  * 
  * Don't forget to prepend the routers with ./ to indicate that they are local modules 
  * in the same directory as app.js.
- */
+*/
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 
@@ -100,7 +103,7 @@ var usersRouter = require('./routes/users');
  *           a JSON-like object, which can contain nested fields and arrays.
  * @format BSON (Binary JSON) format for each document in a collection.
  * @identifier Each document has a unique identifier (_id) and can have different fields and data types.
- */
+*/
 /**
  * @note As a part of implementing a REST (Representational State Transfer) API, 
  *       create separate routers for each resource (campsites, promotions, and partners). 
@@ -109,10 +112,12 @@ var usersRouter = require('./routes/users');
  * partners resources, respectively.
  * @modules campsiteRouter, promotionRouter, partnerRouter
  * These modules organize code better and handle requests for each resource in its own router file.
- */
+*/
 const campsiteRouter = require('./routes/campsiteRouter');
 const promotionRouter = require('./routes/promotionRouter');
 const partnerRouter = require('./routes/partnerRouter');
+const uploadRouter = require('./routes/uploadRouter');
+
 /**
  * Connect Express server to MongoDB/Mongoose
  * @description The mongoose module is used to connect the Express server to a MongoDB database.
@@ -146,7 +151,6 @@ const partnerRouter = require('./routes/partnerRouter');
  * or logs an error message to the console if the connection fails.
  */
 const mongoose = require('mongoose');
-
 const url = config.mongoUrl; 
 /**
  * Previously, mongoose.connect() was called with an options object:
@@ -171,6 +175,52 @@ it is the last "then" */
  * routing HTTP requests, configuring middleware, rendering HTML views, and registering a template engine.
 */
 var app = express();
+/** Redirect all HTTP requests to HTTPS
+ * @description The app.all() method is used to define a middleware function that will be executed for all 
+ * incoming requests, regardless of the HTTP method (GET, POST, PUT, DELETE, etc.).
+ * The middleware function checks if the request is secure (i.e., if it was made over HTTPS) using the req.secure 
+ * property. If the request is secure, it calls the next() function to pass control to the next middleware function 
+ * or route handler. If the request is not secure, it redirects the client to the same URL using HTTPS with a 
+ * 307 Temporary Redirect status code.
+ * @param {string} '/*' - A wildcard path that matches all incoming requests, regardless of the specific URL.
+ * @param {Object} req - The request object, which contains information about the incoming HTTP request, such as headers, 
+ * query parameters, and the request body.
+ * @param {Object} res - The response object, which is used to send the HTTP response back to the client, and contains 
+ * methods for setting headers, status codes, and sending the response body.
+ * @param {Function} next - The next middleware function in the stack, which is called to pass control to the next 
+ * middleware function or route handler. If there are no more middleware functions, it will pass control to the error handler.
+ * @method res.redirect() - The res.redirect() method is used to redirect the client to a different URL. 
+ * In this case, it redirects the client to the same URL using HTTPS, with a 307 Temporary Redirect status code.
+ * @param {number} 307 - The HTTP status code for Temporary Redirect, indicating that the requested resource 
+ * has been temporarily moved to a different URL.
+ * @param {string} 'https://' + req.hostname + ':' + app.get('secPort') + req.url - The URL to which the client is redirected. 
+ * It is constructed using the HTTPS protocol, the hostname of the request, the secure port of the application (retrieved using 
+ * app.get('secPort')), and the original request URL.
+ * @returns {void} - The function does not return a value, but it either calls the next middleware in the stack or redirects 
+ * the client to the HTTPS version of the requested URL.
+ * @note The app.all() method is used to apply this middleware function to all incoming requests, ensuring that all HTTP requests 
+ * are redirected to HTTPS for secure communication.
+ * @note The req.secure property is a boolean that indicates whether the request was made over HTTPS. 
+ * It is true if the request is secure and false otherwise.
+ * @note The req.hostname property contains the hostname of the request, which is used to construct the redirect URL.
+ * @note The app.get('secPort') method retrieves the secure port number from the application settings, which is used in the redirect URL.
+ * @note The req.url property contains the original request URL, which is appended to the redirect URL to ensure that the client 
+ * is redirected to the same resource over HTTPS.
+ */
+// ask whether this should be '/*' because originally it was somehow '/*' even though the provided code just says "*". It may work either way, but 
+// the Express documentation shows '/*' in the example, so it may be more correct to use '/*' instead of '*'. It seems as though it would be
+// faster, too, having the slash in there, because it would be more specific and not have to check for the slash in the request URL.
+// also, the Express documentation shows the res.redirect() method being called with a 307 status code, so it may be more correct to use 
+// res.redirect(307, ...) instead of res.redirect(301, ...).
+app.all('/*', (req, res, next) => {
+  if (req.secure) {
+    return next();
+  }
+  else {
+    console.log(`Redirecting to: https://${req.hostname}:${app.get('secPort')}${req.url}`);
+    res.redirect(301, 'https://' + req.hostname + ':' + app.get('secPort') + req.url);
+  }
+});
 /** 
  * View engine setup
  * @description Set the views directory and view engine for rendering templates
@@ -299,7 +349,6 @@ app.use(express.urlencoded({ extended: false }));
  * authentication in the Express application. 
  */ 
 app.use(passport.initialize());
-
 /**
  * @description The routers for the index and users routes are mounted on their respective paths.
  * The app.use() method is used to mount the routers for different resources on their respective paths.
@@ -308,7 +357,7 @@ app.use(passport.initialize());
  * @method app.use() method is used to mount middleware functions that will be executed for every incoming request.
  * @param {string} '/' - The root path for the indexRouter, which handles requests to the home page of the application.
  * @param {string} '/users' - The path for the usersRouter, which handles requests related to user management, such as signup and login.  
- */
+*/
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
 
@@ -326,10 +375,28 @@ app.use(express.static(path.join(__dirname, 'public')));
 /** 
  * @description The imported routers for campsites, promotions, and partners are mounted on their respective paths.
  * @method app.use() method is used to mount the routers for different resources on their respective paths.
- */
+*/
 app.use('/campsites', campsiteRouter);
 app.use('/promotions', promotionRouter);
 app.use('/partners', partnerRouter);
+/**
+ * @description The imported router for image uploads is mounted on the '/imageUpload' path. This allows the application to handle requests for image uploads and delegate them to the uploadRouter.
+ * @module uploadRouter
+ * @requires ./routes/uploadRouter
+ * @param {string} '/imageUpload' - The path for the uploadRouter, which handles requests related to image uploads.
+ * @returns {void} - The function does not return a value, but it mounts the uploadRouter on the specified path.
+ * @note The uploadRouter is responsible for handling file uploads, specifically image files. It uses the multer middleware to handle multipart/form-data and provides routes for uploading images. The router also includes authentication and authorization checks to ensure that only authenticated users with admin privileges can access the routes.
+ * @note The multer middleware is configured to store uploaded files in the 'public/images' directory and to filter files based on their extensions (only allowing image files).
+ * @note The multer middleware is used in the POST route to handle file uploads. The 'imageFile' field in the request body is expected to contain the image file to be uploaded.
+ * @note The authenticate.verifyUser and authenticate.verifyAdmin middleware functions are used to ensure that only authenticated users with admin privileges can access the routes.
+ * @note The uploadRouter is mounted at the '/imageUpload' path in the main application file (app.js).
+ * @note The router provides routes for GET, POST, PUT, and DELETE operations on the '/imageUpload' path. The GET, PUT, and DELETE operations are not supported and will return a 403 Forbidden response. The POST operation allows authenticated admin users to upload image files.
+ * @note The uploaded image files are stored in the 'public/images' directory and the response includes the details of the uploaded file in JSON format.
+ * @note The multer middleware is configured to store uploaded files in the 'public/images' directory and to filter files based on their extensions (only allowing image files).
+ * @note The multer middleware is used in the POST route to handle file uploads. The 'imageFile' field in the request body is expected to contain the image
+ * @method app.use() method is used to mount the router for image uploads on its respective path.
+ */
+app.use('/imageUpload', uploadRouter);
 
 /** 
  * @description Catch 404 and forward to error handler
