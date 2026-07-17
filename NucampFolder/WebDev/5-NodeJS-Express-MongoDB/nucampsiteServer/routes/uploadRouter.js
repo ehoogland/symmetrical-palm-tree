@@ -1,6 +1,7 @@
 const express = require('express');
 const authenticate = require('../authenticate');
 const multer = require('multer');
+const cors = require('./cors'); // Import the cors module for handling Cross-Origin Resource Sharing (CORS) in the uploadRouter     
 /**
  * @description multer is middleware for handling multipart/form-data used mostly for uploading files.
  * @method diskStorage @memberof module:multer 
@@ -131,22 +132,23 @@ const upload = multer({ storage: storage, fileFilter: imageFileFilter});
 const uploadRouter = express.Router();
 
 uploadRouter.route('/')
-.get(authenticate.verifyUser, authenticate.verifyAdmin, (req, res) => {
+.options(cors.corsWithOptions, (req, res) => res.sendStatus(200))
+.get(cors.cors, authenticate.verifyUser, authenticate.verifyAdmin, (req, res) => {
     res.statusCode = 403; // Forbidden
     res.end('GET operation not supported on /imageUpload');
 })
 // multer middleware is used to handle file uploads. The 'imageFile' field in the request 
 // body is expected to contain the image file to be uploaded.
-.post(authenticate.verifyUser, authenticate.verifyAdmin, upload.single('imageFile'), (req, res) => {
+.post(cors.corsWithOptions, authenticate.verifyUser, authenticate.verifyAdmin, upload.single('imageFile'), (req, res) => {
     res.statusCode = 200;
     res.setHeader('Content-Type', 'application/json');
     res.json(req.file); // Respond with the details of the uploaded file in JSON format
 })
-.put(authenticate.verifyUser, authenticate.verifyAdmin, (req, res) => {
+.put(cors.corsWithOptions,authenticate.verifyUser, authenticate.verifyAdmin, (req, res) => {
     res.statusCode = 403;
     res.end('PUT operation not supported on /imageUpload');
 })
-.delete(authenticate.verifyUser, authenticate.verifyAdmin, (req, res) => {
+.delete(cors.corsWithOptions, authenticate.verifyUser, authenticate.verifyAdmin, (req, res) => {
     res.statusCode = 403;
     res.end('DELETE operation not supported on /imageUpload');
 });

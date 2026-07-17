@@ -1,21 +1,26 @@
 const express = require('express');
 const User = require('../models/user');
+// The passport module is imported to handle user authentication using the Passport.js library.
 const passport = require('passport');
 // Import the authenticate module to access the getToken function for generating JWTs
 const authenticate = require('../authenticate');
+const multer = require('multer'); // Import the multer module for handling file uploads
+const cors = require('./cors'); // Import the cors module for handling Cross-Origin Resource Sharing (CORS) in the users router
 const router = express.Router();
 
 /**
- * Task 3: Complete the GET /users endpoint.
  * @route GET /users
  * @description Returns all user documents from the database.
  * Access is restricted to admin users only. verifyUser runs first to authenticate
  * the JWT and populate req.user, then verifyAdmin checks req.user.admin === true.
+ * This is unlike the other GET routes (e.g., in partnerRouter). Those allow any 
+ * authenticated user to access them and use cors.cors. Preflight requests 
+ * are handled with cors.corsWithOptions.
  * Non-admin authenticated users receive 403 Forbidden.
  * Unauthenticated requests receive 401 Unauthorized.
  * @returns {Array} JSON array of all user documents.
  */
-router.get('/', authenticate.verifyUser, authenticate.verifyAdmin, (req, res, next) => {
+router.get('/', cors.corsWithOptions, authenticate.verifyUser, authenticate.verifyAdmin, (req, res, next) => {
     User.find()
     .then(users => {
         res.statusCode = 200;
@@ -35,7 +40,7 @@ router.get('/', authenticate.verifyUser, authenticate.verifyAdmin, (req, res, ne
  * @param {string} [req.body.firstname] - Optional first name.
  * @param {string} [req.body.lastname] - Optional last name.
  */
-router.post('/signup', (req, res) => {
+router.post('/signup', cors.corsWithOptions, (req, res) => {
     /** Register the new user. register() is provided by passport-local-mongoose and
      * returns a Promise, so we use .then()/.catch() for async handling. */
     User.register(new User({username: req.body.username}), req.body.password)
@@ -75,7 +80,7 @@ router.post('/signup', (req, res) => {
  * @param {string} req.body.password - The user's password.
  * @returns {Object} JSON containing success, token, and status message.
  */
-router.post('/login', passport.authenticate('local', {session: false}), (req, res) => {
+router.post('/login', cors.corsWithOptions, passport.authenticate('local', {session: false}), (req, res) => {
     const token = authenticate.getToken({_id: req.user._id});
     res.statusCode = 200;
     res.setHeader('Content-Type', 'application/json');
@@ -87,7 +92,7 @@ router.post('/login', passport.authenticate('local', {session: false}), (req, re
  * @description Destroys the user's session and clears the session cookie.
  * If no session exists, responds with a 401 error.
  */
-router.get('/logout', (req, res, next) => {
+router.get('/logout', cors.corsWithOptions, (req, res, next) => {
  if (req.session) {
         req.session.destroy();
         res.clearCookie('session-id');

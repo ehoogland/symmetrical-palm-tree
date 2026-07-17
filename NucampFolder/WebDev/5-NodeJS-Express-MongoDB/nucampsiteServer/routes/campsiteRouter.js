@@ -16,20 +16,22 @@
  * while logged in with the same account. 
  * Confirm that you cannot update or delete that comment while not logged in, or logged into 
  * a different account.
- *
+ * The cors module is imported to handle Cross-Origin Resource Sharing (CORS) for the campsiteRouter.
+ * Don't forget to use the cors middleware in the routes to enable CORS for specific origins based 
+ * on the whitelist. Use ./ to indicate that the cors.js file is in the same directory as the campsiteRouter.js file.
  */
 
 const express = require('express');
 const Campsite = require('../models/campsite');
 const authenticate = require('../authenticate');
-
+const cors = require('./cors');
 // The campsiteRouter is an instance of the Express Router, which allows us to define 
 // routes for handling HTTP requests related to campsites. It is used to create 
 // modular route handlers for the /campsites endpoint and its sub-routes.
 // The campsiteRouter.route() method is used to define a route for the /campsites endpoint.
 const campsiteRouter = express.Router();
 /**
- * Task 2: Set up admin-only access points.
+ * Set up admin-only access points.
  * Access levels across all campsite routes:
  *
  * /campsites
@@ -55,19 +57,51 @@ const campsiteRouter = express.Router();
  *   POST   — authenticated user (verifyUser); always returns 403 — method not supported
  *   PUT    — authenticated user (verifyUser); any logged-in user may edit a comment
  *   DELETE — authenticated user (verifyUser); any logged-in user may delete a comment
+ * 
+ * @method campsiteRouter.route() - Defines a route for the /campsites endpoint and its sub-routes.
+ * @param {string} path - The path for the route, which is /campsites in this case.
+ * @returns {Object} - Returns the campsiteRouter instance for chaining route handlers.
+ * @method .options() - Defines a route handler for the HTTP OPTIONS method, which is 
+ *                      used to handle preflight requests for CORS. Preflight requests are sent by 
+ *                      the browser to determine if the actual request is safe to send. A response
+ *                      with a 200 OK status is sent to indicate that the request is allowed.
+ * @param {Function} cors.corsWithOptions - Middleware function to handle CORS with custom options 
+ *                                          based on the whitelist.
+ * @param {Function} (req, res) => res.sendStatus(200) - Route handler that sends a 200 OK 
+ *                   status for OPTIONS requests.
+ * @method .get() - Defines a route handler for the HTTP GET method to retrieve all campsites.
+ * @param {Function} cors.cors - Middleware function to handle CORS with default settings. GET requests 
+ *                               are allowed from any origin, so the default CORS settings are used.
+ * @param {Function} (req, res, next) => { ... } - Route handler that retrieves all campsites from the 
+ *                                                 database and sends them in the response.
+ * @method .post() - Defines a route handler for the HTTP POST method to create a new campsite.
+ * @param {Function} cors.corsWithOptions - Middleware function to handle CORS with custom options based 
+ *                                          on the whitelist. Used with POST, PUT and DELETE requests to allow 
+ *                                          cross-origin requests from specific origins.
+ * @param {Function} authenticate.verifyUser - Middleware function to verify that the user is authenticated.
+ * @param {Function} authenticate.verifyAdmin - Middleware function to verify that the user has admin privileges.
+ * @param {Function} (req, res, next) => { ... } - Route handler that creates a new campsite in the database 
+ *                                                 and sends it in the response.
+ * @method .put() - Defines a route handler for the HTTP PUT method to update all campsites (not supported).
+ * @param {Function} (req, res) => { ... } - Route handler that sends a 403 Forbidden status for PUT requests 
+ *                                           on /campsites.
+ * @method .delete() - Defines a route handler for the HTTP DELETE method to delete all campsites.
+ * @param {Function} (req, res, next) => { ... } - Route handler that .deletes all campsites from the database 
+ *                                                 and sends the response.
  */
 campsiteRouter.route('/')
-.get((req, res, next) => {
+.options(cors.corsWithOptions, (req, res) => res.sendStatus(200))
+.get(cors.cors, (req, res, next) => {
     Campsite.find()
     .populate('comments.author')
     .then(campsites => {
         res.statusCode = 200;
         res.setHeader('Content-Type', 'application/json');
         res.json(campsites);
+    })
+    .catch(err => next(err));
 })
-.catch(err => next(err));
-})
-.post(authenticate.verifyUser, authenticate.verifyAdmin, (req, res, next) => {
+.post(cors.corsWithOptions, authenticate.verifyUser, authenticate.verifyAdmin, (req, res, next) => {
     Campsite.create(req.body)
     .then(campsite => {
         console.log('Campsite Created ', campsite);
@@ -77,25 +111,26 @@ campsiteRouter.route('/')
     })
     .catch(err => next(err));
 })
-.put(authenticate.verifyUser, (req, res) => {
+.put(cors.corsWithOptions, authenticate.verifyUser, authenticate.verifyAdmin,(req, res) => {
     res.statusCode = 403;
     res.end('PUT operation not supported on /campsites');
 })
-.delete(authenticate.verifyUser, authenticate.verifyAdmin, (req, res, next) => {
-Campsite.deleteMany()
-.then(response => {
-    res.statusCode = 200;
-    res.setHeader('Content-Type', 'application/json');
-    res.json(response);
-})
-.catch(err => next(err));
+.delete(cors.corsWithOptions, authenticate.verifyUser, authenticate.verifyAdmin, (req, res, next) => {
+    Campsite.deleteMany()
+    .then(response => {
+        res.statusCode = 200;
+        res.setHeader('Content-Type', 'application/json');
+        res.json(response);
+    })
+    .catch(err => next(err));
 });
 // The campsiteRouter.route() method is used to define a route for the /campsites/:campsiteId endpoint, which allows us to handle requests for a specific campsite identified by its unique ID. 
 // The :campsiteId is a route parameter that can be accessed in the request object (req.params.campsiteId) 
 // to perform operations on the specific campsite.
 
 campsiteRouter.route('/:campsiteId')
-.get((req, res, next) => {
+.options(cors.corsWithOptions, (req, res) => res.sendStatus(200))
+.get(cors.cors, (req, res, next) => {
     Campsite.findById(req.params.campsiteId)
     .populate('comments.author')
     .then(campsite => {
@@ -105,11 +140,11 @@ campsiteRouter.route('/:campsiteId')
     })
     .catch(err => next(err));
 })
-.post(authenticate.verifyUser, (req, res) => {
+.post(cors.corsWithOptions, authenticate.verifyUser, authenticate.verifyAdmin, (req, res) => {
     res.statusCode = 403;
     res.end(`POST operation not supported on /campsites/${req.params.campsiteId}`);
 })
-.put(authenticate.verifyUser, authenticate.verifyAdmin, (req, res, next) => {
+.put(cors.corsWithOptions, authenticate.verifyUser, authenticate.verifyAdmin, (req, res, next) => {
     Campsite.findByIdAndUpdate(req.params.campsiteId, {
         $set: req.body
     }, { new: true })
@@ -117,10 +152,10 @@ campsiteRouter.route('/:campsiteId')
         res.statusCode = 200;
         res.setHeader('Content-Type', 'application/json');
         res.json(campsite);
+    })
+    .catch(err => next(err));
 })
-.catch(err => next(err));
-})
-.delete(authenticate.verifyUser, authenticate.verifyAdmin, (req, res, next) => {
+.delete(cors.corsWithOptions, authenticate.verifyUser, authenticate.verifyAdmin, (req, res, next) => {
     Campsite.findByIdAndDelete(req.params.campsiteId)
     .then(response => {
         res.statusCode = 200;
@@ -131,7 +166,8 @@ campsiteRouter.route('/:campsiteId')
 });
 
 campsiteRouter.route('/:campsiteId/comments')
-.get((req, res, next) => {
+.options(cors.corsWithOptions, (req, res) => res.sendStatus(200))
+.get(cors.cors, (req, res, next) => {
     Campsite.findById(req.params.campsiteId)
     .populate('comments.author')
     .then(campsite => {
@@ -147,7 +183,7 @@ campsiteRouter.route('/:campsiteId/comments')
     })
     .catch(err => next(err));
 })
-.post(authenticate.verifyUser, (req, res, next) => {
+.post(cors.corsWithOptions, authenticate.verifyUser, (req, res, next) => {
     Campsite.findById(req.params.campsiteId)
     .then(campsite => {
         if (campsite) {
@@ -168,11 +204,11 @@ campsiteRouter.route('/:campsiteId/comments')
     })
     .catch(err => next(err));
 })
-.put(authenticate.verifyUser, (req, res) => {
+.put(cors.corsWithOptions, authenticate.verifyUser, (req, res) => {
     res.statusCode = 403;
     res.end(`PUT operation not supported on /campsites/${req.params.campsiteId}/comments`);
 })
-.delete(authenticate.verifyUser, authenticate.verifyAdmin, (req, res, next) => {
+.delete(cors.corsWithOptions, authenticate.verifyUser, authenticate.verifyAdmin, (req, res, next) => {
     Campsite.findById(req.params.campsiteId)
     .then(campsite => {
         if (campsite) {
@@ -201,7 +237,8 @@ campsiteRouter.route('/:campsiteId/comments')
 });
 
 campsiteRouter.route('/:campsiteId/comments/:commentId')
-.get((req, res, next) => {
+.options(cors.corsWithOptions, (req, res) => res.sendStatus(200))
+.get(cors.cors, (req, res, next) => {
     Campsite.findById(req.params.campsiteId)
     .populate('comments.author')
     .then(campsite => {
@@ -221,22 +258,36 @@ campsiteRouter.route('/:campsiteId/comments/:commentId')
     })
     .catch(err => next(err));
 })
-.post(authenticate.verifyUser, (req, res) => {
+.post(cors.corsWithOptions, authenticate.verifyUser, authenticate.verifyAdmin, (req, res) => {
     res.statusCode = 403;
     res.end(`POST operation not supported on /campsites/${req.params.campsiteId}/comments/${req.params.commentId}`);
 })
 /**
- * Task 4: Updating/deleting comments.
+ * Updating/deleting comments.
  * PUT and DELETE on a specific comment are restricted to the comment's author.
  * verifyUser authenticates the request and loads req.user.
  * Inside the handler, req.user._id is compared to comment.author.
  * If they do not match, a 403 Forbidden error is returned.
+ * 
+ * Did not use verifyAdmin here because we want to allow any authenticated user to 
+ * update/delete their own comments, not just admins.
+ * 
+ * Since PUT is a mutating operation, we need to check if the logged-in user is the author 
+ * of the comment before allowing the update, so cors.corsWithOptions is used to handle 
+ * CORS for the PUT request, and the verifyUser middleware is used to authenticate the user.
+ * Once the user is authenticated, findById() is used to find the campsite by its ID, and 
+ * then the comment is retrieved using the comment's ID.
+ * 
+ * @note Mongoose 7+ removed the `.remove()` method on subdocuments.
+ * Use `.deleteOne()` instead to remove a subdocument from its parent array.
+ * `.remove()` will throw `TypeError: comment.remove is not a function` in Mongoose 7+.
  */
-.put(authenticate.verifyUser, (req, res, next) => {
+.put(cors.corsWithOptions, authenticate.verifyUser, (req, res, next) => {
     Campsite.findById(req.params.campsiteId)
     .then(campsite => {
         if (campsite && campsite.comments.id(req.params.commentId)) {
-            /** Task 4: Only allow the comment's author to update it. 
+            /** 
+             * Only allow the comment's author to update it. 
              * Uses Mongoose's safe ObjectId comparison method, .equals(), to compare the logged-in 
              * user's ID (req.user._id) with the comment's author ID (comment.author).
              * If they match, the comment is updated; if not, a 403 Forbidden error is returned.
@@ -274,11 +325,15 @@ campsiteRouter.route('/:campsiteId/comments/:commentId')
     })
     .catch(err => next(err));
 })
-.delete(authenticate.verifyUser, (req, res, next) => {
+/**
+ * Did not use verifyAdmin here because we want to allow any authenticated user to delete 
+ * their own comments, not just admins.
+ */
+.delete(cors.corsWithOptions, authenticate.verifyUser, (req, res, next) => {
     Campsite.findById(req.params.campsiteId)
     .then(campsite => {
         if (campsite && campsite.comments.id(req.params.commentId)) {
-            /** Task 4: Only allow the comment's author to delete it. */
+            /** Only allow the comment's author to delete it. */
             const comment = campsite.comments.id(req.params.commentId);
             if (comment.author.equals(req.user._id)) {
                 /**

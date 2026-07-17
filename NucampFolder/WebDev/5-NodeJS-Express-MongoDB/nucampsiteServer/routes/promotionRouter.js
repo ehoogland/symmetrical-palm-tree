@@ -1,3 +1,7 @@
+const express = require('express');
+const Promotion = require('../models/promotion');
+const authenticate = require('../authenticate');
+const cors = require('./cors');
 /**
  * @description The promotionRouter is an instance of the Express Router, which allows us to define routes for handling HTTP requests 
  *              related to promotions. It is used to create modular route handlers for the /promotions endpoint and its sub-routes.
@@ -32,13 +36,12 @@
  * @requires express - The Express library, which is used to create the promotionRouter object and define routes for handling HTTP requests.
  * @requires ../models/promotion - The Promotion model, which is used to interact with the promotions collection in the MongoDB database.
  */
-const express = require('express');
-const Promotion = require('../models/promotion');
-const authenticate = require('../authenticate');
-const promotionRouter = express.Router();
-
 /**
- * Task 2: Set up admin-only access points.
+ * @const promotionRouter - The router object for handling promotion-related routes.
+ */
+const promotionRouter = express.Router();
+/**
+ * Set up access points.
  * Access levels across all promotion routes:
  *
  * /promotions
@@ -54,7 +57,8 @@ const promotionRouter = express.Router();
  *   DELETE — admin only  (verifyUser + verifyAdmin)
  */
 promotionRouter.route('/')
-.get((req, res, next) => {
+.options(cors.corsWithOptions, (req, res) => res.sendStatus(200))
+.get(cors.cors, (req, res, next) => {
     Promotion.find()
     .then(promotions => {
         res.statusCode = 200;
@@ -63,7 +67,7 @@ promotionRouter.route('/')
     })
     .catch(err => next(err));
 })
-.post(authenticate.verifyUser, authenticate.verifyAdmin, (req, res, next) => {
+.post(cors.corsWithOptions, authenticate.verifyUser, authenticate.verifyAdmin, (req, res, next) => {
     Promotion.create(req.body)
     .then(promotion => {
         console.log('Promotion Created ', promotion);
@@ -73,11 +77,11 @@ promotionRouter.route('/')
     })
     .catch(err => next(err));
 })
-.put(authenticate.verifyUser, (req, res) => {
+.put(cors.corsWithOptions, authenticate.verifyUser, authenticate.verifyAdmin, (req, res) => {
     res.statusCode = 403;
     res.end('PUT operation not supported on /promotions');
 })
-.delete(authenticate.verifyUser, authenticate.verifyAdmin, (req, res, next) => {
+.delete(cors.corsWithOptions, authenticate.verifyUser, authenticate.verifyAdmin, (req, res, next) => {
     Promotion.deleteMany()
     .then(response => {
         res.statusCode = 200;
@@ -86,9 +90,17 @@ promotionRouter.route('/')
     })
     .catch(err => next(err));
 });
-
+/**
+ * @description The route handlers for GET, POST, PUT, and DELETE requests are defined for this endpoint, allowing us 
+ * to retrieve, create, update, and delete a specific promotion by its ID.
+ * @Object promotionRouter - The promotionRouter object is used to define the routes for handling HTTP requests related to promotions.
+ * @method promotionRouter.route() - A method of @Object promotionRouter that is used to define a route for the 
+ * /promotions/:promotionId endpoint.
+ * @param {string} :promotionId - A route parameter that allows access to a specific promotion by its unique identifier.
+ */
 promotionRouter.route('/:promotionId')
-.get((req, res, next) => {
+.options(cors.corsWithOptions, (req, res) => res.sendStatus(200))
+.get(cors.cors, (req, res, next) => {
     Promotion.findById(req.params.promotionId)
     .then(promotion => {
         res.statusCode = 200;
@@ -97,7 +109,21 @@ promotionRouter.route('/:promotionId')
     })
     .catch(err => next(err));
 })
-.post(authenticate.verifyUser, (req, res) => {
+/**
+ * @Operation POST is not supported on the /promotions/:promotionId endpoint. It is used for creating new promotions,
+ * not for updating existing ones. A 403 Forbidden status code and an appropriate message are returned.
+ * 
+ * @Operation PUT allows us to update an existing promotion's information.
+ * @method Promotion.findByIdAndUpdate() - A Mongoose method to find the promotion by its ID and update it with the data provided in the request body.
+ * @option { new: true } - Ensures that the updated document is returned in the response.
+ * 
+ * @Operation DELETE is supported on the /partners/:partnerId endpoint, allowing us to delete a specific partner by its ID.
+ * @method Partner.findByIdAndDelete() - A Mongoose method to find and remove the partner from the database.
+ * The response includes the result of the delete operation, which confirms that the partner was removed.
+ * @param {function} authenticate.verifyUser - A Passport middleware function that verifies the user's authentication status before allowing 
+ *                                             access to certain routes.
+ */
+.post(cors.corsWithOptions, authenticate.verifyUser, (req, res) => {
     res.statusCode = 403;
     res.end(`POST operation not supported on /promotions/${req.params.promotionId}`);
 })
@@ -108,7 +134,7 @@ promotionRouter.route('/:promotionId')
 // The { new: true } option is used to return the updated document in the response.
 // The response is sent back to the client with a status code of 200 and the updated 
 // promotion document in JSON format.
-.put(authenticate.verifyUser, authenticate.verifyAdmin, (req, res, next) => {
+.put(cors.corsWithOptions, authenticate.verifyUser, authenticate.verifyAdmin, (req, res, next) => {
     Promotion.findByIdAndUpdate(req.params.promotionId, {
         $set: req.body
     }, { new: true })
@@ -119,7 +145,7 @@ promotionRouter.route('/:promotionId')
     })
     .catch(err => next(err));
 })
-.delete(authenticate.verifyUser, authenticate.verifyAdmin, (req, res, next) => {
+.delete(cors.corsWithOptions, authenticate.verifyUser, authenticate.verifyAdmin, (req, res, next) => {
     Promotion.findByIdAndDelete(req.params.promotionId)
     .then(response => {
         res.statusCode = 200;

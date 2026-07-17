@@ -1,6 +1,7 @@
 const express = require('express');
 const Partner = require('../models/partner');
 const authenticate = require('../authenticate');
+const cors = require('./cors');
 /**
  * @description The partnerRouter is an instance of the Express Router, which allows us to define routes for handling HTTP requests 
  *              related to partners. It is used to create modular route handlers for the /partners endpoint and its sub-routes.
@@ -35,10 +36,12 @@ const authenticate = require('../authenticate');
  * @requires express - The Express library, which is used to create the partnerRouter object and define routes for handling HTTP requests.
  * @requires ../models/partner - The Partner model, which is used to interact with the partners collection in the MongoDB database.
  */
-const partnerRouter = express.Router();
-
 /**
- * Task 2: Set up admin-only access points.
+ * @const partnerRouter - The router object for handling partner-related routes.
+ */
+const partnerRouter = express.Router();
+/**
+ * Set up access points.
  * Access levels across all partner routes:
  *
  * /partners
@@ -54,7 +57,8 @@ const partnerRouter = express.Router();
  *   DELETE — admin only  (verifyUser + verifyAdmin)
  */
 partnerRouter.route('/')
-.get((req, res, next) => {
+.options(cors.corsWithOptions, (req, res) => res.sendStatus(200))
+.get(cors.cors, (req, res, next) => {
     Partner.find()
     .then(partners => {
         res.statusCode = 200;
@@ -63,7 +67,7 @@ partnerRouter.route('/')
     })
     .catch(err => next(err));
 })
-.post(authenticate.verifyUser, authenticate.verifyAdmin, (req, res, next) => {
+.post(cors.corsWithOptions, authenticate.verifyUser, authenticate.verifyAdmin, (req, res, next) => {
         Partner.create(req.body)
     .then(partner => {
         console.log('Partner Created ', partner);
@@ -73,11 +77,11 @@ partnerRouter.route('/')
     })
     .catch(err => next(err));
 })
-.put(authenticate.verifyUser, (req, res) => {
+.put(cors.corsWithOptions, authenticate.verifyUser, authenticate.verifyAdmin, (req, res) => {
     res.statusCode = 403;
     res.end('PUT operation not supported on /partners');
 })
-.delete(authenticate.verifyUser, authenticate.verifyAdmin, (req, res, next) => {
+.delete(cors.corsWithOptions, authenticate.verifyUser, authenticate.verifyAdmin, (req, res, next) => {
     Partner.deleteMany()
     .then(response => {
         res.statusCode = 200;
@@ -95,7 +99,8 @@ partnerRouter.route('/')
  * @param {string} :partnerId - A route parameter that allows access to a specific partner by its unique identifier.
  */
 partnerRouter.route('/:partnerId')
-.get((req, res, next) => {
+.options(cors.corsWithOptions, (req, res) => res.sendStatus(200))
+.get(cors.cors, (req, res, next) => {
     Partner.findById(req.params.partnerId)
     .then(partner => {
         res.statusCode = 200;
@@ -118,13 +123,19 @@ partnerRouter.route('/:partnerId')
  * @param {function} authenticate.verifyUser - A Passport middleware function that verifies the user's authentication status before allowing 
  *                                             access to certain routes.
  */
-.post(authenticate.verifyUser, (req, res) => {      
+.post(cors.corsWithOptions, authenticate.verifyUser, (req, res) => {      
     res.statusCode = 403;
     res.end(`POST operation not supported on /partners/${req.params.partnerId}`);
 })
-.put(authenticate.verifyUser, authenticate.verifyAdmin, (req, res, next) => {
+// The findByIdAndUpdate() method is called on the Partner model, passing in the partnerId
+// from the request parameters and the updated data from the request body. 
+// The $set operator is used to specify which fields should be updated in the document.
+// The { new: true } option is used to return the updated document in the response.
+// The response is sent back to the client with a status code of 200 and the updated 
+// partner document in JSON format.
+.put(cors.corsWithOptions, authenticate.verifyUser, authenticate.verifyAdmin, (req, res, next) => {
     Partner.findByIdAndUpdate(req.params.partnerId, {
-        $set: req.body
+        $set: req.body  
     }, { new: true })
     .then(partner => {
         res.statusCode = 200;
@@ -133,7 +144,7 @@ partnerRouter.route('/:partnerId')
     })
     .catch(err => next(err));
 })
-.delete(authenticate.verifyUser, authenticate.verifyAdmin, (req, res, next) => {
+.delete(cors.corsWithOptions, authenticate.verifyUser, authenticate.verifyAdmin, (req, res, next) => {
     Partner.findByIdAndDelete(req.params.partnerId)
     .then(response => {
         res.statusCode = 200;
