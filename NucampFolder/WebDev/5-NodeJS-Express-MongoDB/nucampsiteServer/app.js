@@ -18,6 +18,8 @@
  * @var campsiteRouter - The router for handling requests to the campsites resource.
  * @var promotionRouter - The router for handling requests to the promotions resource.
  * @var partnerRouter - The router for handling requests to the partners resource.
+ * @var uploadRouter - The router for handling requests to the upload resource.
+ * @var favoriteRouter - The router for handling requests to the favorites resource.
  * @var mongoose - The mongoose module is used to connect the Express server to a MongoDB database and 
  *                 define data models.
  * @var url - The connection string for the MongoDB database, specifying the protocol, host, port, 
@@ -78,13 +80,14 @@ const passport = require('passport');
 const config = require('./config');
 /**
  * @description indexRouter and usersRouter are imported from the routes directory. These routers 
- * handle requests for the index and users routes, respectively.
+ * handle requests for the index, users, and favorites routes, respectively.
  * @module indexRouter
  * @module usersRouter
  * @requires ./routes/index
  * @requires ./routes/users
  * @exports indexRouter - The router for handling requests to the index route.
  * @exports usersRouter - The router for handling requests to the users route.
+ * @exports favoriteRouter - The router for handling requests to the favorites route.
  * The routers are mounted on their respective paths using app.use() in the 
  * Express application, allowing the application to handle requests for these 
  * routes and delegate them to the appropriate router.
@@ -106,17 +109,20 @@ var usersRouter = require('./routes/users');
 */
 /**
  * @note As a part of implementing a REST (Representational State Transfer) API, 
- *       create separate routers for each resource (campsites, promotions, and partners). 
+ *       create separate routers for each resource (campsites, promotions, partners, and favorites).
  * @description The campsiteRouter, promotionRouter, and partnerRouter are imported from 
- * the routes directory. These routers handle requests for the campsites, promotions, and 
- * partners resources, respectively.
- * @modules campsiteRouter, promotionRouter, partnerRouter
+ * the routes directory. These routers handle requests for the campsites, promotions, partners, and 
+ * favorites resources, respectively.
+ * @modules campsiteRouter, promotionRouter, partnerRouter, favoriteRouter
  * These modules organize code better and handle requests for each resource in its own router file.
 */
 const campsiteRouter = require('./routes/campsiteRouter');
 const promotionRouter = require('./routes/promotionRouter');
 const partnerRouter = require('./routes/partnerRouter');
 const uploadRouter = require('./routes/uploadRouter');
+// Task 2, app.js modification: The favoriteRouter is imported from the routes directory. 
+// This router handles requests for the favorites resource.
+const favoriteRouter = require('./routes/favoriteRouter');
 
 /**
  * Connect Express server to MongoDB/Mongoose
@@ -373,12 +379,13 @@ app.use('/users', usersRouter);
 app.use(express.static(path.join(__dirname, 'public')));
 
 /** 
- * @description The imported routers for campsites, promotions, and partners are mounted on their respective paths.
+ * @description The imported routers for campsites, promotions, partners, and favorites are mounted on their respective paths.
  * @method app.use() method is used to mount the routers for different resources on their respective paths.
 */
 app.use('/campsites', campsiteRouter);
 app.use('/promotions', promotionRouter);
 app.use('/partners', partnerRouter);
+app.use('/favorites', favoriteRouter);
 /**
  * @description The imported router for image uploads is mounted on the '/imageUpload' path. This allows the application to handle requests for image uploads and delegate them to the uploadRouter.
  * @module uploadRouter
