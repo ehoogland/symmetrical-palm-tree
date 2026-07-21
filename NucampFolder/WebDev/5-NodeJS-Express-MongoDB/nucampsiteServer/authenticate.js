@@ -49,7 +49,7 @@ passport.deserializeUser(User.deserializeUser());
  * @returns {string} JWT token
  */
 exports.getToken = user => {    
-    return jwt.sign(user, config.secretKey, {expiresIn: 3600});
+    return jwt.sign(user, config.secretKey, {expiresIn: 3600000});
 };
 /**
  * @description Options for JWT strategy. The JWT is extracted from the Authorization header 

@@ -2,10 +2,9 @@
 // modular routes for the application. The routes are protected by authentication middleware and support CORS.
 const express = require('express');
 const Campsite = require('../models/campsite');
+const campsiteRouter = express.Router();
 const authenticate = require('../authenticate');
 const cors = require('./cors');
-
-const campsiteRouter = express.Router();
 
 campsiteRouter.route('/')
 .options(cors.corsWithOptions, (req, res) => res.sendStatus(200))
@@ -41,30 +40,29 @@ campsiteRouter.route('/')
     })
     .catch(err => next(err));
 });
-// This route handles requests for a specific campsite identified by its ID. It supports GET, POST, PUT, and DELETE methods, with appropriate authentication and authorization checks.
-campsiteRouter.route('/:campsiteId')
-.options(cors.corsWithOptions, (req, res) => res.sendStatus(200))
-.get(cors.cors, (req, res, next) => {
-    Campsite.findById(req.params.campsiteId)
-    .then(campsite => {
-        res.statusCode = 200;
-        res.setHeader('Content-Type', 'application/json');
-        res.json(campsite);
-    })
-    .catch(err => next(err));
-});
 /**
  * @description The route handlers for GET, POST, PUT, and DELETE requests are defined for this endpoint, allowing us 
  * to retrieve, create, update, and delete a specific campsite by its ID.
  * @Object campsiteRouter - The campsiteRouter object is used to define the routes for handling HTTP requests related to campsites.
- * @method campsiteRouter.route() - A method of @Object campsiteRouter that is used to define a route for the 
- * /campsites/:campsiteId endpoint.
+ * @method campsiteRouter.route('/:campsiteId') - A method of @Object campsiteRouter that is used to define a route for the
+ * /campsites/:campsiteId endpoint, allowing access to a specific campsite by its unique identifier.
  * @param {string} :campsiteId - A route parameter that allows access to a specific campsite by its unique identifier.
+ * @param {function} cors.corsWithOptions - A middleware function that handles CORS for the route, allowing cross-origin requests.
+ * @param {function} authenticate.verifyUser - A middleware function that verifies the user's authentication status.
+ * @param {function} authenticate.verifyAdmin - A middleware function that verifies if the authenticated user has admin privileges.
+ * @param {function} Campsite.findById() - A Mongoose method that retrieves a specific campsite document from the database by its ID.
+ * @param {function} Campsite.findByIdAndUpdate() - A Mongoose method that updates a specific campsite document in the database by its ID.
+ * @param {function} Campsite.findByIdAndDelete() - A Mongoose method that deletes a specific campsite document from the database by its ID.
+ * @returns {void}
+ * @method populate('comments.author') - A Mongoose method that populates the author field of the comments subdocument 
+ * with the corresponding user document.
+ * @method res.json() - A method of the response object that sends a JSON response to the client.
  */ 
  campsiteRouter.route('/:campsiteId')
 .options(cors.corsWithOptions, (req, res) => res.sendStatus(200))
 .get(cors.cors, (req, res, next) => {
     Campsite.findById(req.params.campsiteId)
+    .populate('comments.author')
     .then(campsite => {
         res.statusCode = 200;
         res.setHeader('Content-Type', 'application/json');
@@ -77,8 +75,15 @@ campsiteRouter.route('/:campsiteId')
     res.end(`POST operation not supported on /campsites/${req.params.campsiteId}`);
 })      
 .put(cors.corsWithOptions, authenticate.verifyUser, authenticate.verifyAdmin, (req, res) => {
-    res.statusCode = 403;
-    res.end(`PUT operation not supported on /campsites/${req.params.campsiteId}`);
+  Campsite.findByIdAndUpdate(req.params.campsiteId, {
+    $set: req.body
+  }, { new: true })
+  .then(campsite => {
+    res.statusCode = 200;
+    res.setHeader('Content-Type', 'application/json');
+    res.json(campsite);
+  })
+  .catch(err => next(err));
 })
 .delete(cors.corsWithOptions, authenticate.verifyUser, authenticate.verifyAdmin, (req, res, next) => {
     Campsite.findByIdAndDelete(req.params.campsiteId)
@@ -89,4 +94,5 @@ campsiteRouter.route('/:campsiteId')
     })
     .catch(err => next(err));
 });
+
 module.exports = campsiteRouter;
