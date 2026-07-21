@@ -40,7 +40,6 @@
  * @requires http-errors
 */
 var createError = require('http-errors');
-
 const express = require('express');
 
 /**
@@ -385,6 +384,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/campsites', campsiteRouter);
 app.use('/promotions', promotionRouter);
 app.use('/partners', partnerRouter);
+
 app.use('/favorites', favoriteRouter);
 /**
  * @description The imported router for image uploads is mounted on the '/imageUpload' path. This allows the application to handle requests for image uploads and delegate them to the uploadRouter.
