@@ -115,6 +115,11 @@ favoriteRouter.route('/:campsiteId')
 .options(cors.corsWithOptions, (req, res) => res.sendStatus(200))
 .get(cors.cors, authenticate.verifyUser, (req, res, next) => {
   res.statusCode = 403;
+  // Don't forget to set the Content-Type header to text/plain so that the client 
+  // knows how to interpret the response body.
+  res.setHeader('Content-Type', 'text/plain');
+  // Return a message in the response body indicating that the GET operation 
+  // is not supported for this route.
   res.end('GET operation not supported on /favorites/:campsiteId');
 }) 
 .post(cors.corsWithOptions, authenticate.verifyUser, (req, res, next) => {
@@ -168,7 +173,11 @@ favoriteRouter.route('/:campsiteId')
 })
 .put(cors.corsWithOptions, authenticate.verifyUser, (req, res) => {
   res.statusCode = 403;
-  res.end('PUT operation not supported on /favorites/' + req.params.campsiteId);
+  // Don't forget to set the Content-Type header to text/plain so that the client
+  // knows how to interpret the response body. res.end does not automatically set 
+  // the Content-Type header, so we need to do it manually.
+  res.setHeader('Content-Type', 'text/plain'); 
+  res.end('PUT operation not supported on /favorites/:campsiteId');
 })
 .delete(cors.corsWithOptions, authenticate.verifyUser, (req, res, next) => {
   Favorite.findOne({ user: req.user._id })
@@ -181,14 +190,24 @@ favoriteRouter.route('/:campsiteId')
                 favorite.campsites.splice(index, 1);
                 favorite.save()
                     .then(favorite => {
+                        // Here, using res.json() to send the updated document in the 
+                        // response body as JSON, which is a common practice in RESTful 
+                        // APIs. It automatically sets the Content-Type header to 
+                        // application/json.
                         res.status(200).json(favorite);
                     })
                     .catch(err => next(err));
             } else {
-                res.status(200).end('Campsite not found in favorites');
+              // Unless you use the response methods "send" or "json" to send a 
+              // response body, best practice is to set a content type header; otherwise 
+              // the client will receive an empty response body.
+              res.status(200).setHeader('Content-Type', 'text/plain')
+              .end('Campsite not found in favorites');
             }
         } else {
-            res.status(200).end('There are no favorites to delete');
+            // Remember to set the Content-Type header to text/plain so that the 
+            // client knows how to interpret the response body.
+            res.status(200).setHeader('Content-Type', 'text/plain').end('There are no favorites to delete');
         }
     })
     .catch(err => next(err));
